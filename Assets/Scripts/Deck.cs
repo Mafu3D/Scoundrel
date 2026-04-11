@@ -43,7 +43,7 @@ namespace Project.Decks
 
                 if (addToTop) allItems.Insert(0, item);
                 else allItems.Add(item);
-                AddToRemaining(itemsToAdd, shuffle, addToTop);
+                AddToRemaining(new List<T>() {item}, shuffle, addToTop);
             }
         }
 
