@@ -5,12 +5,14 @@ using UnityEngine;
 using Project.Decks;
 using TMPro;
 using System;
+using Unity.VisualScripting;
 
 public class TableManager : MonoBehaviour
 {
     [SerializeField] List<CardSlot> CardSlots;
     [SerializeField] GameObject CardPrefab;
     [SerializeField] TMP_Text remaining_TMPText;
+    [SerializeField] TMP_Text round_TMPText;
 
     [SerializeField] GameManager GameManager;
     [SerializeField] DeckManager DeckManager;
@@ -62,6 +64,8 @@ public class TableManager : MonoBehaviour
             }
             CardSlots[i].AssignCard(GameManager.CurrentRoom.Cards[i]);
         }
+
+        round_TMPText.text = "Round: " + GameManager.RoomNumber.ToString();
     }
 
     private void OnCardDraw()

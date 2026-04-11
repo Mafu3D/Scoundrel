@@ -61,6 +61,7 @@ namespace Project.Decks
         public void Shuffle()
         {
             remainingItems.Shuffle();
+            Debug.Log("shufflin");
         }
 
         public void Reset()
@@ -116,7 +117,7 @@ namespace Project.Decks
             }
 
             AddToRemaining(invalidItems);
-            Shuffle();
+            // Shuffle();
 
             return drawnItem;
         }
@@ -144,7 +145,7 @@ namespace Project.Decks
                     invalidItems = filterMethod(drawn);
                 }
             }
-            Shuffle();
+            // Shuffle();
             return drawn;
         }
 

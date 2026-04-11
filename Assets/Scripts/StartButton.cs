@@ -6,6 +6,7 @@ public class StartButton : MonoBehaviour
 {
     [SerializeField] GameManager gameManager;
 
+
     public void StartGame()
     {
         gameManager.StartNewGame();

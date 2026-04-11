@@ -31,6 +31,7 @@ public class DeckManager : MonoBehaviour
 
         // Create deck
         Deck = new Deck<Card>(cards);
+        Deck.Shuffle();
     }
 
 

@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
 
     public int RoomNumber = 0;
 
-    public bool HasRunToken;
+    public bool HasRunToken = true;
+    private bool usedRunTokenLastRound = false;
     public int ExtraRunTokens = 0;
 
     public Action OnStartNewGame;
@@ -41,6 +42,8 @@ public class GameManager : MonoBehaviour
         Room room = new(roomSize, drawnCards);
         CurrentRoom = room;
 
+        RoomNumber++;
+
         OnEnterNewRoom?.Invoke();
     }
 
@@ -57,6 +60,16 @@ public class GameManager : MonoBehaviour
         Room NextRoom = new(roomSize, newCards);
         CurrentRoom = NextRoom;
 
+        RoomNumber++;
+        if (usedRunTokenLastRound)
+        {
+            usedRunTokenLastRound = false;
+            if (!HasRunToken)
+            {
+                HasRunToken = true;
+            }
+        }
+
         OnEnterNewRoom?.Invoke();
     }
 
@@ -66,6 +79,26 @@ public class GameManager : MonoBehaviour
         if (CurrentRoom.TryRemoveCard(card))
         {
             OnCardsChanged?.Invoke();
+        }
+    }
+
+    public void Run()
+    {
+        Debug.Log(HasRunToken + " " + ExtraRunTokens);
+        if (!HasRunToken && ExtraRunTokens <= 0)
+        {
+            Debug.Log("tried to run but can't");
+            return;
+        }
+
+        DeckManager.Deck.AddToRemaining(CurrentRoom.Cards.ToList(), addToTop: false, shuffle: false);
+        CurrentRoom.ClearCards();
+        EnterNewRoom();
+
+        if (HasRunToken)
+        {
+            HasRunToken = false;
+            usedRunTokenLastRound = true;
         }
     }
 }
@@ -109,6 +142,14 @@ public class Room
         int index = Array.IndexOf(Cards, card);
         Cards[index] = null;
         return true;
+    }
+
+    public void ClearCards()
+    {
+        for (int i = 0; i < Cards.Length; i++)
+        {
+            Cards[i] = null;
+        }
     }
 
     public int RemainingCount => RemainingCards().Count;
