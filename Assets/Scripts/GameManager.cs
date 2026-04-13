@@ -5,6 +5,7 @@ using UnityEngine;
 using Project.Decks;
 using System;
 using System.Linq;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
     public bool HasEnteredTheRoom { get; private set; } = false;
 
     public Action OnStartNewGame;
+    public Action OnGameOver;
     public Action OnEnterNewRoom;
     public Action OnCardsChanged;
 
@@ -32,12 +34,73 @@ public class GameManager : MonoBehaviour
 
     public bool GameHasStarted {get; private set;}
 
+    void OnEnable()
+    {
+        Player.OnDeath += GameOver;
+    }
+
+    void OnDisable()
+    {
+        Player.OnDeath -= GameOver;
+    }
+
     public void StartNewGame()
     {
+        RoomNumber = 0;
         DeckManager.ResetDeck();
         OnStartNewGame?.Invoke();
         EnterFirstRoom();
         GameHasStarted = true;
+    }
+
+    private void GameOver()
+    {
+        OnGameOver?.Invoke();
+    }
+
+    public int GetScore()
+    {
+        int monsterScore = 0;
+        bool monstersInRoom = false;
+        foreach (Card card in DeckManager.Deck.RemainingItems)
+        {
+            if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
+            {
+                monsterScore += card.Value;
+            }
+        }
+        foreach (Card card in CurrentRoom.Cards)
+        {
+            if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
+            {
+                monstersInRoom = true;
+                monsterScore += card.Value;
+            }
+        }
+
+        if (DeckManager.Deck.CurrentCount == 0 && !monstersInRoom)
+        {
+            if (Player.CurrentHealth == Player.MaxHealth)
+            {
+                int potionScore = 0;
+                foreach (Card card in CurrentRoom.Cards)
+                {
+                    if (card.Suit == Suit.HEARTS)
+                    {
+                        if (card.Value > potionScore)
+                        {
+                            potionScore = card.Value;
+                        }
+                    }
+                }
+                return Player.MaxHealth + potionScore;
+            }
+            else
+            {
+                return Player.CurrentHealth;
+            }
+        }
+        return Player.CurrentHealth - monsterScore;
     }
 
     public void EnterFirstRoom()
@@ -178,6 +241,11 @@ public class GameManager : MonoBehaviour
     private void DrinkPotion(int value)
     {
         Player.Heal(value);
+    }
+
+    private void CheckForGameOver()
+    {
+
     }
 
 }

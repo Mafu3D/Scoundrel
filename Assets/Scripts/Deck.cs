@@ -19,9 +19,9 @@ namespace Project.Decks
     public class Deck<T> where T : IDeckStorable
     {
         private List<T> allItems = new();
-        private List<T> remainingItems = new();
+        public List<T> RemainingItems { get; private set; } = new();
         private Dictionary<int, T> hashedItems = new();
-        public int CurrentCount => remainingItems.Count;
+        public int CurrentCount => RemainingItems.Count;
         public int TotalCount => allItems.Count;
 
         public Deck() { }
@@ -52,21 +52,21 @@ namespace Project.Decks
             foreach (T item in itemsToAdd)
             {
                 if (item == null) continue;
-                if (addToTop) remainingItems.Insert(0, item);
-                else remainingItems.Add(item);
+                if (addToTop) RemainingItems.Insert(0, item);
+                else RemainingItems.Add(item);
                 if (shuffle) Shuffle();
             }
         }
 
         public void Shuffle()
         {
-            remainingItems.Shuffle();
+            RemainingItems.Shuffle();
             Debug.Log("shufflin");
         }
 
         public void Reset()
         {
-            remainingItems = new List<T>(allItems);
+            RemainingItems = new List<T>(allItems);
             Shuffle();
         }
 
@@ -76,9 +76,9 @@ namespace Project.Decks
             drawn = default;
             if (TryGetItemFromID(id, out T targetItem))
             {
-                if (remainingItems.Contains(targetItem))
+                if (RemainingItems.Contains(targetItem))
                 {
-                    remainingItems.Pop(remainingItems.IndexOf(targetItem), out drawn);
+                    RemainingItems.Pop(RemainingItems.IndexOf(targetItem), out drawn);
                     return true;
                 }
             }
@@ -87,13 +87,13 @@ namespace Project.Decks
 
         public T Draw(Func<T, bool> filterMethod=null, int index=0)
         {
-            if (remainingItems.Count == 0 || index > remainingItems.Count - 1)
+            if (RemainingItems.Count == 0 || index > RemainingItems.Count - 1)
             {
                 return default;
             }
 
             T drawnItem;
-            remainingItems.Pop(index, out drawnItem);
+            RemainingItems.Pop(index, out drawnItem);
             List<T> invalidItems = new();
             if (filterMethod != null)
             {
@@ -108,11 +108,11 @@ namespace Project.Decks
                         break;
                     }
                     invalidItems.Add(drawnItem);
-                    if (remainingItems.Count == 0)
+                    if (RemainingItems.Count == 0)
                     {
                         Debug.LogError($"{this} is out of cards!");
                     }
-                    remainingItems.Pop(index, out drawnItem);
+                    RemainingItems.Pop(index, out drawnItem);
                 }
             }
 

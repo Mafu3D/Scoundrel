@@ -48,13 +48,20 @@ public class WeaponSlot : MonoBehaviour
 
     public void DeregisterWeapon()
     {
-        this.weapon = null;
-        weapon.OnWeaponUpdated -= OnWeaponUpdated;
+        if (weapon != null)
+        {
+            weapon.OnWeaponUpdated -= OnWeaponUpdated;
+        }
         mainCardObject.gameObject.SetActive(false);
+        this.weapon = null;
     }
 
     private void OnWeaponUpdated()
     {
+        if (weapon == null)
+        {
+            return;
+        }
         if (weapon.SlainCards.Count == 0)
         {
             secondaryCardObject.gameObject.SetActive(false);

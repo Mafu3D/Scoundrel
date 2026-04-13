@@ -14,7 +14,7 @@ public class Player : MonoBehaviour
     public Action OnDeath;
     public Action OnWeaponChanged;
 
-    private int currentHealth;
+    public int CurrentHealth { get; private set; }
 
     void OnEnable()
     {
@@ -28,15 +28,17 @@ public class Player : MonoBehaviour
 
     private void OnStartNewGame()
     {
-        currentHealth = MaxHealth;
-        OnHealthChanged?.Invoke(currentHealth);
+        CurrentHealth = MaxHealth;
+        OnHealthChanged?.Invoke(CurrentHealth);
+        Weapon = null;
+        OnWeaponChanged?.Invoke();
     }
 
     public void TakeDamage(int amount)
     {
-        currentHealth = Math.Clamp(currentHealth - Math.Abs(amount), 0, MaxHealth);
-        OnHealthChanged?.Invoke(currentHealth);
-        if (currentHealth <= 0)
+        CurrentHealth = Math.Clamp(CurrentHealth - Math.Abs(amount), 0, MaxHealth);
+        OnHealthChanged?.Invoke(CurrentHealth);
+        if (CurrentHealth <= 0)
         {
             HandleDeath();
         }
@@ -44,8 +46,8 @@ public class Player : MonoBehaviour
 
     public void Heal(int amount)
     {
-        currentHealth = Math.Clamp(currentHealth + Math.Abs(amount), 0, MaxHealth);
-        OnHealthChanged?.Invoke(currentHealth);
+        CurrentHealth = Math.Clamp(CurrentHealth + Math.Abs(amount), 0, MaxHealth);
+        OnHealthChanged?.Invoke(CurrentHealth);
     }
 
     public void EquipWeapon(Card card)
