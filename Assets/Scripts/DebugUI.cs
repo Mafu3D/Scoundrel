@@ -17,6 +17,7 @@ public class DebugUI : MonoBehaviour
         }
         else
         {
+            message += "Room: ";
             foreach (var card in gameManager.CurrentRoom.Cards)
             {
                 if (card != null)
@@ -27,6 +28,15 @@ public class DebugUI : MonoBehaviour
                 {
                     message += "NONE / ";
                 }
+            }
+
+            if (gameManager.Player.Weapon != null)
+            {
+                message += $" Weapon: {gameManager.Player.Weapon.GetWeaponInfoString()}";
+            }
+            else
+            {
+                message += "Weapon: NONE";
             }
         }
         text.text = message;

@@ -13,15 +13,18 @@ public class TableManager : MonoBehaviour
     [SerializeField] GameObject CardPrefab;
     [SerializeField] TMP_Text remaining_TMPText;
     [SerializeField] TMP_Text round_TMPText;
+    [SerializeField] TMP_Text health_TMPText;
 
     [SerializeField] GameManager GameManager;
     [SerializeField] DeckManager DeckManager;
+    [SerializeField] Player Player;
 
     void OnEnable()
     {
         GameManager.OnStartNewGame += OnStartNewGame;
         GameManager.OnEnterNewRoom += OnEnterNewRoom;
         GameManager.OnCardsChanged += OnCardsChanged;
+        Player.OnHealthChanged += OnPlayerHealthChanged;
         DeckManager.OnCardDraw += OnCardDraw;
     }
 
@@ -30,7 +33,13 @@ public class TableManager : MonoBehaviour
         GameManager.OnStartNewGame -= OnStartNewGame;
         GameManager.OnEnterNewRoom -= OnEnterNewRoom;
         GameManager.OnCardsChanged -= OnCardsChanged;
+        Player.OnHealthChanged -= OnPlayerHealthChanged;
         DeckManager.OnCardDraw -= OnCardDraw;
+    }
+
+    private void OnPlayerHealthChanged(int amount)
+    {
+        health_TMPText.text = $"{amount} / {Player.MaxHealth}";
     }
 
     private void OnCardsChanged()

@@ -8,12 +8,15 @@ public class RunButton : MonoBehaviour
 
     public void Run()
     {
-        gameManager.Run();
+        if (gameManager.CanRun())
+        {
+            gameManager.Run();
+        }
     }
 
     void Update()
     {
-        if (gameManager.HasRunToken)
+        if (gameManager.CanRun())
         {
             button.interactable = true;
         }

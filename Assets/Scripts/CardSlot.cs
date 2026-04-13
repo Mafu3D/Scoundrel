@@ -9,7 +9,7 @@ public class CardSlot : MonoBehaviour
 
     public void AssignCard(Card card)
     {
-        cardObject.AssignCard(card);
+        cardObject.RegisterCard(card);
     }
 
     public void SetActive(bool value)

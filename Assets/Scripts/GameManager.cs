@@ -9,12 +9,16 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] public DeckManager DeckManager;
+    [SerializeField] public Player Player;
 
     public int RoomNumber = 0;
 
     public bool HasRunToken = true;
     private bool usedRunTokenLastRound = false;
     public int ExtraRunTokens = 0;
+    public bool HasDrankPotionThisRoom { get; private set; } = false;
+
+    public bool HasEnteredTheRoom { get; private set; } = false;
 
     public Action OnStartNewGame;
     public Action OnEnterNewRoom;
@@ -70,22 +74,72 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        HasEnteredTheRoom = false;
+
         OnEnterNewRoom?.Invoke();
     }
 
-    public void OnCardClicked(int index)
+    public void OnCardClicked(Card card, CardClickContext context)
     {
-        Card card = CurrentRoom.Cards[index];
-        if (CurrentRoom.TryRemoveCard(card))
+        bool success = false;
+
+        if (!CurrentRoom.Cards.Contains(card))
         {
+            return;
+        }
+        // Card card = CurrentRoom.Cards[index];
+        switch(card.Suit)
+        {
+            case Suit.HEARTS:
+                if (!HasDrankPotionThisRoom)
+                {
+                    DrinkPotion(card.Value);
+                    success = true;
+                }
+                else
+                {
+                    success = true;
+                }
+                break;
+            case Suit.DIAMONDS:
+                EquipWeapon(card);
+                success = true;
+                break;
+            case Suit.SPADES:
+            case Suit.CLUBS:
+                if (context == CardClickContext.TOP)
+                {
+                    if (Player.Weapon == null || Player.Weapon.GetCurrentStrength() <= card.Value)
+                    {
+                        success = false;
+                    }
+                    else
+                    {
+                        FightWeapon(card);
+                        success = true;
+                    }
+                }
+                else if (context == CardClickContext.BOT)
+                {
+                    FightUnarmed(card);
+                    success = true;
+                }
+                break;
+        }
+
+        if (success)
+        {
+            if (!HasEnteredTheRoom)
+            {
+                HasEnteredTheRoom = true;
+            }
+            CurrentRoom.TryRemoveCard(card);
             OnCardsChanged?.Invoke();
         }
     }
-
     public void Run()
     {
-        Debug.Log(HasRunToken + " " + ExtraRunTokens);
-        if (!HasRunToken && ExtraRunTokens <= 0)
+        if (!HasRunToken && ExtraRunTokens <= 0 || HasEnteredTheRoom)
         {
             Debug.Log("tried to run but can't");
             return;
@@ -101,6 +155,31 @@ public class GameManager : MonoBehaviour
             usedRunTokenLastRound = true;
         }
     }
+
+    public bool CanRun() => (HasRunToken || ExtraRunTokens > 0) && !HasEnteredTheRoom;
+
+    private void FightWeapon(Card card)
+    {
+        int damage = Math.Clamp(card.Value - Player.Weapon.Power, 0, 999);
+        Player.TakeDamage(damage);
+        Player.Weapon.AddMonsterToSlain(card);
+    }
+
+    private void FightUnarmed(Card card)
+    {
+        Player.TakeDamage(card.Value);
+    }
+
+    private void EquipWeapon(Card card)
+    {
+        Player.EquipWeapon(card);
+    }
+
+    private void DrinkPotion(int value)
+    {
+        Player.Heal(value);
+    }
+
 }
 
 public class Room
