@@ -6,17 +6,11 @@ public class RunButton : MonoBehaviour
     [SerializeField] GameManager gameManager;
     [SerializeField] Button button;
 
-    public void Run()
-    {
-        if (gameManager.CanRun())
-        {
-            gameManager.Run();
-        }
-    }
+    public void Run() => gameManager.Player.TryRun();
 
     void Update()
     {
-        if (gameManager.CanRun())
+        if (gameManager.Player.CanRun())
         {
             button.interactable = true;
         }

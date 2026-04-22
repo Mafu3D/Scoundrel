@@ -132,7 +132,7 @@ public class CardView : MonoBehaviour
             }
             else if (Card.Suit == Suit.HEARTS)
             {
-                if (gameManager.HasDrankPotionThisRoom)
+                if (gameManager.Player.HasDrankPotionThisRoom)
                 {
                     cardClickContext = CardClickContext.TOP;
                     attackWeaponContainer.SetActive(false);

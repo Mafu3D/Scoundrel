@@ -12,35 +12,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] public DeckManager DeckManager;
     [SerializeField] public Player Player;
 
-    public int RoomNumber = 0;
-
-    public bool HasRunToken = true;
-    private bool usedRunTokenLastRound = false;
-    public int ExtraRunTokens = 0;
-    public bool HasDrankPotionThisRoom { get; private set; } = false;
-    public bool HasEnteredTheRoom { get; private set; } = false;
+    public bool GameHasStarted {get; private set;}
+    public int RoomNumber { get; private set; }= 0;
+    public Room CurrentRoom = null;
 
     public Action OnStartNewGame;
     public Action OnGameOver;
     public Action OnEnterNewRoom;
     public Action OnCardsChanged;
 
-    public Room CurrentRoom = null;
     private int roomSize = 4;
     private int remainingToMove = 1;
 
     public bool CanGoToNextRoom => CurrentRoom != null && CurrentRoom.RemainingCount <= remainingToMove;
 
-    public bool GameHasStarted {get; private set;}
-
     void OnEnable()
     {
-        Player.OnDeath += GameOver;
     }
 
     void OnDisable()
     {
-        Player.OnDeath -= GameOver;
     }
 
     public void StartNewGame()
@@ -50,10 +41,21 @@ public class GameManager : MonoBehaviour
         OnStartNewGame?.Invoke();
         EnterFirstRoom();
         GameHasStarted = true;
+
+        Player.OnRunSuccess += OnPlayerRun;
+        Player.OnDeath += GameOver;
+        Player.StartNewGame();
+    }
+
+    private void EndGame()
+    {
+        Player.OnRunSuccess -= OnPlayerRun;
+        Player.OnDeath -= GameOver;
     }
 
     private void GameOver()
     {
+        EndGame();
         OnGameOver?.Invoke();
     }
 
@@ -102,7 +104,7 @@ public class GameManager : MonoBehaviour
         return Player.CurrentHealth - monsterScore;
     }
 
-    public void EnterFirstRoom()
+    private void EnterFirstRoom()
     {
         List<CardModel> drawnCards = DeckManager.Draw(roomSize);
         Room room = new(roomSize, drawnCards);
@@ -113,7 +115,7 @@ public class GameManager : MonoBehaviour
         OnEnterNewRoom?.Invoke();
     }
 
-    public void EnterNewRoom()
+    private void EnterNewRoom()
     {
         if (!CanGoToNextRoom) return;
 
@@ -125,125 +127,52 @@ public class GameManager : MonoBehaviour
 
         Room NextRoom = new(roomSize, newCards);
         CurrentRoom = NextRoom;
-
         RoomNumber++;
-        if (usedRunTokenLastRound)
-        {
-            usedRunTokenLastRound = false;
-            if (!HasRunToken)
-            {
-                HasRunToken = true;
-            }
-        }
 
-        HasEnteredTheRoom = false;
+        Player.RoundReset();
 
         OnEnterNewRoom?.Invoke();
     }
 
     public void OnCardClicked(CardModel card, CardClickContext context)
     {
-        bool success = false;
-
         if (!CurrentRoom.Cards.Contains(card))
         {
             return;
         }
 
-        switch(card.Suit)
+        // Try to handle the player action based on the card suit
+        bool success = card.Suit switch
         {
-            case Suit.HEARTS:
-                if (!HasDrankPotionThisRoom)
-                {
-                    DrinkPotion(card.Value);
-                    success = true;
-                }
-                else
-                {
-                    success = true;
-                }
-                break;
-            case Suit.DIAMONDS:
-                EquipWeapon(card);
-                success = true;
-                break;
-            case Suit.SPADES:
-            case Suit.CLUBS:
-                if (context == CardClickContext.TOP)
-                {
-                    if (Player.Weapon == null || Player.Weapon.GetCurrentStrength() <= card.Value)
-                    {
-                        success = false;
-                    }
-                    else
-                    {
-                        FightWeapon(card);
-                        success = true;
-                    }
-                }
-                else if (context == CardClickContext.BOT)
-                {
-                    FightUnarmed(card);
-                    success = true;
-                }
-                break;
-        }
+            Suit.HEARTS => HandlePotion(card),
+            Suit.DIAMONDS => Player.TryEquipWeapon(card),
+            Suit.SPADES or Suit.CLUBS => HandleEnemy(card, context),
+            _ => false
+        };
 
         if (success)
         {
-            if (!HasEnteredTheRoom)
+            if (!Player.HasEnteredTheRoom)
             {
-                HasEnteredTheRoom = true;
+                Player.EnterNewRoom();
             }
             CurrentRoom.TryRemoveCard(card);
             OnCardsChanged?.Invoke();
         }
     }
-    public void Run()
-    {
-        if (!HasRunToken && ExtraRunTokens <= 0 || HasEnteredTheRoom)
-        {
-            Debug.Log("tried to run but can't");
-            return;
-        }
 
+    private bool HandlePotion(CardModel card)
+    {
+        Player.TryDrinkPotion(card);
+        return true;
+    }
+
+    private bool HandleEnemy(CardModel card, CardClickContext context) => context == CardClickContext.TOP ? Player.TryFightWeapon(card) : Player.TryFightUnarmed(card);
+
+    private void OnPlayerRun()
+    {
         DeckManager.Deck.AddToRemaining(CurrentRoom.Cards.ToList(), addToTop: false, shuffle: false);
         CurrentRoom.ClearCards();
         EnterNewRoom();
-
-        if (HasRunToken)
-        {
-            HasRunToken = false;
-            usedRunTokenLastRound = true;
-        }
-    }
-
-    public bool CanRun() => (HasRunToken || ExtraRunTokens > 0) && !HasEnteredTheRoom;
-
-    private void FightWeapon(CardModel card)
-    {
-        int damage = Math.Clamp(card.Value - Player.Weapon.Power, 0, 999);
-        Player.TakeDamage(damage);
-        Player.Weapon.AddMonsterToSlain(card);
-    }
-
-    private void FightUnarmed(CardModel card)
-    {
-        Player.TakeDamage(card.Value);
-    }
-
-    private void EquipWeapon(CardModel card)
-    {
-        Player.EquipWeapon(card);
-    }
-
-    private void DrinkPotion(int value)
-    {
-        Player.Heal(value);
-    }
-
-    private void CheckForGameOver()
-    {
-
     }
 }
