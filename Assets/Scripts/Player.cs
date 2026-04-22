@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField] public int MaxHealth = 20;
 
     public int CurrentHealth { get; private set; }
-    public Weapon Weapon { get; private set; }
+    public WeaponModel Weapon { get; private set; }
     public bool HasRunToken { get; private set; } = true;
     public bool HasEnteredTheRoom { get; private set; } = false;
     public int ExtraRunTokens { get; private set; } = 0;
@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
     public bool TryEquipWeapon(CardModel card)
     {
         // Setting this up to return a bool so that conditions can be added later
-        this.Weapon = new Weapon(card);
+        this.Weapon = new WeaponModel(card);
         OnWeaponChanged?.Invoke();
         return true;
     }

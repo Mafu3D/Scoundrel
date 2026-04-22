@@ -5,6 +5,7 @@ using Project.Decks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
 
 public enum CardClickContext
 {
@@ -25,18 +26,24 @@ public class CardView : MonoBehaviour
     [SerializeField] private GameObject discardContainer;
     [SerializeField] private GameObject equipContainer;
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private bool clickable = true;
+    [SerializeField] public bool Clickable = true;
 
     public bool IsActive { get; private set; } = false;
     public CardModel Card {get; private set; }
     public UnityEvent<CardModel, CardClickContext> OnCardClicked;
 
     private BoxCollider2D myCollider;
+    private SortingGroup mySortingGroup;
     private CardClickContext cardClickContext;
+
+    void Awake()
+    {
+        myCollider = GetComponent<BoxCollider2D>();
+        mySortingGroup = GetComponent<SortingGroup>();
+    }
 
     void Start()
     {
-        myCollider = GetComponent<BoxCollider2D>();
         attackWeaponContainer.SetActive(false);
         attackUnarmedContainer.SetActive(false);
         drinkContainer.SetActive(false);
@@ -88,9 +95,14 @@ public class CardView : MonoBehaviour
         Card = null;
     }
 
+    public void SetSortingLayer(int layer)
+    {
+        mySortingGroup.sortingOrder = layer;
+    }
+
     void OnMouseDown()
     {
-        if (!clickable)
+        if (!Clickable)
         {
             return;
         }
@@ -100,7 +112,7 @@ public class CardView : MonoBehaviour
 
     void Update()
     {
-        if (Card == null || !clickable)
+        if (Card == null || !Clickable)
         {
             return;
         }

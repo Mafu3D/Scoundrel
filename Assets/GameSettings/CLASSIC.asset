@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6626f29255529243ab61d687593e2a6, type: 3}
   m_Name: CLASSIC
   m_EditorClassIdentifier: 
-  Name: 
-  CardsPerRoom: 0
+  Name: Classic
+  CardsPerRoom: 4

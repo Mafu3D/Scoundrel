@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using Project.Decks;
 
-public class Weapon
+public class WeaponModel
 {
     public int StartingPower { get; private set; }
     public int Power { get; private set; }
     public CardModel Card;
     public List<CardModel> SlainCards { get; private set; } = new();
-    public Action OnWeaponUpdated;
+    public Action OnWeaponUpdate;
 
-    public Weapon(CardModel card)
+    public WeaponModel(CardModel card)
     {
         Card = card;
         StartingPower = card.Value;
@@ -37,6 +37,6 @@ public class Weapon
     public void AddMonsterToSlain(CardModel card)
     {
         SlainCards.Add(card);
-        OnWeaponUpdated?.Invoke();
+        OnWeaponUpdate?.Invoke();
     }
 }

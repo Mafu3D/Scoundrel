@@ -542,6 +542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 995225361}
   roomView: {fileID: 1834382874}
+  weaponView: {fileID: 1891542652}
 --- !u!4 &238818180
 Transform:
   m_ObjectHideFlags: 0
@@ -2503,9 +2504,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03747ff7e76d99b47991981035b6b909, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameSettings: {fileID: 0}
-  DeckManager: {fileID: 0}
-  Player: {fileID: 0}
+  GameSettings: {fileID: 11400000, guid: 3edf7b51b53b3d8409e9ecdabbc81237, type: 2}
+  DeckManager: {fileID: 995225364}
+  Player: {fileID: 995225363}
 --- !u!4 &995225362
 Transform:
   m_ObjectHideFlags: 0
@@ -3521,15 +3522,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4203964957157243235, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4203964957157243235, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4203964957157243235, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4203964957157243235, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4941,7 +4942,7 @@ GameObject:
   - component: {fileID: 1891542653}
   - component: {fileID: 1891542652}
   m_Layer: 0
-  m_Name: WeaponSlot
+  m_Name: WeaponView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4959,10 +4960,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d634a19accac26544bc3849dd0c46248, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
-  CardPrefab: {fileID: 2983930758097186374, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+  Player: {fileID: 995225363}
+  CardViewPrefab: {fileID: 0}
   weaponCard: {fileID: 2016223835}
-  lastDefeatedCard: {fileID: 43123129}
+  defeatedCards:
+  - {fileID: 43123129}
+  defeatedCardsOffset: -0.755
 --- !u!4 &1891542653
 Transform:
   m_ObjectHideFlags: 0
