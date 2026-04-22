@@ -13,7 +13,7 @@ public enum CardClickContext
     BOT
 }
 
-public class CardObject : MonoBehaviour
+public class CardView : MonoBehaviour
 {
     [SerializeField] private List<TMP_Text> valueTMPTexts = new();
     [SerializeField] private TMP_Text suitTMPText;
@@ -26,12 +26,12 @@ public class CardObject : MonoBehaviour
     [SerializeField] private GameObject equipContainer;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private bool clickable = true;
+
+    public bool IsActive { get; private set; } = false;
+    public CardModel Card {get; private set; }
+    public UnityEvent<CardModel, CardClickContext> OnCardClicked;
+
     private BoxCollider2D myCollider;
-
-    public UnityEvent<Card, CardClickContext> OnCardClicked;
-
-    public Card Card {get; private set; }
-
     private CardClickContext cardClickContext;
 
     void Start()
@@ -44,7 +44,7 @@ public class CardObject : MonoBehaviour
         equipContainer.SetActive(false);
     }
 
-    public void RegisterCard(Card card)
+    public void RegisterCard(CardModel card)
     {
         Card = card;
         if (card == null) return;
@@ -94,8 +94,6 @@ public class CardObject : MonoBehaviour
         {
             return;
         }
-
-        Debug.Log("clicky");
         OnCardClicked?.Invoke(Card, cardClickContext);
         gameManager.OnCardClicked(Card, cardClickContext);
     }
