@@ -18,7 +18,6 @@ public class GameManager : MonoBehaviour
     private bool usedRunTokenLastRound = false;
     public int ExtraRunTokens = 0;
     public bool HasDrankPotionThisRoom { get; private set; } = false;
-
     public bool HasEnteredTheRoom { get; private set; } = false;
 
     public Action OnStartNewGame;
@@ -62,14 +61,14 @@ public class GameManager : MonoBehaviour
     {
         int monsterScore = 0;
         bool monstersInRoom = false;
-        foreach (Card card in DeckManager.Deck.RemainingItems)
+        foreach (CardModel card in DeckManager.Deck.RemainingItems)
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
                 monsterScore += card.Value;
             }
         }
-        foreach (Card card in CurrentRoom.Cards)
+        foreach (CardModel card in CurrentRoom.Cards)
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
@@ -83,7 +82,7 @@ public class GameManager : MonoBehaviour
             if (Player.CurrentHealth == Player.MaxHealth)
             {
                 int potionScore = 0;
-                foreach (Card card in CurrentRoom.Cards)
+                foreach (CardModel card in CurrentRoom.Cards)
                 {
                     if (card.Suit == Suit.HEARTS)
                     {
@@ -105,7 +104,7 @@ public class GameManager : MonoBehaviour
 
     public void EnterFirstRoom()
     {
-        List<Card> drawnCards = DeckManager.Draw(roomSize);
+        List<CardModel> drawnCards = DeckManager.Draw(roomSize);
         Room room = new(roomSize, drawnCards);
         CurrentRoom = room;
 
@@ -118,10 +117,10 @@ public class GameManager : MonoBehaviour
     {
         if (!CanGoToNextRoom) return;
 
-        List<Card> newCards = new();
+        List<CardModel> newCards = new();
 
         newCards.AddRange(CurrentRoom.RemainingCards());
-        List<Card> drawnCards = DeckManager.Draw(roomSize - CurrentRoom.RemainingCount);
+        List<CardModel> drawnCards = DeckManager.Draw(roomSize - CurrentRoom.RemainingCount);
         newCards.AddRange(drawnCards);
 
         Room NextRoom = new(roomSize, newCards);
@@ -142,7 +141,7 @@ public class GameManager : MonoBehaviour
         OnEnterNewRoom?.Invoke();
     }
 
-    public void OnCardClicked(Card card, CardClickContext context)
+    public void OnCardClicked(CardModel card, CardClickContext context)
     {
         bool success = false;
 
@@ -150,7 +149,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        // Card card = CurrentRoom.Cards[index];
+
         switch(card.Suit)
         {
             case Suit.HEARTS:
@@ -221,19 +220,19 @@ public class GameManager : MonoBehaviour
 
     public bool CanRun() => (HasRunToken || ExtraRunTokens > 0) && !HasEnteredTheRoom;
 
-    private void FightWeapon(Card card)
+    private void FightWeapon(CardModel card)
     {
         int damage = Math.Clamp(card.Value - Player.Weapon.Power, 0, 999);
         Player.TakeDamage(damage);
         Player.Weapon.AddMonsterToSlain(card);
     }
 
-    private void FightUnarmed(Card card)
+    private void FightUnarmed(CardModel card)
     {
         Player.TakeDamage(card.Value);
     }
 
-    private void EquipWeapon(Card card)
+    private void EquipWeapon(CardModel card)
     {
         Player.EquipWeapon(card);
     }
@@ -247,57 +246,4 @@ public class GameManager : MonoBehaviour
     {
 
     }
-
-}
-
-public class Room
-{
-    public int Size = 4;
-    public Card[] Cards;
-
-    public Room(int roomSize, List<Card> cards)
-    {
-        Cards = new Card[roomSize];
-
-        for (int i = 0; i < Cards.Length; i++)
-        {
-            Cards[i] = cards[i];
-        }
-    }
-
-    public List<Card> RemainingCards()
-    {
-        List<Card> remaining = new();
-        foreach (var card in Cards)
-        {
-            if (card != null)
-            {
-                remaining.Add(card);
-            }
-        }
-        return remaining;
-    }
-
-    public bool TryRemoveCard(Card card)
-    {
-        if (!Cards.Contains(card))
-        {
-            Debug.LogWarning("card is not in the current room!");
-            return false;
-        }
-
-        int index = Array.IndexOf(Cards, card);
-        Cards[index] = null;
-        return true;
-    }
-
-    public void ClearCards()
-    {
-        for (int i = 0; i < Cards.Length; i++)
-        {
-            Cards[i] = null;
-        }
-    }
-
-    public int RemainingCount => RemainingCards().Count;
 }

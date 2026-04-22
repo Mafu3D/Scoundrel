@@ -9,7 +9,7 @@ using Unity.VisualScripting;
 
 public class TableManager : MonoBehaviour
 {
-    [SerializeField] List<CardSlot> CardSlots;
+    [SerializeField] List<CardView> Cards;
     [SerializeField] GameObject CardPrefab;
     [SerializeField] TMP_Text remaining_TMPText;
     [SerializeField] TMP_Text round_TMPText;
@@ -53,18 +53,18 @@ public class TableManager : MonoBehaviour
 
     private void OnCardsChanged()
     {
-        for (int i = 0; i < CardSlots.Count; i++)
+        for (int i = 0; i < Cards.Count; i++)
         {
             bool setActive = GameManager.CurrentRoom.Cards[i] != null;
-            CardSlots[i].SetActive(setActive);
+            Cards[i].gameObject.SetActive(setActive);
         }
     }
 
     private void Start()
     {
-        foreach (var cardSlot in CardSlots)
+        foreach (var cardSlot in Cards)
         {
-            cardSlot.SetActive(false);
+            cardSlot.gameObject.SetActive(false);
         }
         foreach (var item in showDuringGameOver)
         {
@@ -90,13 +90,13 @@ public class TableManager : MonoBehaviour
 
     private void OnEnterNewRoom()
     {
-        for (int i = 0; i < CardSlots.Count; i++)
+        for (int i = 0; i < Cards.Count; i++)
         {
             if (GameManager.CurrentRoom.Cards[i] != null)
             {
-                CardSlots[i].SetActive(true);
+                Cards[i].gameObject.SetActive(true);
             }
-            CardSlots[i].AssignCard(GameManager.CurrentRoom.Cards[i]);
+            Cards[i].RegisterCard(GameManager.CurrentRoom.Cards[i]);
         }
 
         round_TMPText.text = "Round: " + GameManager.RoomNumber.ToString();
@@ -119,14 +119,14 @@ public class TableManager : MonoBehaviour
         }
 
         int monsterScore = 0;
-        foreach (Card card in DeckManager.Deck.RemainingItems)
+        foreach (CardModel card in DeckManager.Deck.RemainingItems)
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
                 monsterScore += card.Value;
             }
         }
-        foreach (Card card in GameManager.CurrentRoom.Cards)
+        foreach (CardModel card in GameManager.CurrentRoom.Cards)
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {

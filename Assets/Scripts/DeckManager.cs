@@ -8,36 +8,36 @@ using System;
 
 public class DeckManager : MonoBehaviour
 {
-    public Deck<Card> Deck { get; private set; }
+    public Deck<CardModel> Deck { get; private set; }
 
     public Action OnCardDraw;
 
     public void ResetDeck()
     {
         // Create black cards
-        List<Card> cards = new();
+        List<CardModel> cards = new();
         for (int i = 2; i <= 14; i++)
         {
-            cards.Add(new Card(Suit.CLUBS, i));
-            cards.Add(new Card(Suit.SPADES, i));
+            cards.Add(new CardModel(Suit.CLUBS, i));
+            cards.Add(new CardModel(Suit.SPADES, i));
         }
 
         // Create red cards
         for (int i = 2; i <= 10; i++)
         {
-            cards.Add(new Card(Suit.HEARTS, i));
-            cards.Add(new Card(Suit.DIAMONDS, i));
+            cards.Add(new CardModel(Suit.HEARTS, i));
+            cards.Add(new CardModel(Suit.DIAMONDS, i));
         }
 
         // Create deck
-        Deck = new Deck<Card>(cards);
+        Deck = new Deck<CardModel>(cards);
         Deck.Shuffle();
     }
 
 
-    public List<Card> Draw(int amount)
+    public List<CardModel> Draw(int amount)
     {
-        List<Card> drawn = Deck.DrawMultiple(amount);
+        List<CardModel> drawn = Deck.DrawMultiple(amount);
         OnCardDraw?.Invoke();
         return drawn;
     }

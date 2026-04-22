@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
         OnHealthChanged?.Invoke(CurrentHealth);
     }
 
-    public void EquipWeapon(Card card)
+    public void EquipWeapon(CardModel card)
     {
         this.Weapon = new Weapon(card);
         OnWeaponChanged?.Invoke();
@@ -67,11 +67,11 @@ public class Weapon
 {
     public int StartingPower { get; private set; }
     public int Power { get; private set; }
-    public Card Card;
-    public List<Card> SlainCards { get; private set; } = new();
+    public CardModel Card;
+    public List<CardModel> SlainCards { get; private set; } = new();
     public Action OnWeaponUpdated;
 
-    public Weapon(Card card)
+    public Weapon(CardModel card)
     {
         Card = card;
         StartingPower = card.Value;
@@ -95,7 +95,7 @@ public class Weapon
 
     public bool CanSlayMonster(int monsterStrength) => monsterStrength < GetCurrentStrength();
 
-    public void AddMonsterToSlain(Card card)
+    public void AddMonsterToSlain(CardModel card)
     {
         SlainCards.Add(card);
         OnWeaponUpdated?.Invoke();

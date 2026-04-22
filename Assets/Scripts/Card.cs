@@ -9,7 +9,7 @@ namespace Project.Decks
         CLUBS
     }
 
-    public class Card : IDeckStorable
+    public class CardModel : IDeckStorable
     {
         public Suit Suit { get; private set; }
 
@@ -19,7 +19,7 @@ namespace Project.Decks
 
         private Guid uuid;
 
-        public Card(Suit suit, int value) {
+        public CardModel(Suit suit, int value) {
             this.Suit = suit;
             this.Value = value;
 

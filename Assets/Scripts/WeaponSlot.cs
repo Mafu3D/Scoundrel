@@ -8,15 +8,15 @@ public class WeaponSlot : MonoBehaviour
 {
     [SerializeField] Player Player;
     [SerializeField] GameObject CardPrefab;
-    [SerializeField] CardObject mainCardObject;
-    [SerializeField] CardObject secondaryCardObject;
+    [SerializeField] CardView weaponCard;
+    [SerializeField] CardView lastDefeatedCard;
 
     Weapon weapon;
 
     void OnEnable()
     {
-        mainCardObject.gameObject.SetActive(false);
-        secondaryCardObject.gameObject.SetActive(false);
+        weaponCard.gameObject.SetActive(false);
+        lastDefeatedCard.gameObject.SetActive(false);
         Player.OnWeaponChanged += OnWeaponChanged;
     }
 
@@ -41,9 +41,9 @@ public class WeaponSlot : MonoBehaviour
     public void RegisterWeapon(Weapon weapon)
     {
         this.weapon = weapon;
-        mainCardObject.RegisterCard(weapon.Card);
+        weaponCard.RegisterCard(weapon.Card);
         weapon.OnWeaponUpdated += OnWeaponUpdated;
-        mainCardObject.gameObject.SetActive(true);
+        weaponCard.gameObject.SetActive(true);
     }
 
     public void DeregisterWeapon()
@@ -52,7 +52,7 @@ public class WeaponSlot : MonoBehaviour
         {
             weapon.OnWeaponUpdated -= OnWeaponUpdated;
         }
-        mainCardObject.gameObject.SetActive(false);
+        weaponCard.gameObject.SetActive(false);
         this.weapon = null;
     }
 
@@ -64,16 +64,16 @@ public class WeaponSlot : MonoBehaviour
         }
         if (weapon.SlainCards.Count == 0)
         {
-            secondaryCardObject.gameObject.SetActive(false);
+            lastDefeatedCard.gameObject.SetActive(false);
         }
         else
         {
-            secondaryCardObject.gameObject.SetActive(true);
-            if (secondaryCardObject.Card != null)
+            lastDefeatedCard.gameObject.SetActive(true);
+            if (lastDefeatedCard.Card != null)
             {
-                secondaryCardObject.DeregisterCard();
+                lastDefeatedCard.DeregisterCard();
             }
-            secondaryCardObject.RegisterCard(weapon.SlainCards[^1]);
+            lastDefeatedCard.RegisterCard(weapon.SlainCards[^1]);
         }
     }
 }
