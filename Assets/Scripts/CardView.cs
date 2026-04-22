@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Project.Decks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
@@ -14,41 +15,53 @@ public enum CardClickContext
     BOT
 }
 
-public class CardView : MonoBehaviour
+public partial class CardView : MonoBehaviour
 {
+    [SerializeField] public bool Clickable = true;
+
+    [Header("Card Text")]
     [SerializeField] private List<TMP_Text> valueTMPTexts = new();
     [SerializeField] private TMP_Text suitTMPText;
+
+    [Header("Card Colors")]
     [SerializeField] private Color red;
     [SerializeField] private Color black;
-    [SerializeField] private GameObject attackWeaponContainer;
-    [SerializeField] private GameObject attackUnarmedContainer;
-    [SerializeField] private GameObject drinkContainer;
-    [SerializeField] private GameObject discardContainer;
-    [SerializeField] private GameObject equipContainer;
+
+    [Header("Hover")]
+    [SerializeField] CardHoverContextView topHoverContext;
+    [SerializeField] CardHoverContextView botHoverContext;
+    [SerializeField] CardHoverContextView fullHoverContext;
+
+    [Header("Hover Contexts Colors")]
+    [SerializeField] private Color attackWeaponColor;
+    [SerializeField] private Color attackUnarmedColor;
+    [SerializeField] private Color equipColor;
+    [SerializeField] private Color drinkColor;
+    [SerializeField] private Color discardColor;
+
+
     [SerializeField] private GameManager gameManager;
-    [SerializeField] public bool Clickable = true;
 
     public bool IsActive { get; private set; } = false;
     public CardModel Card {get; private set; }
-    public UnityEvent<CardModel, CardClickContext> OnCardClicked;
+    public Action<CardModel, CardClickContext> OnCardClicked; // Not used?
 
     private BoxCollider2D myCollider;
     private SortingGroup mySortingGroup;
     private CardClickContext cardClickContext;
+    private List<CardHoverContextView> allHoverContexts;
 
     void Awake()
     {
         myCollider = GetComponent<BoxCollider2D>();
         mySortingGroup = GetComponent<SortingGroup>();
+
+        allHoverContexts = new() {topHoverContext, botHoverContext, fullHoverContext};
     }
 
     void Start()
     {
-        attackWeaponContainer.SetActive(false);
-        attackUnarmedContainer.SetActive(false);
-        drinkContainer.SetActive(false);
-        discardContainer.SetActive(false);
-        equipContainer.SetActive(false);
+        HideAllHoverBoxes();
     }
 
     public void RegisterCard(CardModel card)
@@ -117,69 +130,81 @@ public class CardView : MonoBehaviour
             return;
         }
 
+        HandleMousePosition();
+    }
+
+    private void HandleMousePosition()
+    {
         Vector3 mousePos = Input.mousePosition;
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
         if (myCollider.OverlapPoint(worldPos))
         {
             if (Card.Suit == Suit.SPADES || Card.Suit == Suit.CLUBS)
             {
+                // Attack Weapon (Top)
                 if (worldPos.y >= this.transform.position.y)
                 {
                     cardClickContext = CardClickContext.TOP;
-                    attackWeaponContainer.SetActive(true);
-                    attackUnarmedContainer.SetActive(false);
-                    drinkContainer.SetActive(false);
-                    discardContainer.SetActive(false);
-                    equipContainer.SetActive(false);
+                    ShowHoverBox(topHoverContext, attackWeaponColor, "Weapon");
                 }
+                // Attack Unarmed (Bot)
                 else
                 {
                     cardClickContext = CardClickContext.BOT;
-                    attackWeaponContainer.SetActive(false);
-                    attackUnarmedContainer.SetActive(true);
-                    drinkContainer.SetActive(false);
-                    discardContainer.SetActive(false);
-                    equipContainer.SetActive(false);
+                    ShowHoverBox(botHoverContext, attackUnarmedColor, "Fist");
                 }
             }
             else if (Card.Suit == Suit.HEARTS)
             {
-                if (gameManager.Player.HasDrankPotionThisRoom)
+                // Drink
+                if (gameManager.Player.HasDrankPotionThisRoom || gameManager.Player.IsAtMaxHealth)
                 {
                     cardClickContext = CardClickContext.TOP;
-                    attackWeaponContainer.SetActive(false);
-                    attackUnarmedContainer.SetActive(false);
-                    drinkContainer.SetActive(false);
-                    discardContainer.SetActive(true);
-                    equipContainer.SetActive(false);
+                    ShowHoverBox(fullHoverContext, discardColor, "Discard");
                 }
+                // Discard
                 else
                 {
                     cardClickContext = CardClickContext.TOP;
-                    attackWeaponContainer.SetActive(false);
-                    attackUnarmedContainer.SetActive(false);
-                    drinkContainer.SetActive(true);
-                    discardContainer.SetActive(false);
-                    equipContainer.SetActive(false);
+                    ShowHoverBox(fullHoverContext, drinkColor, "Drink");
                 }
             }
             else if (Card.Suit == Suit.DIAMONDS)
             {
+                // Equip
                 cardClickContext = CardClickContext.NONE;
-                attackWeaponContainer.SetActive(false);
-                attackUnarmedContainer.SetActive(false);
-                drinkContainer.SetActive(false);
-                discardContainer.SetActive(false);
-                equipContainer.SetActive(true);
+                ShowHoverBox(fullHoverContext, equipColor, "Equip");
             }
         }
         else
         {
-            attackWeaponContainer.SetActive(false);
-            attackUnarmedContainer.SetActive(false);
-            drinkContainer.SetActive(false);
-            discardContainer.SetActive(false);
-            equipContainer.SetActive(false);
+            // None
+            HideAllHoverBoxes();
+        }
+    }
+
+    private void ShowHoverBox(CardHoverContextView boxToShow, Color bgColor, string text)
+    {
+        foreach (CardHoverContextView box in allHoverContexts)
+        {
+            if (box != boxToShow)
+            {
+                box.gameObject.SetActive(false);
+                box.Clear();
+                continue;
+            }
+            box.gameObject.SetActive(true);
+            box.SetBGColor(bgColor);
+            box.SetText(text);
+        }
+    }
+
+    private void HideAllHoverBoxes()
+    {
+        foreach (CardHoverContextView box in allHoverContexts)
+        {
+            box.gameObject.SetActive(false);
+            box.Clear();
         }
     }
 

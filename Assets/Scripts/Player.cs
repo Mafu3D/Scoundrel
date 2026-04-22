@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public bool HasEnteredTheRoom { get; private set; } = false;
     public int ExtraRunTokens { get; private set; } = 0;
     public bool HasDrankPotionThisRoom { get; private set; } = false;
+    public bool IsAtMaxHealth => CurrentHealth == MaxHealth;
 
     public Action<int> OnHealthChanged;
     public Action OnDeath;
