@@ -9,20 +9,24 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("GameSettings")]
+    [SerializeField] public GameSettings GameSettings;
+
+    [Header("Services")]
     [SerializeField] public DeckManager DeckManager;
     [SerializeField] public Player Player;
 
     public bool GameHasStarted {get; private set;}
     public int RoomNumber { get; private set; }= 0;
-    public Room CurrentRoom = null;
+    public RoomModel CurrentRoom { get; private set; } = null;
+    public ScoreKeeper ScoreKeeper { get; private set; } = null;
 
     public Action OnStartNewGame;
     public Action OnGameOver;
     public Action OnEnterNewRoom;
-    public Action OnCardsChanged;
 
-    private int roomSize = 4;
-    private int remainingToMove = 1;
+    private int cardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
+    private readonly int remainingToMove = 1;
 
     public bool CanGoToNextRoom => CurrentRoom != null && CurrentRoom.RemainingCount <= remainingToMove;
 
@@ -32,6 +36,16 @@ public class GameManager : MonoBehaviour
 
     void OnDisable()
     {
+    }
+
+    void Awake()
+    {
+        // ServiceLocator.Global.Register(this);
+    }
+
+    void Start()
+    {
+        ScoreKeeper = new ScoreKeeper(this);
     }
 
     public void StartNewGame()
@@ -59,55 +73,10 @@ public class GameManager : MonoBehaviour
         OnGameOver?.Invoke();
     }
 
-    public int GetScore()
-    {
-        int monsterScore = 0;
-        bool monstersInRoom = false;
-        foreach (CardModel card in DeckManager.Deck.RemainingItems)
-        {
-            if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
-            {
-                monsterScore += card.Value;
-            }
-        }
-        foreach (CardModel card in CurrentRoom.Cards)
-        {
-            if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
-            {
-                monstersInRoom = true;
-                monsterScore += card.Value;
-            }
-        }
-
-        if (DeckManager.Deck.CurrentCount == 0 && !monstersInRoom)
-        {
-            if (Player.CurrentHealth == Player.MaxHealth)
-            {
-                int potionScore = 0;
-                foreach (CardModel card in CurrentRoom.Cards)
-                {
-                    if (card.Suit == Suit.HEARTS)
-                    {
-                        if (card.Value > potionScore)
-                        {
-                            potionScore = card.Value;
-                        }
-                    }
-                }
-                return Player.MaxHealth + potionScore;
-            }
-            else
-            {
-                return Player.CurrentHealth;
-            }
-        }
-        return Player.CurrentHealth - monsterScore;
-    }
-
     private void EnterFirstRoom()
     {
-        List<CardModel> drawnCards = DeckManager.Draw(roomSize);
-        Room room = new(roomSize, drawnCards);
+        List<CardModel> drawnCards = DeckManager.Draw(cardsPerRoom);
+        RoomModel room = new(cardsPerRoom, drawnCards);
         CurrentRoom = room;
 
         RoomNumber++;
@@ -122,10 +91,10 @@ public class GameManager : MonoBehaviour
         List<CardModel> newCards = new();
 
         newCards.AddRange(CurrentRoom.RemainingCards());
-        List<CardModel> drawnCards = DeckManager.Draw(roomSize - CurrentRoom.RemainingCount);
+        List<CardModel> drawnCards = DeckManager.Draw(cardsPerRoom - CurrentRoom.RemainingCount);
         newCards.AddRange(drawnCards);
 
-        Room NextRoom = new(roomSize, newCards);
+        RoomModel NextRoom = new(cardsPerRoom, newCards);
         CurrentRoom = NextRoom;
         RoomNumber++;
 
@@ -157,7 +126,6 @@ public class GameManager : MonoBehaviour
                 Player.EnterNewRoom();
             }
             CurrentRoom.TryRemoveCard(card);
-            OnCardsChanged?.Invoke();
         }
     }
 

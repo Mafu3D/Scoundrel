@@ -9,8 +9,6 @@ using Unity.VisualScripting;
 
 public class TableManager : MonoBehaviour
 {
-    [SerializeField] List<CardView> Cards;
-    [SerializeField] GameObject CardPrefab;
     [SerializeField] TMP_Text remaining_TMPText;
     [SerializeField] TMP_Text round_TMPText;
     [SerializeField] TMP_Text health_TMPText;
@@ -29,7 +27,7 @@ public class TableManager : MonoBehaviour
     {
         GameManager.OnStartNewGame += OnStartNewGame;
         GameManager.OnEnterNewRoom += OnEnterNewRoom;
-        GameManager.OnCardsChanged += OnCardsChanged;
+
         GameManager.OnGameOver += OnGameOver;
         Player.OnHealthChanged += OnPlayerHealthChanged;
         DeckManager.OnCardDraw += OnCardDraw;
@@ -39,7 +37,7 @@ public class TableManager : MonoBehaviour
     {
         GameManager.OnStartNewGame -= OnStartNewGame;
         GameManager.OnEnterNewRoom -= OnEnterNewRoom;
-        GameManager.OnCardsChanged -= OnCardsChanged;
+
         GameManager.OnGameOver -= OnGameOver;
         Player.OnHealthChanged -= OnPlayerHealthChanged;
         DeckManager.OnCardDraw -= OnCardDraw;
@@ -51,21 +49,11 @@ public class TableManager : MonoBehaviour
         health_TMPText.text = $"{amount} / {Player.MaxHealth}";
     }
 
-    private void OnCardsChanged()
-    {
-        for (int i = 0; i < Cards.Count; i++)
-        {
-            bool setActive = GameManager.CurrentRoom.Cards[i] != null;
-            Cards[i].gameObject.SetActive(setActive);
-        }
-    }
+
 
     private void Start()
     {
-        foreach (var cardSlot in Cards)
-        {
-            cardSlot.gameObject.SetActive(false);
-        }
+
         foreach (var item in showDuringGameOver)
         {
             item.SetActive(false);
@@ -90,15 +78,6 @@ public class TableManager : MonoBehaviour
 
     private void OnEnterNewRoom()
     {
-        for (int i = 0; i < Cards.Count; i++)
-        {
-            if (GameManager.CurrentRoom.Cards[i] != null)
-            {
-                Cards[i].gameObject.SetActive(true);
-            }
-            Cards[i].RegisterCard(GameManager.CurrentRoom.Cards[i]);
-        }
-
         round_TMPText.text = "Round: " + GameManager.RoomNumber.ToString();
     }
 
@@ -143,6 +122,6 @@ public class TableManager : MonoBehaviour
             endMessage_TMPText.text = "You Lose!";
         }
 
-        score_TMPText.text = GameManager.GetScore().ToString();
+        score_TMPText.text = GameManager.ScoreKeeper.GetScore().ToString();
     }
 }

@@ -5,12 +5,14 @@ using Project.Decks;
 using System;
 using System.Linq;
 
-public class Room
+public class RoomModel
 {
     public int Size = 4;
     public CardModel[] Cards;
 
-    public Room(int roomSize, List<CardModel> cards)
+    public Action OnCardsChanged;
+
+    public RoomModel(int roomSize, List<CardModel> cards)
     {
         Cards = new CardModel[roomSize];
 
@@ -43,6 +45,7 @@ public class Room
 
         int index = Array.IndexOf(Cards, card);
         Cards[index] = null;
+        OnCardsChanged?.Invoke();
         return true;
     }
 
