@@ -18,7 +18,7 @@ public class PlayerHealthView : MonoBehaviour
 
     private void OnPlayerHealthChanged(int amount)
     {
-        health_TMPText.text = $"{amount} / {Player.MaxHealth}";
+        health_TMPText.text = $"{amount}/{Player.MaxHealth}";
     }
 
 }

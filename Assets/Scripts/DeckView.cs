@@ -18,6 +18,6 @@ public class DeckView : MonoBehaviour
 
     private void OnCardDraw()
     {
-        remainingCards_TMPText.text = $"{DeckManager.Deck.CurrentCount} / {DeckManager.Deck.TotalCount}";
+        remainingCards_TMPText.text = $"{DeckManager.Deck.CurrentCount}/{DeckManager.Deck.TotalCount}";
     }
 }

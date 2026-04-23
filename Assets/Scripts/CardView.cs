@@ -19,13 +19,19 @@ public partial class CardView : MonoBehaviour
 {
     [SerializeField] public bool Clickable = true;
 
-    [Header("Card Text")]
+    [Header("Card Visuals")]
     [SerializeField] private List<TMP_Text> valueTMPTexts = new();
-    [SerializeField] private TMP_Text suitTMPText;
+    [SerializeField] private SpriteRenderer suitSprite;
 
     [Header("Card Colors")]
     [SerializeField] private Color red;
     [SerializeField] private Color black;
+
+    [Header("Suit Sprites")]
+    [SerializeField] private Sprite diamondsSprite;
+    [SerializeField] private Sprite heartsSprite;
+    [SerializeField] private Sprite clubsSprite;
+    [SerializeField] private Sprite spadesSprite;
 
     [Header("Hover")]
     [SerializeField] CardHoverContextView topHoverContext;
@@ -99,8 +105,21 @@ public partial class CardView : MonoBehaviour
             TMPText.color = color;
         }
 
-        suitTMPText.text = card.Suit.ToString();
-        suitTMPText.color = color;
+        switch (card.Suit)
+        {
+            case Suit.SPADES:
+                suitSprite.sprite = spadesSprite;
+                break;
+            case Suit.CLUBS:
+                suitSprite.sprite = clubsSprite;
+                break;
+            case Suit.HEARTS:
+                suitSprite.sprite = heartsSprite;
+                break;
+            case Suit.DIAMONDS:
+                suitSprite.sprite = diamondsSprite;
+                break;
+        }
     }
 
     public void DeregisterCard()

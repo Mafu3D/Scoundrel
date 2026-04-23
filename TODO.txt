@@ -2,4 +2,3 @@ TODO:
 - Find way to remove GameManager reference from CardView
 - Refactor CardView to use mouse events and more in depth contexting
 - Shift all weapon cards over to avoid weapons going off screen
-- Break up rest of TableManager
