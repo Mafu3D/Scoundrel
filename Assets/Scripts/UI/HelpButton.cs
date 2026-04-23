@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class HelpButton : MonoBehaviour
 {
-    [SerializeField] GameObject helpObject;
+    [SerializeField] GameObject helpTextObject;
 
     // Start is called before the first frame update
     void Start()
     {
-        helpObject.SetActive(false);
+        helpTextObject.SetActive(false);
     }
 
     public void ToggleHelp()
     {
-        if (helpObject.activeSelf)
+        if (helpTextObject.activeSelf)
         {
-            helpObject.SetActive(false);
+            helpTextObject.SetActive(false);
         }
         else
         {
-            helpObject.SetActive(true);
+            helpTextObject.SetActive(true);
         }
     }
 }

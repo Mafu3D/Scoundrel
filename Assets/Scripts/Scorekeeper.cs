@@ -9,6 +9,30 @@ public class ScoreKeeper
         this.gameManager = gameManager;
     }
 
+    public bool HasPlayerWon()
+    {
+        int monsterScore = 0;
+        foreach (CardModel card in gameManager.DeckManager.Deck.RemainingItems)
+        {
+            if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
+            {
+                monsterScore += card.Value;
+            }
+        }
+        foreach (CardModel card in gameManager.CurrentRoom.Cards)
+        {
+            if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
+            {
+                monsterScore += card.Value;
+            }
+        }
+        if (gameManager.DeckManager.Deck.CurrentCount == 0 && monsterScore == 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public int GetScore()
     {
         int monsterScore = 0;
