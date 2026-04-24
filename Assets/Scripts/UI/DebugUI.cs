@@ -5,11 +5,31 @@ using UnityEngine;
 
 public class DebugUI : MonoBehaviour
 {
-    [SerializeField] TMP_Text text;
     [SerializeField] GameManager gameManager;
+    [SerializeField] GameObject mainContainer;
+    [SerializeField] TMP_Text bottomText;
+    [SerializeField] bool startEnabled;
+
+    void Start()
+    {
+        if (startEnabled)
+        {
+            mainContainer.SetActive(true);
+        }
+    }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Period))
+        {
+            ToggleUI();
+        }
+
+        if (!mainContainer.activeSelf)
+        {
+            return;
+        }
+
         string message = "";
         if (!gameManager.GameHasStarted)
         {
@@ -39,6 +59,18 @@ public class DebugUI : MonoBehaviour
                 message += "Weapon: NONE";
             }
         }
-        text.text = message;
+        bottomText.text = message;
+    }
+
+    private void ToggleUI()
+    {
+        if (mainContainer.activeSelf)
+        {
+            mainContainer.SetActive(false);
+        }
+        else
+        {
+            mainContainer.SetActive(true);
+        }
     }
 }

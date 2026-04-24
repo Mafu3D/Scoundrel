@@ -61,7 +61,6 @@ namespace Project.Decks
         public void Shuffle()
         {
             RemainingItems.Shuffle();
-            Debug.Log("shufflin");
         }
 
         public void Reset()
