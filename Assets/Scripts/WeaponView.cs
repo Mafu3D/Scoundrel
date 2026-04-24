@@ -11,7 +11,7 @@ public class WeaponView : MonoBehaviour
     [SerializeField] GameObject CardViewPrefab;
     [SerializeField] CardView weaponCard;
     [SerializeField] List<CardView> defeatedCardsPool;
-    [SerializeField] float defeatedCardsOffset = -0.755f;
+    [SerializeField] float cardOffset = -0.755f;
 
     WeaponModel weapon;
 
@@ -86,7 +86,7 @@ public class WeaponView : MonoBehaviour
             {
                 card.RegisterCard(weapon.SlainCards[i]);
                 card.gameObject.SetActive(true);
-                card.transform.localPosition = new Vector3(defeatedCardsOffset*(i+1), 0, 0);
+                card.transform.localPosition = new Vector3(cardOffset*(i+1), 0, 0);
             }
             else
             {
@@ -95,6 +95,25 @@ public class WeaponView : MonoBehaviour
                     card.DeregisterCard();
                 }
                 card.gameObject.SetActive(false);
+            }
+        }
+
+        // Offset the cards
+        for (int i = 0; i < weapon.SlainCards.Count + 1; i++)
+        {
+            CardView card = i == 0 ? weaponCard : defeatedCardsPool[i-1];
+            float midPoint = (weapon.SlainCards.Count + 1) / 2;
+            if (i < midPoint)
+            {
+                // Positive
+                int step = (int)Math.Floor(midPoint - i);
+                card.transform.localPosition = Vector3.zero + new Vector3(cardOffset * step, 0f, 0f);
+            }
+            else
+            {
+                // Negative
+                int step = (int)Math.Ceiling(i - midPoint);
+                card.transform.localPosition = Vector3.zero + new Vector3(cardOffset * -step, 0f, 0f);
             }
         }
     }
