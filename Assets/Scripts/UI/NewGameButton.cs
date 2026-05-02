@@ -8,6 +8,6 @@ public class NewGameButton : MonoBehaviour
 
     public void NewGame()
     {
-        gameManager.StartNewGame();
+        gameManager.RestartGame();
     }
 }

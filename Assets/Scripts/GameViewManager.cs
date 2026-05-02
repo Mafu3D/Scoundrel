@@ -9,7 +9,7 @@ public class GameViewManager : MonoBehaviour
     void OnEnable()
     {
         gameManager.OnStartNewGame += OnStartNewGame;
-        gameManager.OnEnterNewRoom += OnEnterNewRoom;
+        gameManager.OnOpenNewRoom += OnOpenNewRoom;
         gameManager.OnGameOver += OnGameOver;
         gameManager.Player.OnWeaponChanged += OnWeaponChanged;
     }
@@ -17,7 +17,7 @@ public class GameViewManager : MonoBehaviour
     void OnDisable()
     {
         gameManager.OnStartNewGame -= OnStartNewGame;
-        gameManager.OnEnterNewRoom -= OnEnterNewRoom;
+        gameManager.OnOpenNewRoom -= OnOpenNewRoom;
         gameManager.OnGameOver -= OnGameOver;
         gameManager.Player.OnWeaponChanged -= OnWeaponChanged;
     }
@@ -28,7 +28,7 @@ public class GameViewManager : MonoBehaviour
         weaponView.OnStartNewGame();
     }
 
-    private void OnEnterNewRoom()
+    private void OnOpenNewRoom()
     {
         roomView.DeregisterRoom();
         roomView.RegisterRoom(gameManager.CurrentRoom);

@@ -41,4 +41,30 @@ public class DeckManager : MonoBehaviour
         OnCardDraw?.Invoke();
         return drawn;
     }
+
+    public int RemainingOfSuit(Suit suit)
+    {
+        int remaining = 0;
+        foreach (CardModel card in Deck.RemainingItems)
+        {
+            if (card.Suit == suit)
+            {
+                remaining++;
+            }
+        }
+        return remaining;
+    }
+
+    public int RemainingOfSuit(List<Suit> suits)
+    {
+        int remaining = 0;
+        foreach (CardModel card in Deck.RemainingItems)
+        {
+            if (suits.Contains(card.Suit))
+            {
+                remaining++;
+            }
+        }
+        return remaining;
+    }
 }

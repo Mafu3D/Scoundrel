@@ -172,7 +172,8 @@ namespace Project.Decks
 
     }
 
-    public static class Deck {
+    public static class Deck
+    {
         public static Deck<T> InitializeDeck<T>(IDeckDefinition<T> deckDefinition) where T : IDeckStorable
         {
             if (deckDefinition == null) return new();
@@ -182,56 +183,4 @@ namespace Project.Decks
             return deck;
         }
     }
-
-    // public class DrawnCollection<T> where T : IDeckStorable
-    // {
-    //     List<T> drawnItems;
-    //     Deck<T> deck;
-    //     int amount;
-
-    //     public DrawnCollection(List<T> initialDrawn, Deck<T> ownerDeck)
-    //     {
-    //         drawnItems = initialDrawn;
-    //         amount = drawnItems.Count;
-    //         deck = ownerDeck;
-    //     }
-
-    //     public DrawnCollection<T> UntilCondition(Func<List<T>, bool> condition)
-    //     {
-    //         int maxLoops = 9999;
-    //         int i = 0;
-    //         while(!condition(drawnItems))
-    //         {
-    //             deck.AddToRemaining(new(drawnItems));
-    //             drawnItems = deck.DrawCollection(amount).ToList();
-    //             i++;
-    //             if (i > maxLoops)
-    //             {
-    //                 Debug.LogError("DrawUntilCondition reached maximum loops!");
-    //                 break;
-    //             }
-    //         }
-    //         return this;
-    //     }
-
-    //     public DrawnCollection<T> NoDuplicates()
-    //     {
-    //         int maxLoops = 9999;
-    //         int i = 0;
-    //         while(!condition(drawnItems))
-    //         {
-    //             deck.AddToRemaining(new(drawnItems));
-    //             drawnItems = deck.DrawCollection(amount).ToList();
-    //             i++;
-    //             if (i > maxLoops)
-    //             {
-    //                 Debug.LogError("DrawUntilCondition reached maximum loops!");
-    //                 break;
-    //             }
-    //         }
-    //         return this;
-    //     }
-
-    //     public List<T> ToList() => drawnItems;
-    // }
 }

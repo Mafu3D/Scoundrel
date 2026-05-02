@@ -8,6 +8,8 @@ public class NextRoomButton : MonoBehaviour
     [SerializeField] GameManager GameManager;
     [SerializeField] Button button;
 
+    public void Next() => GameManager.GoToNextRoom();
+
     void Update()
     {
         if (GameManager.CanGoToNextRoom)

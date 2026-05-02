@@ -37,7 +37,8 @@ public class DebugUI : MonoBehaviour
         }
         else
         {
-            message += "Room: ";
+            string entered = gameManager.Player.HasEnteredTheRoom ? "Entered" : "Not Entered";
+            message += $"Room ({entered}): ";
             foreach (var card in gameManager.CurrentRoom.Cards)
             {
                 if (card != null)

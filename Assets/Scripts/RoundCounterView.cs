@@ -8,15 +8,15 @@ public class RoundCounterView : MonoBehaviour
 
     void OnEnable()
     {
-        GameManager.OnEnterNewRoom += OnEnterNewRoom;
+        GameManager.OnOpenNewRoom += OnOpenNewRoom;
     }
 
     void OnDisable()
     {
-        GameManager.OnEnterNewRoom -= OnEnterNewRoom;
+        GameManager.OnOpenNewRoom -= OnOpenNewRoom;
     }
 
-    private void OnEnterNewRoom()
+    private void OnOpenNewRoom()
     {
         roundCounter_TMPText.text = "Round: " + GameManager.RoomNumber.ToString();
     }

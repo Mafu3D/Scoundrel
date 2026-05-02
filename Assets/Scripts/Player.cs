@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] public int MaxHealth = 20;
+    [SerializeField] public int RunCooldownTime = 1;
 
     public int CurrentHealth { get; private set; }
     public WeaponModel Weapon { get; private set; }
@@ -21,11 +22,12 @@ public class Player : MonoBehaviour
 
     private bool runTokenOnCooldown = false;
 
+    private int runCooldownCounter = 0;
+
     public void StartNewGame()
     {
-        CurrentHealth = MaxHealth;
+        ResetPlayer();
         OnHealthChanged?.Invoke(CurrentHealth);
-        Weapon = null;
         OnWeaponChanged?.Invoke();
     }
 
@@ -34,11 +36,15 @@ public class Player : MonoBehaviour
         // Reset the run token
         if (runTokenOnCooldown)
         {
-            // TODO: Add counter here so that run token can have variable cooldown
-            runTokenOnCooldown = false;
-            if (!HasRunToken)
+            runCooldownCounter += 1;
+            if (runCooldownCounter > RunCooldownTime)
             {
-                HasRunToken = true;
+                runCooldownCounter = 0;
+                runTokenOnCooldown = false;
+                if (!HasRunToken)
+                {
+                    HasRunToken = true;
+                }
             }
         }
 
@@ -132,5 +138,14 @@ public class Player : MonoBehaviour
     {
         OnDeath?.Invoke();
         Debug.Log("YOU DIED");
+    }
+
+    private void ResetPlayer()
+    {
+        CurrentHealth = MaxHealth;
+        runCooldownCounter = 0;
+        runTokenOnCooldown = false;
+        HasRunToken = true;
+        Weapon = null;
     }
 }

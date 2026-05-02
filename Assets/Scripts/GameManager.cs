@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
     public Action OnStartNewGame;
     public Action OnGameOver;
-    public Action OnEnterNewRoom;
+    public Action OnOpenNewRoom;
 
     private int cardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
     private readonly int remainingToMove = 1;
@@ -46,6 +46,12 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         ScoreKeeper = new ScoreKeeper(this);
+    }
+
+    public void RestartGame()
+    {
+        EndGame();
+        StartNewGame();
     }
 
     public void StartNewGame()
@@ -78,15 +84,19 @@ public class GameManager : MonoBehaviour
         List<CardModel> drawnCards = DeckManager.Draw(cardsPerRoom);
         RoomModel room = new(cardsPerRoom, drawnCards);
         CurrentRoom = room;
+        CurrentRoom.OnCardsChanged += CheckForGameResolution;
 
         RoomNumber++;
 
-        OnEnterNewRoom?.Invoke();
+        OnOpenNewRoom?.Invoke();
     }
 
-    private void EnterNewRoom()
+    private void OpenNewRoom()
     {
-        if (!CanGoToNextRoom) return;
+        if (CurrentRoom != null)
+        {
+            CurrentRoom.OnCardsChanged -= CheckForGameResolution;
+        }
 
         List<CardModel> newCards = new();
 
@@ -96,11 +106,20 @@ public class GameManager : MonoBehaviour
 
         RoomModel NextRoom = new(cardsPerRoom, newCards);
         CurrentRoom = NextRoom;
+        CurrentRoom.OnCardsChanged -= CheckForGameResolution;
         RoomNumber++;
 
         Player.RoundReset();
 
-        OnEnterNewRoom?.Invoke();
+        OnOpenNewRoom?.Invoke();
+    }
+
+    private void CheckForGameResolution()
+    {
+        if (ScoreKeeper.HasPlayerWon())
+        {
+            EndGame();
+        }
     }
 
     public void OnCardClicked(CardModel card, CardClickContext context)
@@ -129,6 +148,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void GoToNextRoom()
+    {
+        if (!CanGoToNextRoom) return;
+        OpenNewRoom();
+    }
+
     private bool HandlePotion(CardModel card)
     {
         Player.TryDrinkPotion(card);
@@ -141,6 +166,6 @@ public class GameManager : MonoBehaviour
     {
         DeckManager.Deck.AddToRemaining(CurrentRoom.Cards.ToList(), addToTop: false, shuffle: false);
         CurrentRoom.ClearCards();
-        EnterNewRoom();
+        OpenNewRoom();
     }
 }
