@@ -50,6 +50,15 @@ public class GameManager : MonoBehaviour
         ScoreKeeper = new ScoreKeeper(this);
     }
 
+    void Update()
+    {
+        if (CurrentRoom != null)
+        {
+            CurrentRoom.Update();
+        }
+        Player.Update();
+    }
+
     public void RestartGame()
     {
         EndGame();

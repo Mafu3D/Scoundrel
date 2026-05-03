@@ -49,11 +49,11 @@ public class Elite : Buff
     {
         if (leftNeighbor != null)
         {
-            leftNeighbor.DeregisterBuff(buffToApply);
+            leftNeighbor.Buffs.DeregisterBuff(buffToApply);
         }
         if (rightNeighbor != null)
         {
-            rightNeighbor.DeregisterBuff(buffToApply);
+            rightNeighbor.Buffs.DeregisterBuff(buffToApply);
         }
     }
 
@@ -63,19 +63,19 @@ public class Elite : Buff
         int myIndex = Array.IndexOf(gameManager.CurrentRoom.Cards, owner);
         if (myIndex > 0)
         {
-            CardModel potentialNeighbor = gameManager.CurrentRoom.Cards[myIndex - 1];
-            if (potentialNeighbor.Suit == Suit.SPADES || potentialNeighbor.Suit == Suit.CLUBS)
+            CardModel neighbor = gameManager.CurrentRoom.Cards[myIndex - 1];
+            if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
             {
-                leftNeighbor = potentialNeighbor;
+                leftNeighbor = neighbor;
                 leftNeighbor.RegisterBuff(buffToApply);
             }
         }
         if (myIndex < gameManager.CardsPerRoom - 1)
         {
-            CardModel potentialNeighbor = gameManager.CurrentRoom.Cards[myIndex + 1];
-            if (potentialNeighbor.Suit == Suit.SPADES || potentialNeighbor.Suit == Suit.CLUBS)
+            CardModel neighbor = gameManager.CurrentRoom.Cards[myIndex + 1];
+            if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
             {
-                rightNeighbor = potentialNeighbor;
+                rightNeighbor = neighbor;
                 rightNeighbor.RegisterBuff(buffToApply);
             }
         }

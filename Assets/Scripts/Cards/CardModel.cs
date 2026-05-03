@@ -30,7 +30,11 @@ namespace Project.Decks
         public int BaseValue { get; private set; }
 
         public string ID => uuid.ToString();
-        private List<Buff> buffs = new();
+
+        public Action OnUpdate;
+
+        public BuffManager Buffs => buffs;
+        private BuffManager buffs;
         public List<int> ValueModifiers = new();
 
         private Guid uuid;
@@ -38,6 +42,7 @@ namespace Project.Decks
         public CardModel(Suit suit, int value) {
             this.Suit = suit;
             this.BaseValue = value;
+            this.buffs = new BuffManager(this);
 
             uuid = Guid.NewGuid();
         }
@@ -45,30 +50,24 @@ namespace Project.Decks
         public CardModel(Suit suit, int value, List<Buff> buffs) {
             this.Suit = suit;
             this.BaseValue = value;
-            this.buffs = buffs;
+            this.buffs = new BuffManager(this);
+            foreach(Buff buff in buffs)
+            {
+                this.buffs.RegisterBuff(buff);
+            }
 
             uuid = Guid.NewGuid();
+        }
+
+        public void Update()
+        {
+            buffs.Update();
+            OnUpdate?.Invoke();
         }
 
         public override string ToString()
         {
             return $"{Value} of {Suit}";
-        }
-
-        public void RegisterBuff(Buff buff)
-        {
-            buffs.Add(buff);
-            buff.Initialize(this);
-            buff.OnBuffApplied();
-        }
-
-        public void DeregisterBuff(Buff buff)
-        {
-            if (buffs.Contains(buff))
-            {
-                buff.OnBuffRemoved();
-                buffs.Remove(buff);
-            }
         }
 
         public void RegisterValueModifier(int value)
@@ -84,34 +83,20 @@ namespace Project.Decks
             }
         }
 
-        public List<Buff> GetAbilities()
+        public void HandleDeath()
         {
-            return buffs;
-        }
-
-        public void HandleRemoval()
-        {
-            List<Buff> buffsToBeRemoved = new();
-            foreach (Buff buff in buffs)
-            {
-                if (buff.RemoveOnDeath)
-                {
-                    buffsToBeRemoved.Add(buff);
-                }
-                buff.OnCardRemoval();
-            }
-            foreach(Buff buff in buffsToBeRemoved)
-            {
-                DeregisterBuff(buff);
-            }
+            buffs.OnDeath();
         }
 
         public void HandleOnDraw()
         {
-            foreach (Buff buff in buffs)
-            {
-                buff.OnDraw();
-            }
+            buffs.ActivateBuffTrigger(BuffTrigger.OnDraw);
         }
+
+        public BuffManager GetBuffs() => Buffs;
+
+        public void RegisterBuff(Buff buff) => Buffs.RegisterBuff(buff);
+
+        public void DeregisterBuff(Buff buff) => Buffs.DeregisterBuff();
     }
 }

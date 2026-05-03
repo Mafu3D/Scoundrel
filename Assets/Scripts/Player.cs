@@ -24,6 +24,14 @@ public class Player : MonoBehaviour
 
     private int runCooldownCounter = 0;
 
+    public void Update()
+    {
+        if (Weapon != null)
+        {
+            Weapon.Update();
+        }
+    }
+
     public void StartNewGame()
     {
         ResetPlayer();

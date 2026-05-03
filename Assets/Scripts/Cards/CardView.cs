@@ -76,10 +76,15 @@ public partial class CardView : MonoBehaviour
     {
         Card = card;
         if (card == null) return;
+        Card.OnUpdate += UpdateView;
     }
 
     public void DeregisterCard()
     {
+        if (Card != null)
+        {
+            Card.OnUpdate -= UpdateView;
+        }
         Card = null;
     }
 
@@ -100,8 +105,6 @@ public partial class CardView : MonoBehaviour
 
     void Update()
     {
-        UpdateView();
-
         if (Card == null || !Clickable)
         {
             return;

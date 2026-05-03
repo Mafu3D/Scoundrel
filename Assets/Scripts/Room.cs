@@ -33,6 +33,17 @@ public class RoomModel
         }
     }
 
+    public void Update()
+    {
+        foreach (CardModel card in Cards)
+        {
+            if (card != null)
+            {
+                card.Update();
+            }
+        }
+    }
+
     public List<CardModel> RemainingCards()
     {
         List<CardModel> remaining = new();
@@ -61,7 +72,7 @@ public class RoomModel
     private void RemoveCard(CardModel card)
     {
         int index = Array.IndexOf(Cards, card);
-        card.HandleRemoval();
+        card.HandleDeath();
         Cards[index] = null;
         OnCardsChanged?.Invoke();
     }
@@ -80,4 +91,15 @@ public class RoomModel
     }
 
     public int RemainingCount => RemainingCards().Count;
+
+    public void OnRun()
+    {
+        foreach(CardModel card in Cards)
+        {
+            if (card != null)
+            {
+                card.Buffs.OnRun();
+            }
+        }
+    }
 }

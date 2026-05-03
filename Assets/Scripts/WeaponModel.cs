@@ -17,6 +17,15 @@ public class WeaponModel
         Power = card.Value;
     }
 
+    public void Update()
+    {
+        Card.Update();
+        foreach(CardModel card in SlainCards)
+        {
+            card.Update();
+        }
+    }
+
     public string GetWeaponInfoString()
     {
         return $"Pow: {Power} Str: {GetCurrentStrength()} Slain: {SlainCards.Count}";
