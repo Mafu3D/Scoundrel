@@ -22,6 +22,17 @@ public class RoomModel
         }
     }
 
+    public void InitializeRoom()
+    {
+        foreach (CardModel card in Cards)
+        {
+            if (card != null)
+            {
+                card.HandleOnDraw();
+            }
+        }
+    }
+
     public List<CardModel> RemainingCards()
     {
         List<CardModel> remaining = new();

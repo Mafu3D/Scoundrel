@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
         RoomModel room = new(CardsPerRoom, drawnCards);
         CurrentRoom = room;
         CurrentRoom.OnCardsChanged += CheckForGameResolution;
+        CurrentRoom.InitializeRoom();
 
         RoomNumber++;
 
@@ -108,7 +109,8 @@ public class GameManager : MonoBehaviour
 
         RoomModel NextRoom = new(CardsPerRoom, newCards);
         CurrentRoom = NextRoom;
-        CurrentRoom.OnCardsChanged -= CheckForGameResolution;
+        CurrentRoom.OnCardsChanged += CheckForGameResolution;
+        CurrentRoom.InitializeRoom();
         RoomNumber++;
 
         Player.RoundReset();

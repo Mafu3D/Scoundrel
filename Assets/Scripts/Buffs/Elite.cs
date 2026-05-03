@@ -21,7 +21,10 @@ public class Elite : Buff
 
     public override void OnDiscardPotion() { }
 
-    public override void OnDraw() { }
+    public override void OnDraw()
+    {
+        DoBuffEffect();
+    }
 
     public override void OnDrinkPotion() { }
 
@@ -38,6 +41,23 @@ public class Elite : Buff
     public override void OnUpdate() { }
 
     public override void OnBuffApplied()
+    {
+        DoBuffEffect();
+    }
+
+    public override void OnBuffRemoved()
+    {
+        if (leftNeighbor != null)
+        {
+            leftNeighbor.DeregisterBuff(buffToApply);
+        }
+        if (rightNeighbor != null)
+        {
+            rightNeighbor.DeregisterBuff(buffToApply);
+        }
+    }
+
+    private void DoBuffEffect()
     {
         // ServiceLocator.Global.Get(out gameManager);
         int myIndex = Array.IndexOf(gameManager.CurrentRoom.Cards, owner);
@@ -58,18 +78,6 @@ public class Elite : Buff
                 rightNeighbor = potentialNeighbor;
                 rightNeighbor.RegisterBuff(buffToApply);
             }
-        }
-    }
-
-    public override void OnBuffRemoved()
-    {
-        if (leftNeighbor != null)
-        {
-            leftNeighbor.DeregisterBuff(buffToApply);
-        }
-        if (rightNeighbor != null)
-        {
-            rightNeighbor.DeregisterBuff(buffToApply);
         }
     }
 }

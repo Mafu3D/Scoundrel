@@ -105,5 +105,13 @@ namespace Project.Decks
                 DeregisterBuff(buff);
             }
         }
+
+        public void HandleOnDraw()
+        {
+            foreach (Buff buff in buffs)
+            {
+                buff.OnDraw();
+            }
+        }
     }
 }
