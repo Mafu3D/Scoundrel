@@ -2844,7 +2844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameSettings: {fileID: 11400000, guid: 3edf7b51b53b3d8409e9ecdabbc81237, type: 2}
   DeckManager: {fileID: 995225364}
-  AbilityRegistry: {fileID: 995225365}
+  BuffRegistry: {fileID: 995225365}
   Player: {fileID: 995225363}
 --- !u!4 &995225362
 Transform:
@@ -2899,8 +2899,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83541cf0934bbfc45a36da68f983e095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PublicAbilities:
-  - {fileID: 0}
+  PublicBuffs:
+  - {fileID: 11400000, guid: c652abec3d8c2624e914353d59cf6c77, type: 2}
 --- !u!1 &1000473789
 GameObject:
   m_ObjectHideFlags: 0

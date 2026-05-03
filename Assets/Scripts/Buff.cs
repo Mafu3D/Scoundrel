@@ -11,6 +11,7 @@ public abstract class Buff : ScriptableObject
 
     [Header("Base Buff Parameters")]
     [SerializeField] public bool RemoveOnDeath;
+    [SerializeField] public List<Buff> childBuffs = new();
 
     protected GameManager gameManager;
     protected CardModel owner;
@@ -19,8 +20,22 @@ public abstract class Buff : ScriptableObject
     {
         ServiceLocator.Global.Get(out gameManager);
         this.owner = owner;
+        OnBuffInitialized();
     }
 
+    public Buff GetChildBuffByName(string name)
+    {
+        foreach (Buff buff in childBuffs)
+        {
+            if (buff.Name == name)
+            {
+                return buff;
+            }
+        }
+        return default;
+    }
+
+    public abstract void OnBuffInitialized();
     public abstract void OnBuffApplied();
     public abstract void OnBuffRemoved();
     public abstract void OnDraw();

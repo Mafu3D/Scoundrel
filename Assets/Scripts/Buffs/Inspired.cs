@@ -5,12 +5,14 @@ public class Inspired : Buff
 {
     [SerializeField] private int amount = 1;
 
+    public override void OnBuffInitialized() { }
     public override void OnAttack() { }
 
     public override void OnBuffApplied()
     {
         owner.RegisterValueModifier(amount);
     }
+
 
     public override void OnBuffRemoved()
     {

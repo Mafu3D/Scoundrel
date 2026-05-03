@@ -6,11 +6,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Elite", menuName="Abilities/Elite")]
 public class Elite : Buff
 {
-    [Header("Instance Parameters")]
-    [SerializeField] Buff buff;
-
     CardModel leftNeighbor = null;
     CardModel rightNeighbor = null;
+
+    Buff buffToApply;
+
+    public override void OnBuffInitialized() {
+        buffToApply = GetChildBuffByName("Inspired");
+    }
 
     public override void OnAttack() { }
 
@@ -44,7 +47,7 @@ public class Elite : Buff
             if (potentialNeighbor.Suit == Suit.SPADES || potentialNeighbor.Suit == Suit.CLUBS)
             {
                 leftNeighbor = potentialNeighbor;
-                leftNeighbor.RegisterBuff(buff);
+                leftNeighbor.RegisterBuff(buffToApply);
             }
         }
         if (myIndex < gameManager.CardsPerRoom - 1)
@@ -53,7 +56,7 @@ public class Elite : Buff
             if (potentialNeighbor.Suit == Suit.SPADES || potentialNeighbor.Suit == Suit.CLUBS)
             {
                 rightNeighbor = potentialNeighbor;
-                rightNeighbor.RegisterBuff(buff);
+                rightNeighbor.RegisterBuff(buffToApply);
             }
         }
     }
@@ -62,11 +65,11 @@ public class Elite : Buff
     {
         if (leftNeighbor != null)
         {
-            leftNeighbor.DeregisterBuff(buff);
+            leftNeighbor.DeregisterBuff(buffToApply);
         }
         if (rightNeighbor != null)
         {
-            rightNeighbor.DeregisterBuff(buff);
+            rightNeighbor.DeregisterBuff(buffToApply);
         }
     }
 }
