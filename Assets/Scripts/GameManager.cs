@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Services")]
     [SerializeField] public DeckManager DeckManager;
-    [SerializeField] public AbilityRegistry AbilityRegistry;
+    [SerializeField] public BuffRegistry BuffRegistry;
     [SerializeField] public Player Player;
 
     public bool GameHasStarted {get; private set;}
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     public Action OnGameOver;
     public Action OnOpenNewRoom;
 
-    private int cardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
+    public int CardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
     private readonly int remainingToMove = 1;
 
     public bool CanGoToNextRoom => CurrentRoom != null && CurrentRoom.RemainingCount <= remainingToMove;
@@ -83,8 +83,8 @@ public class GameManager : MonoBehaviour
 
     private void EnterFirstRoom()
     {
-        List<CardModel> drawnCards = DeckManager.Draw(cardsPerRoom);
-        RoomModel room = new(cardsPerRoom, drawnCards);
+        List<CardModel> drawnCards = DeckManager.Draw(CardsPerRoom);
+        RoomModel room = new(CardsPerRoom, drawnCards);
         CurrentRoom = room;
         CurrentRoom.OnCardsChanged += CheckForGameResolution;
 
@@ -103,10 +103,10 @@ public class GameManager : MonoBehaviour
         List<CardModel> newCards = new();
 
         newCards.AddRange(CurrentRoom.RemainingCards());
-        List<CardModel> drawnCards = DeckManager.Draw(cardsPerRoom - CurrentRoom.RemainingCount);
+        List<CardModel> drawnCards = DeckManager.Draw(CardsPerRoom - CurrentRoom.RemainingCount);
         newCards.AddRange(drawnCards);
 
-        RoomModel NextRoom = new(cardsPerRoom, newCards);
+        RoomModel NextRoom = new(CardsPerRoom, newCards);
         CurrentRoom = NextRoom;
         CurrentRoom.OnCardsChanged -= CheckForGameResolution;
         RoomNumber++;

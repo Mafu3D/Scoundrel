@@ -15,7 +15,7 @@ namespace Project.Decks
             List<CardModel> contents = new();
             foreach (CardDefinition card in Cards)
             {
-                contents.Add(new CardModel(card.Suit, card.Value, card.Abilities));
+                contents.Add(new CardModel(card.Suit, card.Value, card.Buffs));
             }
             return contents;
         }

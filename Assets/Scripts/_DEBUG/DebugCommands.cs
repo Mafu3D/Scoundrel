@@ -63,28 +63,106 @@ namespace Project.DebugCommands
     }
 
     [DebugCommand]
-    public class AddAbilityTo0 : IDebugCommand<string>
+    public class AddBuffTo0 : IDebugCommand<string>
     {
-        public string ID => "addAbility0";
+        public string ID => "addBuff0";
 
         public string Description => "Adds the ability to the card at the given slot index";
 
-        public string Format => "addAbility0 <string>";
+        public string Format => "addBuff0 <string>";
 
         public bool HasDefaultValue => false;
 
         public string DefaultParameter => "";
 
-        public void Invoke(string abilityName)
+        public void Invoke(string buffName)
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
-            Ability ability = gameManager.AbilityRegistry.GetAbilityFromName(abilityName);
-            if (ability == null)
+            Buff buff = gameManager.BuffRegistry.GetBuffFromName(buffName);
+            if (buff == null)
             {
-                UnityEngine.Debug.Log($"{abilityName} not found!");
+                UnityEngine.Debug.Log($"{buffName} not found!");
             }
 
-            gameManager.CurrentRoom.Cards[0].RegisterAbility(ability);
+            gameManager.CurrentRoom.Cards[0].RegisterBuff(buff);
+        }
+    }
+
+    [DebugCommand]
+    public class AddBuffTo1 : IDebugCommand<string>
+    {
+        public string ID => "addBuff1";
+
+        public string Description => "Adds the ability to the card at the given slot index";
+
+        public string Format => "addBuff1 <string>";
+
+        public bool HasDefaultValue => false;
+
+        public string DefaultParameter => "";
+
+        public void Invoke(string buffName)
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            Buff buff = gameManager.BuffRegistry.GetBuffFromName(buffName);
+            if (buff == null)
+            {
+                UnityEngine.Debug.Log($"{buffName} not found!");
+            }
+
+            gameManager.CurrentRoom.Cards[1].RegisterBuff(buff);
+        }
+    }
+
+    [DebugCommand]
+    public class AddBuffTo2 : IDebugCommand<string>
+    {
+        public string ID => "addBuff2";
+
+        public string Description => "Adds the ability to the card at the given slot index";
+
+        public string Format => "addBuff2 <string>";
+
+        public bool HasDefaultValue => false;
+
+        public string DefaultParameter => "";
+
+        public void Invoke(string buffName)
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            Buff ability = gameManager.BuffRegistry.GetBuffFromName(buffName);
+            if (ability == null)
+            {
+                UnityEngine.Debug.Log($"{buffName} not found!");
+            }
+
+            gameManager.CurrentRoom.Cards[2].RegisterBuff(ability);
+        }
+    }
+
+    [DebugCommand]
+    public class AddBuffTo3 : IDebugCommand<string>
+    {
+        public string ID => "addBuff3";
+
+        public string Description => "Adds the ability to the card at the given slot index";
+
+        public string Format => "addBuff3 <string>";
+
+        public bool HasDefaultValue => false;
+
+        public string DefaultParameter => "";
+
+        public void Invoke(string buffName)
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            Buff buff = gameManager.BuffRegistry.GetBuffFromName(buffName);
+            if (buff == null)
+            {
+                UnityEngine.Debug.Log($"{buffName} not found!");
+            }
+
+            gameManager.CurrentRoom.Cards[3].RegisterBuff(buff);
         }
     }
 }

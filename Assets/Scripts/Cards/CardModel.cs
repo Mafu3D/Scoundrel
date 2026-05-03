@@ -11,29 +11,41 @@ namespace Project.Decks
         CLUBS
     }
 
-    public class CardModel : IDeckStorable, IAbilityRegisterable
+    public class CardModel : IDeckStorable, IBuffRegisterable
     {
         public Suit Suit { get; private set; }
 
-        public int Value { get; private set; }
+        public int Value
+        {
+            get
+            {
+                int value = BaseValue;
+                foreach (int val in ValueModifiers)
+                {
+                    value += val;
+                }
+                return value;
+            }
+        }
+        public int BaseValue { get; private set; }
 
         public string ID => uuid.ToString();
-
-        public List<Ability> Abilities = new();
+        private List<Buff> buffs = new();
+        public List<int> ValueModifiers = new();
 
         private Guid uuid;
 
         public CardModel(Suit suit, int value) {
             this.Suit = suit;
-            this.Value = value;
+            this.BaseValue = value;
 
             uuid = Guid.NewGuid();
         }
 
-        public CardModel(Suit suit, int value, List<Ability> abilities) {
+        public CardModel(Suit suit, int value, List<Buff> buffs) {
             this.Suit = suit;
-            this.Value = value;
-            this.Abilities = abilities;
+            this.BaseValue = value;
+            this.buffs = buffs;
 
             uuid = Guid.NewGuid();
         }
@@ -43,22 +55,54 @@ namespace Project.Decks
             return $"{Value} of {Suit}";
         }
 
-        public List<Ability> GetAbilities()
+        public void RegisterBuff(Buff buff)
         {
-            return Abilities;
+            buffs.Add(buff);
+            buff.Initialize(this);
+            buff.OnBuffApplied();
         }
 
-        public void RegisterAbility(Ability ability)
+        public void DeregisterBuff(Buff buff)
         {
-            Abilities.Add(ability);
-            Debug.Log($"{ability.Name} registered!");
-        }
-
-        public void DeregisterAbility(Ability ability)
-        {
-            if (Abilities.Contains(ability))
+            if (buffs.Contains(buff))
             {
-                Abilities.Remove(ability);
+                buff.OnBuffRemoved();
+                buffs.Remove(buff);
+            }
+        }
+
+        public void RegisterValueModifier(int value)
+        {
+            ValueModifiers.Add(value);
+        }
+
+        public void DeregisterValueModifier(int value)
+        {
+            if (ValueModifiers.Contains(value))
+            {
+                ValueModifiers.Remove(value);
+            }
+        }
+
+        public List<Buff> GetAbilities()
+        {
+            return buffs;
+        }
+
+        public void HandleRemoval()
+        {
+            List<Buff> buffsToBeRemoved = new();
+            foreach (Buff buff in buffs)
+            {
+                if (buff.RemoveOnDeath)
+                {
+                    buffsToBeRemoved.Add(buff);
+                }
+                buff.OnCardRemoval();
+            }
+            foreach(Buff buff in buffsToBeRemoved)
+            {
+                DeregisterBuff(buff);
             }
         }
     }

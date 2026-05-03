@@ -701,6 +701,8 @@ MonoBehaviour:
   suitSprite: {fileID: 8478282949906091295}
   red: {r: 0.5754717, g: 0, b: 0, a: 1}
   black: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
+  valueIncreasedColor: {r: 0.019607844, g: 0.7490196, b: 0, a: 1}
+  valueDecreasedColor: {r: 1, g: 0, b: 0.22352941, a: 1}
   diamondsSprite: {fileID: -598977684, guid: 1c91adeb3f2321e468f8db4cf3a7672b, type: 3}
   heartsSprite: {fileID: -691466565, guid: 1c91adeb3f2321e468f8db4cf3a7672b, type: 3}
   clubsSprite: {fileID: -1895802982, guid: 1c91adeb3f2321e468f8db4cf3a7672b, type: 3}

@@ -50,6 +50,7 @@ public class RoomModel
     private void RemoveCard(CardModel card)
     {
         int index = Array.IndexOf(Cards, card);
+        card.HandleRemoval();
         Cards[index] = null;
         OnCardsChanged?.Invoke();
     }

@@ -26,6 +26,8 @@ public partial class CardView : MonoBehaviour
     [Header("Card Colors")]
     [SerializeField] private Color red;
     [SerializeField] private Color black;
+    [SerializeField] private Color valueIncreasedColor;
+    [SerializeField] private Color valueDecreasedColor;
 
     [Header("Suit Sprites")]
     [SerializeField] private Sprite diamondsSprite;
@@ -74,52 +76,6 @@ public partial class CardView : MonoBehaviour
     {
         Card = card;
         if (card == null) return;
-        Color color = black;
-        if (card.Suit == Suit.HEARTS || card.Suit == Suit.DIAMONDS)
-        {
-            color = red;
-        }
-        foreach (var TMPText in valueTMPTexts)
-        {
-            string valueString = card.Value.ToString();
-            if (card.Value > 10)
-            {
-                if (card.Value == 11)
-                {
-                    valueString = "J";
-                }
-                else if (card.Value == 12)
-                {
-                    valueString = "Q";
-                }
-                else if (card.Value == 13)
-                {
-                    valueString = "K";
-                }
-                else if (card.Value == 14)
-                {
-                    valueString = "A";
-                }
-            }
-            TMPText.text = valueString;
-            TMPText.color = color;
-        }
-
-        switch (card.Suit)
-        {
-            case Suit.SPADES:
-                suitSprite.sprite = spadesSprite;
-                break;
-            case Suit.CLUBS:
-                suitSprite.sprite = clubsSprite;
-                break;
-            case Suit.HEARTS:
-                suitSprite.sprite = heartsSprite;
-                break;
-            case Suit.DIAMONDS:
-                suitSprite.sprite = diamondsSprite;
-                break;
-        }
     }
 
     public void DeregisterCard()
@@ -144,12 +100,79 @@ public partial class CardView : MonoBehaviour
 
     void Update()
     {
+        UpdateView();
+
         if (Card == null || !Clickable)
         {
             return;
         }
 
         HandleMousePosition();
+    }
+
+    private void UpdateView()
+    {
+        if (Card == null)
+        {
+            return;
+        }
+
+        Color color = black;
+        if (Card.Suit == Suit.HEARTS || Card.Suit == Suit.DIAMONDS)
+        {
+            color = red;
+        }
+        foreach (var TMPText in valueTMPTexts)
+        {
+            string valueString = Card.Value.ToString();
+            if (Card.Value > 10)
+            {
+                if (Card.Value == 11)
+                {
+                    valueString = "J";
+                }
+                else if (Card.Value == 12)
+                {
+                    valueString = "Q";
+                }
+                else if (Card.Value == 13)
+                {
+                    valueString = "K";
+                }
+                else if (Card.Value == 14)
+                {
+                    valueString = "A";
+                }
+            }
+            TMPText.text = valueString;
+
+            Color textColor = color;
+            if (Card.Value > Card.BaseValue)
+            {
+                textColor = valueIncreasedColor;
+            }
+            else if (Card.Value < Card.BaseValue)
+            {
+                textColor = valueDecreasedColor;
+            }
+            TMPText.color = textColor;
+        }
+
+        switch (Card.Suit)
+        {
+            case Suit.SPADES:
+                suitSprite.sprite = spadesSprite;
+                break;
+            case Suit.CLUBS:
+                suitSprite.sprite = clubsSprite;
+                break;
+            case Suit.HEARTS:
+                suitSprite.sprite = heartsSprite;
+                break;
+            case Suit.DIAMONDS:
+                suitSprite.sprite = diamondsSprite;
+                break;
+        }
     }
 
     private void HandleMousePosition()

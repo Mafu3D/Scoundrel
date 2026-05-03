@@ -16,14 +16,14 @@ public class ScoreKeeper
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
-                monsterScore += card.Value;
+                monsterScore += card.BaseValue;
             }
         }
         foreach (CardModel card in gameManager.CurrentRoom.Cards)
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
-                monsterScore += card.Value;
+                monsterScore += card.BaseValue;
             }
         }
         if (gameManager.DeckManager.Deck.CurrentCount == 0 && monsterScore == 0)
@@ -41,7 +41,7 @@ public class ScoreKeeper
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
-                monsterScore += card.Value;
+                monsterScore += card.BaseValue;
             }
         }
         foreach (CardModel card in gameManager.CurrentRoom.Cards)
@@ -49,7 +49,7 @@ public class ScoreKeeper
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
                 monstersInRoom = true;
-                monsterScore += card.Value;
+                monsterScore += card.BaseValue;
             }
         }
 
@@ -62,9 +62,9 @@ public class ScoreKeeper
                 {
                     if (card.Suit == Suit.HEARTS)
                     {
-                        if (card.Value > potionScore)
+                        if (card.BaseValue > potionScore)
                         {
-                            potionScore = card.Value;
+                            potionScore = card.BaseValue;
                         }
                     }
                 }
