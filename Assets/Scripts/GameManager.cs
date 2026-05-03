@@ -6,6 +6,7 @@ using Project.Decks;
 using System;
 using System.Linq;
 using TMPro;
+using Mafu.UnityServiceLocator;
 
 public class GameManager : MonoBehaviour
 {
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        // ServiceLocator.Global.Register(this);
+        ServiceLocator.Global.Register(this);
     }
 
     void Start()
@@ -112,6 +113,11 @@ public class GameManager : MonoBehaviour
         Player.RoundReset();
 
         OnOpenNewRoom?.Invoke();
+    }
+
+    public void DEBUG_RUN()
+    {
+        OnPlayerRun();
     }
 
     private void CheckForGameResolution()

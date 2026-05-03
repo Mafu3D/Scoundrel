@@ -43,10 +43,15 @@ public class RoomModel
             return false;
         }
 
+        RemoveCard(card);
+        return true;
+    }
+
+    private void RemoveCard(CardModel card)
+    {
         int index = Array.IndexOf(Cards, card);
         Cards[index] = null;
         OnCardsChanged?.Invoke();
-        return true;
     }
 
     public void ClearCards()
@@ -55,6 +60,11 @@ public class RoomModel
         {
             Cards[i] = null;
         }
+    }
+
+    public void DEBUG_REMOVECARD(CardModel card)
+    {
+        RemoveCard(card);
     }
 
     public int RemainingCount => RemainingCards().Count;

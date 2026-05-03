@@ -11,11 +11,6 @@ namespace Project.Decks
         public string ID { get; }
     }
 
-    public interface IDeckDefinition<T> where T : IDeckStorable
-    {
-        public List<T> UnpackContents();
-    }
-
     public class Deck<T> where T : IDeckStorable
     {
         private List<T> allItems = new();
