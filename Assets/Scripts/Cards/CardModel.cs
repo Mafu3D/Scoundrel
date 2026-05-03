@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Project.Decks
 {
@@ -18,7 +19,7 @@ namespace Project.Decks
 
         public string ID => uuid.ToString();
 
-        public List<Ability> Abilities;
+        public List<Ability> Abilities = new();
 
         private Guid uuid;
 
@@ -50,6 +51,7 @@ namespace Project.Decks
         public void RegisterAbility(Ability ability)
         {
             Abilities.Add(ability);
+            Debug.Log($"{ability.Name} registered!");
         }
 
         public void DeregisterAbility(Ability ability)

@@ -12,6 +12,8 @@ public abstract class Ability : ScriptableObject
         ServiceLocator.Global.Get(out gameManager);
     }
 
+    public abstract string Name { get; }
+
     public abstract void OnDraw();
     public abstract void OnOpenNewRoom();
     public abstract void OnEnterNewRoom();

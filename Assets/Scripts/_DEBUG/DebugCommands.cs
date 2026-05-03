@@ -61,4 +61,30 @@ namespace Project.DebugCommands
             gameManager.CurrentRoom.DEBUG_REMOVECARD(gameManager.CurrentRoom.Cards[index]);
         }
     }
+
+    [DebugCommand]
+    public class AddAbilityTo0 : IDebugCommand<string>
+    {
+        public string ID => "addAbility0";
+
+        public string Description => "Adds the ability to the card at the given slot index";
+
+        public string Format => "addAbility0 <string>";
+
+        public bool HasDefaultValue => false;
+
+        public string DefaultParameter => "";
+
+        public void Invoke(string abilityName)
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            Ability ability = gameManager.AbilityRegistry.GetAbilityFromName(abilityName);
+            if (ability == null)
+            {
+                UnityEngine.Debug.Log($"{abilityName} not found!");
+            }
+
+            gameManager.CurrentRoom.Cards[0].RegisterAbility(ability);
+        }
+    }
 }
