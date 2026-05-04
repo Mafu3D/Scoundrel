@@ -157,7 +157,9 @@ public class BuffManager
         {
             buff.OnBuffRemoved();
             registeredBuffs.Remove(buff);
+            return;
         }
+        Debug.LogWarning($"Tried to remove buff {buff} on {owner} and failed!");
     }
 
 

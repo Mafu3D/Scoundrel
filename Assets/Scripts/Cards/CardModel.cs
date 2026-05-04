@@ -67,7 +67,13 @@ namespace Project.Decks
 
         public override string ToString()
         {
-            return $"{Value} of {Suit}";
+            string output = Value.ToString();
+            if (Value != BaseValue)
+            {
+                output += $"({BaseValue})";
+            }
+            output += $" of {Suit}";
+            return output;
         }
 
         public void RegisterValueModifier(int value)
@@ -77,10 +83,26 @@ namespace Project.Decks
 
         public void DeregisterValueModifier(int value)
         {
+            Debug.Log("Deregistering: " + value + $" from {this.ToString()}");
+            string before = "Before: ";
+            for (int i = 0; i < ValueModifiers.Count; i++)
+            {
+                before += "\n" + ValueModifiers[i].ToString();
+            }
+            Debug.Log(before);
             if (ValueModifiers.Contains(value))
             {
                 ValueModifiers.Remove(value);
+                return;
             }
+            string after = "After: ";
+            for (int i = 0; i < ValueModifiers.Count; i++)
+            {
+                after += "\n" + ValueModifiers[i].ToString();
+            }
+            Debug.Log(after);
+            Debug.LogWarning($"Tried to deregister modifier value of {value} from {this.ToString()} but failed!");
+
         }
 
         public void HandleDeath()

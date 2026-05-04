@@ -15,4 +15,6 @@ MonoBehaviour:
   Name: Inspired
   Description: +1 from being inspired by a neighboring elite ally
   RemoveOnDeath: 0
+  RemoveOnRun: 1
+  childBuffs: []
   amount: 1

@@ -654,6 +654,7 @@ GameObject:
   - component: {fileID: 4534446496112890389}
   - component: {fileID: 964506102154751877}
   - component: {fileID: 5246920160656252357}
+  - component: {fileID: 1739945807082925907}
   m_Layer: 0
   m_Name: Card
   m_TagString: Untagged
@@ -774,6 +775,34 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
+--- !u!114 &1739945807082925907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2983930758097186374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 575471f805e83b34494d543b809770ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 4534446496112890389}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: tooltipGetter
+      Entry: 10
+      Data: 0
+  header: 
+  content: 
+  delay: 0.2
 --- !u!1 &3610247004690400493
 GameObject:
   m_ObjectHideFlags: 0

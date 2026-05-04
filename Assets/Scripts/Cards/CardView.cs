@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Project.Decks;
+using Project.UI.Tooltips;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -15,7 +16,7 @@ public enum CardClickContext
     BOT
 }
 
-public partial class CardView : MonoBehaviour
+public partial class CardView : MonoBehaviour, ITooltipGettable
 {
     [SerializeField] public bool Clickable = true;
 
@@ -281,5 +282,21 @@ public partial class CardView : MonoBehaviour
     private void OnMouseStayBot()
     {
 
+    }
+
+    public bool TryGetTooltipInformation(out string content, out string header)
+    {
+        header = Card.ToString();
+
+        content = "";
+        foreach (Buff buff in Card.Buffs.GetBuffs())
+        {
+            content += $"\n{buff.name} - {buff.Description}";
+        }
+        foreach (int value in Card.ValueModifiers)
+        {
+            content += $"\n{value}";
+        }
+        return true;
     }
 }

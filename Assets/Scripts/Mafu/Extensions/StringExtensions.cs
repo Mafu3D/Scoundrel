@@ -18,5 +18,10 @@ namespace Mafu.Extensions
             }
             return unchecked((int)hash);
         }
+
+        public static bool IsNullOrEmpty(this string str)
+        {
+            return str == null || str == "";
+        }
     }
 }

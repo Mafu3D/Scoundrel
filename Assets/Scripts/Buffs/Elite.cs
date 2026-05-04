@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Mafu.UnityServiceLocator;
 using Project.Decks;
 using UnityEngine;
@@ -6,8 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Elite", menuName="Abilities/Elite")]
 public class Elite : Buff
 {
-    CardModel leftNeighbor = null;
-    CardModel rightNeighbor = null;
+    List<CardModel> neighbors = new();
 
     Buff buffToApply;
 
@@ -47,13 +47,10 @@ public class Elite : Buff
 
     public override void OnBuffRemoved()
     {
-        if (leftNeighbor != null)
+        foreach(CardModel neighbor in neighbors)
         {
-            leftNeighbor.Buffs.DeregisterBuff(buffToApply);
-        }
-        if (rightNeighbor != null)
-        {
-            rightNeighbor.Buffs.DeregisterBuff(buffToApply);
+            Debug.Log("Elite is deregistering: " + neighbor.ToString());
+            neighbor.Buffs.DeregisterBuff(buffToApply);
         }
     }
 
@@ -66,8 +63,7 @@ public class Elite : Buff
             CardModel neighbor = gameManager.CurrentRoom.Cards[myIndex - 1];
             if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
             {
-                leftNeighbor = neighbor;
-                leftNeighbor.RegisterBuff(buffToApply);
+                neighbors.Add(neighbor);
             }
         }
         if (myIndex < gameManager.CardsPerRoom - 1)
@@ -75,9 +71,14 @@ public class Elite : Buff
             CardModel neighbor = gameManager.CurrentRoom.Cards[myIndex + 1];
             if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
             {
-                rightNeighbor = neighbor;
-                rightNeighbor.RegisterBuff(buffToApply);
+                neighbors.Add(neighbor);
             }
+        }
+
+        foreach (CardModel neighbor in neighbors)
+        {
+            neighbor.RegisterBuff(buffToApply);
+            Debug.Log(neighbor.ToString());
         }
     }
 }
