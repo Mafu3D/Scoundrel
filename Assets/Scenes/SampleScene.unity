@@ -2920,7 +2920,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83541cf0934bbfc45a36da68f983e095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PublicBuffs:
+  GlobalBuffs:
   - {fileID: 11400000, guid: c652abec3d8c2624e914353d59cf6c77, type: 2}
 --- !u!1 &1000473789
 GameObject:
@@ -3868,11 +3868,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_Pivot.x
-      value: -0.49233717
+      value: 0.3448276
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_Pivot.y
-      value: -0.48129252
+      value: 1.3571428
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_SizeDelta.x
@@ -3884,11 +3884,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1155.5557
+      value: -485.8238
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -293.48663
+      value: 534.8659
       objectReference: {fileID: 0}
     - target: {fileID: 5689954502834935825, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag

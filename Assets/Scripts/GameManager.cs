@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Services")]
     [SerializeField] public DeckManager DeckManager;
-    [SerializeField] public BuffRegistry BuffRegistry;
+    [SerializeField] public GlobalBuffRegistry BuffRegistry;
     [SerializeField] public Player Player;
 
     public bool GameHasStarted {get; private set;}
