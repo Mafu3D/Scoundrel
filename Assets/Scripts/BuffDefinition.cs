@@ -3,7 +3,7 @@ using Mafu.UnityServiceLocator;
 using Project.Decks;
 using UnityEngine;
 
-public abstract class BuffDefinition : ScriptableObject
+public abstract class Buff : ScriptableObject
 {
     [Header("Buff Meta")]
     [SerializeField] public string Name;
@@ -12,14 +12,15 @@ public abstract class BuffDefinition : ScriptableObject
     [Header("Base Buff Parameters")]
     [SerializeField] public bool RemoveOnDeath;
     [SerializeField] public bool RemoveOnRun;
-    [SerializeField] public List<BuffDefinition> childBuffs = new();
+    [SerializeField] public List<Buff> childBuffs = new();
 
+    public BuffID ID;
     protected GameManager gameManager;
     protected CardModel owner;
 
-    public BuffDefinition GetChildBuffByName(string name)
+    public Buff GetChildBuffByName(string name)
     {
-        foreach (BuffDefinition buff in childBuffs)
+        foreach (Buff buff in childBuffs)
         {
             if (buff.Name == name)
             {
@@ -29,18 +30,26 @@ public abstract class BuffDefinition : ScriptableObject
         return default;
     }
 
-    public abstract void OnBuffInitialized(GameManager gameManager, CardModel owner);
-    public abstract void OnBuffApplied(GameManager gameManager, CardModel owner);
-    public abstract void OnBuffRemoved(GameManager gameManager, CardModel owner);
-    public abstract void OnDraw(GameManager gameManager, CardModel owner);
-    public abstract void OnOpenNewRoom(GameManager gameManager, CardModel owner);
-    public abstract void OnEnterNewRoom(GameManager gameManager, CardModel owner);
-    public abstract void OnRun(GameManager gameManager, CardModel owner);
-    public abstract void OnMonsterDie(GameManager gameManager, CardModel owner);
-    public abstract void OnEquipWeapon(GameManager gameManager, CardModel owner);
-    public abstract void OnDrinkPotion(GameManager gameManager, CardModel owner);
-    public abstract void OnDiscardPotion(GameManager gameManager, CardModel owner);
-    public abstract void OnAttack(GameManager gameManager, CardModel owner);
-    public abstract void OnCardRemoval(GameManager gameManager, CardModel owner);
-    public abstract void OnUpdate(GameManager gameManager, CardModel owner);
+    public void Initialize(CardModel owner)
+    {
+        this.owner = owner;
+        ServiceLocator.Global.Get(out gameManager);
+        ID = new(this);
+        OnBuffInitialized();
+    }
+
+    public abstract void OnBuffInitialized();
+    public abstract void OnBuffApplied();
+    public abstract void OnBuffRemoved();
+    public abstract void OnDraw();
+    public abstract void OnOpenNewRoom();
+    public abstract void OnEnterNewRoom();
+    public abstract void OnRun();
+    public abstract void OnMonsterDie();
+    public abstract void OnEquipWeapon();
+    public abstract void OnDrinkPotion();
+    public abstract void OnDiscardPotion();
+    public abstract void OnAttack();
+    public abstract void OnCardRemoval();
+    public abstract void OnUpdate();
 }

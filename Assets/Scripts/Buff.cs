@@ -1,66 +1,73 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mafu.UnityServiceLocator;
 using Project.Decks;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
-public abstract class Buff : ScriptableObject
-{
-    [Header("Buff Meta")]
-    [SerializeField] public string Name;
-    [SerializeField] public string Description;
+// public class Buff
+// {
+//     public string Name;
+//     public string Description;
+//     public bool RemoveOnDeath;
+//     public bool RemoveOnRun;
 
-    [Header("Base Buff Parameters")]
-    [SerializeField] public bool RemoveOnDeath;
-    [SerializeField] public bool RemoveOnRun;
-    [SerializeField] public List<Buff> childBuffs = new();
+//     private List<Buff> childBuffs = new();
 
-    protected GameManager gameManager;
-    protected CardModel owner;
+//     protected GameManager gameManager;
+//     protected CardModel owner;
+//     protected BuffDefinition definition;
 
-    public void Initialize(CardModel owner)
-    {
-        ServiceLocator.Global.Get(out gameManager);
-        this.owner = owner;
-        OnBuffInitialized();
-    }
+//     public Buff(BuffDefinition definition, CardModel owner)
+//     {
+//         this.definition = definition;
+//         Name = definition.Name;
+//         Description = definition.Description;
+//         RemoveOnDeath = definition.RemoveOnDeath;
+//         RemoveOnRun = definition.RemoveOnRun;
+//         ServiceLocator.Global.Get(out gameManager);
+//         this.owner = owner;
+//         OnBuffInitialized();
+//     }
 
-    public Buff GetChildBuffByName(string name)
-    {
-        foreach (Buff buff in childBuffs)
-        {
-            if (buff.Name == name)
-            {
-                return buff;
-            }
-        }
-        return default;
-    }
+//     public Buff GetChildBuffByName(string name)
+//     {
+//         foreach (Buff buff in childBuffs)
+//         {
+//             if (buff.Name == name)
+//             {
+//                 return buff;
+//             }
+//         }
+//         return default;
+//     }
 
-    public abstract void OnBuffInitialized();
-    public abstract void OnBuffApplied();
-    public abstract void OnBuffRemoved();
-    public abstract void OnDraw();
+//     public void OnBuffInitialized() => definition.OnBuffInitialized(gameManager, owner);
+//     public void OnBuffApplied() => definition.OnBuffApplied(gameManager, owner);
+//     public void OnBuffRemoved() => definition.OnBuffRemoved(gameManager, owner);
+//     public void OnDraw() => definition.OnDraw(gameManager, owner);
 
-    public abstract void OnOpenNewRoom();
-    public abstract void OnEnterNewRoom();
-    public abstract void OnRun();
-    public abstract void OnMonsterDie();
-    public abstract void OnEquipWeapon();
-    public abstract void OnDrinkPotion();
-    public abstract void OnDiscardPotion();
-    public abstract void OnAttack();
-    public abstract void OnCardRemoval();
-    public abstract void OnUpdate();
-}
+//     public void OnOpenNewRoom() => definition.OnOpenNewRoom(gameManager, owner);
+//     public void OnEnterNewRoom() => definition.OnEnterNewRoom(gameManager, owner);
+//     public void OnRun() => definition.OnRun(gameManager, owner);
+//     public void OnMonsterDie() => definition.OnMonsterDie(gameManager, owner);
+//     public void OnEquipWeapon() => definition.OnEquipWeapon(gameManager, owner);
+//     public void OnDrinkPotion() => definition.OnDrinkPotion(gameManager, owner);
+//     public void OnDiscardPotion() => definition.OnDiscardPotion(gameManager, owner);
+//     public void OnAttack() => definition.OnAttack(gameManager, owner);
+//     public void OnCardRemoval() => definition.OnCardRemoval(gameManager, owner);
+//     public void OnUpdate() => definition.OnUpdate(gameManager, owner);
+
+// }
 
 public interface IBuffRegisterable
 {
     public BuffManager Buffs { get; }
     public BuffManager GetBuffs();
-    public void RegisterBuff(Buff buff);
+    public BuffID RegisterBuff(Buff buff);
     public void DeregisterBuff(Buff buff);
+    public void DeregisterBuff(BuffID buffID);
 }
 
 public enum BuffTrigger
@@ -81,10 +88,27 @@ public enum BuffTrigger
     OnUpdate,
 }
 
+public class BuffID
+{
+    public Guid Guid;
+    public string Name;
+    public BuffID(Buff buff)
+    {
+        Guid = Guid.NewGuid();
+        Name = buff.Name;
+    }
+
+    public override string ToString()
+    {
+        return Guid.ToString();
+    }
+}
+
 public class BuffManager
 {
-    List<Buff> registeredBuffs = new();
-    public List<Buff> GetBuffs() => registeredBuffs;
+    List<Buff> orderedBuffs = new();
+    Dictionary<BuffID, Buff> registeredBuffs = new();
+    public List<Buff> GetBuffs() => orderedBuffs;
 
     CardModel owner;
 
@@ -121,7 +145,7 @@ public class BuffManager
     private List<Buff> GetRemoveOnDeathBuffs()
     {
         List<Buff> buffsToBeRemoved = new();
-        foreach (Buff buff in registeredBuffs)
+        foreach (Buff buff in orderedBuffs)
         {
             if (buff.RemoveOnDeath)
             {
@@ -133,39 +157,60 @@ public class BuffManager
 
     private List<Buff> GetRemoveOnRunBuffs()
     {
-        List<Buff> buffsToBeRemoved = new();
-        foreach (Buff buff in registeredBuffs)
+        List<Buff> buffs = new();
+        foreach (Buff buff in orderedBuffs)
         {
             if (buff.RemoveOnRun)
             {
-                buffsToBeRemoved.Add(buff);
+                buffs.Add(buff);
             }
         }
-        return buffsToBeRemoved;
+        return buffs;
     }
 
-    public void RegisterBuff(Buff buff)
+    public BuffID RegisterBuff(Buff buffDefinition)
     {
-        registeredBuffs.Add(buff);
+        Buff buff = UnityEngine.Object.Instantiate(buffDefinition);
         buff.Initialize(owner);
+        registeredBuffs.Add(buff.ID, buff);
+        Debug.Log(registeredBuffs.Count);
+        orderedBuffs.Add(buff);
         buff.OnBuffApplied();
+
+        return buff.ID;
+    }
+
+    public void DeregisterBuff(BuffID buffID)
+    {
+        Debug.Log(registeredBuffs.Count);
+        if (registeredBuffs.Keys.Contains(buffID))
+        {
+            Buff buff = registeredBuffs[buffID];
+            orderedBuffs.Remove(buff);
+            registeredBuffs.Remove(buffID);
+            buff.OnBuffRemoved();
+            return;
+        }
+        Debug.LogWarning($"Tried to remove buff {buffID.Name} on {owner} and failed!");
     }
 
     public void DeregisterBuff(Buff buff)
     {
-        if (registeredBuffs.Contains(buff))
+        if (registeredBuffs.Values.Contains(buff))
         {
+            BuffID buffID = registeredBuffs.FirstOrDefault(x => x.Value == buff).Key;
+            orderedBuffs.Remove(buff);
+            registeredBuffs.Remove(buffID);
             buff.OnBuffRemoved();
-            registeredBuffs.Remove(buff);
             return;
         }
-        Debug.LogWarning($"Tried to remove buff {buff} on {owner} and failed!");
+        Debug.LogWarning($"Tried to remove buff {buff.Name} on {owner} and failed!");
     }
 
 
     public void ActivateBuffTrigger(BuffTrigger trigger)
     {
-        foreach(Buff buff in registeredBuffs)
+        foreach(Buff buff in orderedBuffs)
         {
             switch (trigger)
             {

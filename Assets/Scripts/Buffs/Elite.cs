@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Elite", menuName="Abilities/Elite")]
 public class Elite : Buff
 {
-    List<CardModel> neighbors = new();
+    List<KeyValuePair<CardModel, BuffID>> neighborsBuffMap = new();
 
     Buff buffToApply;
 
@@ -47,10 +47,10 @@ public class Elite : Buff
 
     public override void OnBuffRemoved()
     {
-        foreach(CardModel neighbor in neighbors)
+        foreach(KeyValuePair<CardModel, BuffID> buffMap in neighborsBuffMap)
         {
-            Debug.Log("Elite is deregistering: " + neighbor.ToString());
-            neighbor.Buffs.DeregisterBuff(buffToApply);
+            Debug.Log("Elite is deregistering: " + buffMap.Key.ToString());
+            buffMap.Key.DeregisterBuff(buffMap.Value);
         }
     }
 
@@ -58,6 +58,7 @@ public class Elite : Buff
     {
         // ServiceLocator.Global.Get(out gameManager);
         int myIndex = Array.IndexOf(gameManager.CurrentRoom.Cards, owner);
+        List<CardModel> neighbors = new();
         if (myIndex > 0)
         {
             CardModel neighbor = gameManager.CurrentRoom.Cards[myIndex - 1];
@@ -77,7 +78,8 @@ public class Elite : Buff
 
         foreach (CardModel neighbor in neighbors)
         {
-            neighbor.RegisterBuff(buffToApply);
+            BuffID buffID = neighbor.RegisterBuff(buffToApply);
+            neighborsBuffMap.Add(new(neighbor, buffID));
             Debug.Log(neighbor.ToString());
         }
     }

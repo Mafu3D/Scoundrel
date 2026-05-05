@@ -89,7 +89,6 @@ namespace Project.Decks
             {
                 before += "\n" + ValueModifiers[i].ToString();
             }
-            Debug.Log(before);
             if (ValueModifiers.Contains(value))
             {
                 ValueModifiers.Remove(value);
@@ -117,8 +116,9 @@ namespace Project.Decks
 
         public BuffManager GetBuffs() => Buffs;
 
-        public void RegisterBuff(Buff buff) => Buffs.RegisterBuff(buff);
+        public BuffID RegisterBuff(Buff buff) => Buffs.RegisterBuff(buff);
 
-        public void DeregisterBuff(Buff buff) => Buffs.DeregisterBuff();
+        public void DeregisterBuff(Buff buff) => Buffs.DeregisterBuff(buff);
+        public void DeregisterBuff(BuffID buffID) => Buffs.DeregisterBuff(buffID);
     }
 }
