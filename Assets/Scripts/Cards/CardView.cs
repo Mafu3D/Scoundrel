@@ -289,9 +289,13 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
         header = Card.ToString();
 
         content = "";
-        foreach (Buff buff in Card.Buffs.GetBuffs())
+        foreach (Buff buff in Card.BuffManager.GetBuffs())
         {
-            content += $"\n{buff.name} - {buff.Description}";
+            content += $"\n{buff.Name}({buff.ID}) - {buff.Description}";
+            foreach (Buff childBuff in buff.ChildBuffInstances)
+            {
+                content += $"\n   + {childBuff.Name}({childBuff.ID})";
+            }
         }
         foreach (int value in Card.ValueModifiers)
         {

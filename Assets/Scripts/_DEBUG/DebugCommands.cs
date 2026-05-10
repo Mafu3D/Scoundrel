@@ -84,7 +84,7 @@ namespace Project.DebugCommands
                 UnityEngine.Debug.Log($"{buffName} not found!");
             }
 
-            gameManager.CurrentRoom.Cards[0].RegisterBuff(buff);
+            gameManager.CurrentRoom.Cards[0].AddNewBuff(buff);
         }
     }
 
@@ -110,7 +110,7 @@ namespace Project.DebugCommands
                 UnityEngine.Debug.Log($"{buffName} not found!");
             }
 
-            gameManager.CurrentRoom.Cards[1].RegisterBuff(buff);
+            gameManager.CurrentRoom.Cards[1].AddNewBuff(buff);
         }
     }
 
@@ -136,7 +136,7 @@ namespace Project.DebugCommands
                 UnityEngine.Debug.Log($"{buffName} not found!");
             }
 
-            gameManager.CurrentRoom.Cards[2].RegisterBuff(ability);
+            gameManager.CurrentRoom.Cards[2].AddNewBuff(ability);
         }
     }
 
@@ -162,7 +162,7 @@ namespace Project.DebugCommands
                 UnityEngine.Debug.Log($"{buffName} not found!");
             }
 
-            gameManager.CurrentRoom.Cards[3].RegisterBuff(buff);
+            gameManager.CurrentRoom.Cards[3].AddNewBuff(buff);
         }
     }
 }

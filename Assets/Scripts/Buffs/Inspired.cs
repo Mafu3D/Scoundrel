@@ -5,38 +5,45 @@ public class Inspired : Buff
 {
     [SerializeField] private int amount = 1;
 
-    public override void OnBuffInitialized() { }
-    public override void OnAttack() { }
+    protected override void OnBuffInitialized() { }
+    protected override void OnAttack() { }
 
-    public override void OnBuffApplied()
+    protected override void OnBuffApplied()
     {
-        owner.RegisterValueModifier(amount);
+        Owner.RegisterValueModifier(amount);
     }
 
 
-    public override void OnBuffRemoved()
+    protected override void OnCleanup()
     {
-        owner.DeregisterValueModifier(amount);
+        Owner.DeregisterValueModifier(amount);
+        Debug.Log("inspired cleaning up");
     }
 
-    public override void OnCardRemoval() { }
+    protected override void OnDiscardPotion() { }
 
-    public override void OnDiscardPotion() { }
+    protected override void OnDraw() { }
 
-    public override void OnDraw() { }
+    protected override void OnDrinkPotion() { }
 
-    public override void OnDrinkPotion() { }
+    protected override void OnEnterNewRoom() { }
 
-    public override void OnEnterNewRoom() { }
+    protected override void OnEquipWeapon() { }
 
-    public override void OnEquipWeapon() { }
+    protected override void OnOtherDie() { }
 
-    public override void OnMonsterDie() { }
+    protected override void OnOpenNewRoom() { }
 
-    public override void OnOpenNewRoom() { }
+    protected override void OnRun() { }
 
-    public override void OnRun() { }
+    protected override void OnUpdate() { }
 
-    public override void OnUpdate() { }
+    protected override void OnLeave()
+    {
+    }
+
+    protected override void OnSelfDie()
+    {
+    }
 }
 

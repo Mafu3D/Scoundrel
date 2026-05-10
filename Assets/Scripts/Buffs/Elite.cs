@@ -9,55 +9,55 @@ public class Elite : Buff
 {
     List<KeyValuePair<CardModel, BuffID>> neighborsBuffMap = new();
 
-    Buff buffToApply;
-
-    public override void OnBuffInitialized() {
-        buffToApply = GetChildBuffByName("Inspired");
+    protected override void OnBuffInitialized() {
     }
 
-    public override void OnAttack() { }
+    protected override void OnAttack() { }
 
-    public override void OnCardRemoval() { }
+    protected override void OnDiscardPotion() { }
 
-    public override void OnDiscardPotion() { }
+    protected override void OnDraw()
+    {
+        DoBuffEffect(); // Replace with apply when drawn parameter
+    }
 
-    public override void OnDraw()
+    protected override void OnDrinkPotion() { }
+
+    protected override void OnEnterNewRoom() { }
+
+    protected override void OnEquipWeapon() { }
+
+    protected override void OnOtherDie() { }
+
+    protected override void OnOpenNewRoom() { }
+
+    protected override void OnRun() { }
+
+    protected override void OnUpdate() { }
+
+    protected override void OnBuffApplied()
     {
         DoBuffEffect();
     }
 
-    public override void OnDrinkPotion() { }
-
-    public override void OnEnterNewRoom() { }
-
-    public override void OnEquipWeapon() { }
-
-    public override void OnMonsterDie() { }
-
-    public override void OnOpenNewRoom() { }
-
-    public override void OnRun() { }
-
-    public override void OnUpdate() { }
-
-    public override void OnBuffApplied()
+    protected override void OnCleanup()
     {
-        DoBuffEffect();
-    }
-
-    public override void OnBuffRemoved()
-    {
-        foreach(KeyValuePair<CardModel, BuffID> buffMap in neighborsBuffMap)
-        {
-            Debug.Log("Elite is deregistering: " + buffMap.Key.ToString());
-            buffMap.Key.DeregisterBuff(buffMap.Value);
-        }
+        // foreach(KeyValuePair<CardModel, BuffID> buffMap in neighborsBuffMap)
+        // {
+        //     Debug.Log("Elite is deregistering: " + buffMap.Key.ToString());
+        //     // Clean up the child buffs
+        //     if (buffMap.Key.HasBuff(buffMap.Value))
+        //     {
+        //         buffMap.Key.RemoveBuff(buffMap.Value);
+        //     }
+        // }
+        Debug.Log("elite cleaning up");
     }
 
     private void DoBuffEffect()
     {
         // ServiceLocator.Global.Get(out gameManager);
-        int myIndex = Array.IndexOf(gameManager.CurrentRoom.Cards, owner);
+        int myIndex = Array.IndexOf(gameManager.CurrentRoom.Cards, Owner);
         List<CardModel> neighbors = new();
         if (myIndex > 0)
         {
@@ -76,12 +76,20 @@ public class Elite : Buff
             }
         }
 
+        Buff buffToApply = GetRegisteredChildBuffByName("Inspired");
         foreach (CardModel neighbor in neighbors)
         {
-            BuffID buffID = neighbor.RegisterBuff(buffToApply);
-            neighborsBuffMap.Add(new(neighbor, buffID));
-            Debug.Log(neighbor.ToString());
+            Buff buff = AddBuff(neighbor, buffToApply);
+            neighborsBuffMap.Add(new(neighbor, buff.ID));
         }
+    }
+
+    protected override void OnLeave()
+    {
+    }
+
+    protected override void OnSelfDie()
+    {
     }
 }
 

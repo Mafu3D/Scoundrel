@@ -98,7 +98,7 @@ public class RoomModel
         {
             if (card != null)
             {
-                card.Buffs.OnRun();
+                card.BuffManager.TriggerEffect(BuffTrigger.OnRun);
             }
         }
     }

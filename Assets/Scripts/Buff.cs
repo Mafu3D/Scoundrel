@@ -6,11 +6,13 @@ using UnityEngine;
 
 public interface IBuffRegisterable
 {
-    public BuffManager Buffs { get; }
-    public BuffManager GetBuffs();
-    public BuffID RegisterBuff(Buff buff);
-    public void DeregisterBuff(Buff buff);
-    public void DeregisterBuff(BuffID buffID);
+    public BuffManager BuffManager { get; }
+    public List<Buff> GetBuffs();
+    public Buff AddNewBuff(Buff buff);
+    public void RemoveBuff(Buff buff);
+    public void RemoveBuff(BuffID buffID);
+    public bool HasBuff(Buff buff);
+    public bool HasBuff(BuffID buffID);
 }
 
 public class BuffID
@@ -29,6 +31,10 @@ public class BuffID
     }
 }
 
+/// <summary>
+/// Main class for buffs.
+///
+/// </summary>
 public abstract class Buff : ScriptableObject
 {
     [Header("Buff Meta")]
@@ -36,46 +42,150 @@ public abstract class Buff : ScriptableObject
     [SerializeField] public string Description;
 
     [Header("Base Buff Parameters")]
-    [SerializeField] public bool RemoveOnDeath;
-    [SerializeField] public bool RemoveOnRun;
-    [SerializeField] public List<Buff> childBuffs = new();
+    [SerializeField] public bool IsTemporary = false;
+    [SerializeField] public bool RemoveOnParentCleanup = false;
+    [SerializeField] public bool RemoveOnDeath = true;
+    [SerializeField] public List<Buff> registeredChildBuffs = new();
+
+    public List<Buff> ChildBuffInstances { get; private set; } = new();
 
     public BuffID ID;
-    protected GameManager gameManager;
-    protected CardModel owner;
+    public CardModel Owner { get; private set; }
 
-    public Buff GetChildBuffByName(string name)
+    protected GameManager gameManager;
+
+    public override string ToString() => $"{Name}({ID})";
+
+    public Buff GetRegisteredChildBuffByName(string name)
     {
-        foreach (Buff buff in childBuffs)
+        foreach (Buff buff in registeredChildBuffs)
         {
             if (buff.Name == name)
             {
                 return buff;
             }
         }
-        return default;
+        throw new ArgumentException($"{name} is not a registered child buff of {this.name}", "name");
+    }
+
+    public Buff GetChildBuffInstanceByName(string name)
+    {
+        foreach (Buff buff in ChildBuffInstances)
+        {
+            if (buff.Name == name)
+            {
+                return buff;
+            }
+        }
+        throw new ArgumentException($"There is no instance of {name} registered to {this.name}", "name");
     }
 
     public void Initialize(CardModel owner)
     {
-        this.owner = owner;
+        this.Owner = owner;
         ServiceLocator.Global.Get(out gameManager);
         ID = new(this);
         OnBuffInitialized();
     }
 
-    public abstract void OnBuffInitialized();
-    public abstract void OnBuffApplied();
-    public abstract void OnBuffRemoved();
-    public abstract void OnDraw();
-    public abstract void OnOpenNewRoom();
-    public abstract void OnEnterNewRoom();
-    public abstract void OnRun();
-    public abstract void OnMonsterDie();
-    public abstract void OnEquipWeapon();
-    public abstract void OnDrinkPotion();
-    public abstract void OnDiscardPotion();
-    public abstract void OnAttack();
-    public abstract void OnCardRemoval();
-    public abstract void OnUpdate();
+    public void Remove()
+    {
+        Owner.RemoveBuff(this);
+    }
+
+    private void OnDestroy()
+    {
+        // Cleanup();
+        Debug.Log("destroyed");
+    }
+
+    public void Cleanup()
+    {
+        // foreach (Buff buff in childBuffInstances)
+        // {
+        //     if (!buff.CleanupWithParent)
+        //     {
+        //         continue;
+        //     }
+        //     buff.Cleanup();
+        // }
+        OnCleanup();
+    }
+
+    public void TriggerEffect(BuffTrigger trigger)
+    {
+        GetTriggerCallable(trigger)();
+    }
+
+    private Action GetTriggerCallable(BuffTrigger trigger)
+    {
+        return trigger switch
+        {
+            BuffTrigger.OnBuffApplied => OnBuffApplied,
+            BuffTrigger.OnDraw => OnDraw,
+            BuffTrigger.OnOpenNewRoom => OnOpenNewRoom,
+            BuffTrigger.OnEnterNewRoom => OnEnterNewRoom,
+            BuffTrigger.OnRun => OnRun,
+            BuffTrigger.OnOtherDie => OnOtherDie,
+            BuffTrigger.OnSelfDie => OnSelfDie,
+            BuffTrigger.OnEquipWeapon => OnEquipWeapon,
+            BuffTrigger.OnDrinkPotion => OnDrinkPotion,
+            BuffTrigger.OnDiscardPotion => OnDiscardPotion,
+            BuffTrigger.OnAttack => OnAttack,
+            BuffTrigger.OnUpdate => OnAttack,
+            _ => throw new ArgumentOutOfRangeException(nameof(trigger), $"{nameof(trigger)} has not been registered as a callable trigger.")
+        };
+    }
+
+    protected Buff AddBuff(CardModel target, Buff buff)
+    {
+        Buff newInstance = target.AddNewBuff(buff);
+        ChildBuffInstances.Add(newInstance);
+        return newInstance;
+    }
+
+    /// <summary>
+    /// Called at initialization of the buff by the Buff Manager when adding a new buff.
+    /// This is for any extra initialization that needs to be
+    /// done for the construction of this buff.
+    /// </summary>
+    protected abstract void OnBuffInitialized();
+
+    /// <summary>
+    /// Called whenever the buff is removed, no matter the source.
+    /// This is for logic that needs to run if the buff ever becomes
+    /// no longe active. Like state changes.
+    /// </summary>
+    protected abstract void OnCleanup();
+
+    /// <summary>
+    /// Called when the buff is considered active, after initialization.
+    /// </summary>
+    protected abstract void OnBuffApplied();
+
+    /// <summary>
+    /// Called when the card is drawn, before the room has been fully created.
+    /// Use this for logic that affects how cards are drawn?
+    /// </summary>
+    protected abstract void OnDraw();
+
+    /// <summary>
+    /// Called when the card leaves the table for any reason.
+    /// </summary>
+    protected abstract void OnLeave();
+
+    /// <summary>
+    /// Called every update cycle of the Game Manager update loop.
+    /// </summary>
+    protected abstract void OnUpdate();
+
+    protected abstract void OnOpenNewRoom();
+    protected abstract void OnEnterNewRoom();
+    protected abstract void OnRun();
+    protected abstract void OnSelfDie();
+    protected abstract void OnOtherDie();
+    protected abstract void OnEquipWeapon();
+    protected abstract void OnDrinkPotion();
+    protected abstract void OnDiscardPotion();
+    protected abstract void OnAttack();
 }

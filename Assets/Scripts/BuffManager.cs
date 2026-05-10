@@ -6,19 +6,17 @@ using UnityEngine;
 
 public enum BuffTrigger
 {
-    OnBuffInitialized,
     OnBuffApplied,
-    OnBuffRemoved,
     OnDraw,
     OnOpenNewRoom,
     OnEnterNewRoom,
     OnRun,
-    OnMonsterDie,
+    OnOtherDie,
+    OnSelfDie,
     OnEquipWeapon,
     OnDrinkPotion,
     OnDiscardPotion,
     OnAttack,
-    OnCardRemoval,
     OnUpdate,
 }
 
@@ -35,50 +33,28 @@ public class BuffManager
         this.owner = owner;
     }
 
+    public bool HasBuff(BuffID buffID) => registeredBuffs.Keys.Contains(buffID);
+    public bool HasBuff(Buff buff) => registeredBuffs.Values.Contains(buff);
+
     public void Update()
     {
-        ActivateBuffTrigger(BuffTrigger.OnUpdate);
+        TriggerEffect(BuffTrigger.OnUpdate);
     }
 
-    public void OnDeath()
+    public void CleanupTemporaryBuffs()
     {
-        ActivateBuffTrigger(BuffTrigger.OnCardRemoval);
-        foreach(Buff buff in GetRemoveOnDeathBuffs())
+        foreach(Buff buff in GetTemporaryBuffs())
         {
-            buff.OnCardRemoval();
             DeregisterBuff(buff);
         }
     }
 
-    public void OnRun()
-    {
-        ActivateBuffTrigger(BuffTrigger.OnRun);
-        foreach(Buff buff in GetRemoveOnRunBuffs())
-        {
-            buff.OnCardRemoval();
-            DeregisterBuff(buff);
-        }
-    }
-
-    private List<Buff> GetRemoveOnDeathBuffs()
-    {
-        List<Buff> buffsToBeRemoved = new();
-        foreach (Buff buff in orderedBuffs)
-        {
-            if (buff.RemoveOnDeath)
-            {
-                buffsToBeRemoved.Add(buff);
-            }
-        }
-        return buffsToBeRemoved;
-    }
-
-    private List<Buff> GetRemoveOnRunBuffs()
+    private List<Buff> GetTemporaryBuffs()
     {
         List<Buff> buffs = new();
         foreach (Buff buff in orderedBuffs)
         {
-            if (buff.RemoveOnRun)
+            if (buff.IsTemporary)
             {
                 buffs.Add(buff);
             }
@@ -86,103 +62,89 @@ public class BuffManager
         return buffs;
     }
 
-    public BuffID RegisterBuff(Buff buffDefinition)
+    public void CleanupRemoveOnDeathBuffs()
     {
-        Buff buff = UnityEngine.Object.Instantiate(buffDefinition);
+        foreach(Buff buff in GetRemoveOnDeathBuffs())
+        {
+            DeregisterBuff(buff);
+        }
+    }
+
+    private List<Buff> GetRemoveOnDeathBuffs()
+    {
+        List<Buff> buffs = new();
+        foreach (Buff buff in orderedBuffs)
+        {
+            if (buff.RemoveOnDeath)
+            {
+                buffs.Add(buff);
+            }
+        }
+        return buffs;
+    }
+
+    public Buff AddNewBuff(Buff buff)
+    {
+        if (buff.ID != null)
+        {
+            Debug.LogWarning($"{buff.name} is being added but has already been initialized with id {buff.ID.ToString()}");
+        }
+        Buff newInstance = UnityEngine.Object.Instantiate(buff);
+        RegisterBuff(newInstance);
+        return newInstance;
+    }
+
+    private void RegisterBuff(Buff buff)
+    {
         buff.Initialize(owner);
         registeredBuffs.Add(buff.ID, buff);
-        Debug.Log(registeredBuffs.Count);
         orderedBuffs.Add(buff);
-        buff.OnBuffApplied();
-
-        return buff.ID;
+        buff.TriggerEffect(BuffTrigger.OnBuffApplied);
     }
 
-    public void DeregisterBuff(BuffID buffID)
+    public void RemoveBuff(BuffID buffID)
     {
-        Debug.Log(registeredBuffs.Count);
-        if (registeredBuffs.Keys.Contains(buffID))
+        if (!HasBuff(buffID))
         {
-            Buff buff = registeredBuffs[buffID];
-            orderedBuffs.Remove(buff);
-            registeredBuffs.Remove(buffID);
-            buff.OnBuffRemoved();
+            Debug.LogWarning($"Tried to remove buff {buffID.Name} on {owner} and failed!");
             return;
         }
-        Debug.LogWarning($"Tried to remove buff {buffID.Name} on {owner} and failed!");
+        DeregisterBuff(registeredBuffs[buffID]);
     }
 
-    public void DeregisterBuff(Buff buff)
+    public void RemoveBuff(Buff buff)
     {
-        if (registeredBuffs.Values.Contains(buff))
+        if (!HasBuff(buff))
         {
-            BuffID buffID = registeredBuffs.FirstOrDefault(x => x.Value == buff).Key;
-            orderedBuffs.Remove(buff);
-            registeredBuffs.Remove(buffID);
-            buff.OnBuffRemoved();
+            Debug.LogWarning($"Tried to remove buff {buff.Name} on {owner} and failed!");
             return;
         }
-        Debug.LogWarning($"Tried to remove buff {buff.Name} on {owner} and failed!");
+        DeregisterBuff(buff);
+    }
+
+    private void DeregisterBuff(Buff buff)
+    {
+        foreach(Buff childBuff in buff.ChildBuffInstances)
+        {
+            // TODO: If a child buff is destroyed or deregistered before
+            // its parent the object may become null?
+            if (childBuff != null && childBuff.RemoveOnParentCleanup)
+            {
+                childBuff.Remove();
+            }
+        }
+        orderedBuffs.Remove(buff);
+        BuffID buffID = registeredBuffs.FirstOrDefault(x => x.Value == buff).Key;
+        registeredBuffs.Remove(buffID);
+        buff.Cleanup();
     }
 
 
-    public void ActivateBuffTrigger(BuffTrigger trigger)
+    public void TriggerEffect(BuffTrigger trigger)
     {
         foreach(Buff buff in orderedBuffs)
         {
-            switch (trigger)
-            {
-                case BuffTrigger.OnBuffInitialized:
-                    buff.OnBuffInitialized();
-                    break;
-                case BuffTrigger.OnBuffApplied:
-                    buff.OnBuffApplied();
-                    break;
-                case BuffTrigger.OnBuffRemoved:
-                    buff.OnBuffRemoved();
-                    break;
-                case BuffTrigger.OnDraw:
-                    buff.OnDraw();
-                    break;
-                case BuffTrigger.OnOpenNewRoom:
-                    buff.OnOpenNewRoom();
-                    break;
-                case BuffTrigger.OnEnterNewRoom:
-                    buff.OnEnterNewRoom();
-                    break;
-                case BuffTrigger.OnRun:
-                    buff.OnRun();
-                    break;
-                case BuffTrigger.OnMonsterDie:
-                    buff.OnMonsterDie();
-                    break;
-                case BuffTrigger.OnEquipWeapon:
-                    buff.OnEquipWeapon();
-                    break;
-                case BuffTrigger.OnDrinkPotion:
-                    buff.OnDrinkPotion();
-                    break;
-                case BuffTrigger.OnDiscardPotion:
-                    buff.OnDiscardPotion();
-                    break;
-                case BuffTrigger.OnAttack:
-                    buff.OnAttack();
-                    break;
-                case BuffTrigger.OnCardRemoval:
-                    buff.OnCardRemoval();
-                    break;
-                case BuffTrigger.OnUpdate:
-                    buff.OnUpdate();
-                    break;
-                default:
-                    Debug.LogError($"{trigger} is not accepted");
-                    break;
-            }
+            buff.TriggerEffect(trigger);
         }
-    }
-
-    internal void DeregisterBuff()
-    {
-        throw new NotImplementedException();
     }
 }

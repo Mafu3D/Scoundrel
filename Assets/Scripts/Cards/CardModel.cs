@@ -33,8 +33,8 @@ namespace Project.Decks
 
         public Action OnUpdate;
 
-        public BuffManager Buffs => buffs;
-        private BuffManager buffs;
+        public BuffManager BuffManager => buffManager;
+        private BuffManager buffManager;
         public List<int> ValueModifiers = new();
 
         private Guid uuid;
@@ -42,7 +42,7 @@ namespace Project.Decks
         public CardModel(Suit suit, int value) {
             this.Suit = suit;
             this.BaseValue = value;
-            this.buffs = new BuffManager(this);
+            this.buffManager = new BuffManager(this);
 
             uuid = Guid.NewGuid();
         }
@@ -50,10 +50,10 @@ namespace Project.Decks
         public CardModel(Suit suit, int value, List<Buff> buffs) {
             this.Suit = suit;
             this.BaseValue = value;
-            this.buffs = new BuffManager(this);
+            this.buffManager = new BuffManager(this);
             foreach(Buff buff in buffs)
             {
-                this.buffs.RegisterBuff(buff);
+                this.buffManager.AddNewBuff(buff);
             }
 
             uuid = Guid.NewGuid();
@@ -61,7 +61,7 @@ namespace Project.Decks
 
         public void Update()
         {
-            buffs.Update();
+            buffManager.Update();
             OnUpdate?.Invoke();
         }
 
@@ -101,24 +101,24 @@ namespace Project.Decks
             }
             Debug.Log(after);
             Debug.LogWarning($"Tried to deregister modifier value of {value} from {this.ToString()} but failed!");
-
         }
 
         public void HandleDeath()
         {
-            buffs.OnDeath();
+            buffManager.TriggerEffect(BuffTrigger.OnSelfDie);
+            buffManager.CleanupRemoveOnDeathBuffs();
         }
 
         public void HandleOnDraw()
         {
-            buffs.ActivateBuffTrigger(BuffTrigger.OnDraw);
+            buffManager.TriggerEffect(BuffTrigger.OnDraw);
         }
 
-        public BuffManager GetBuffs() => Buffs;
-
-        public BuffID RegisterBuff(Buff buff) => Buffs.RegisterBuff(buff);
-
-        public void DeregisterBuff(Buff buff) => Buffs.DeregisterBuff(buff);
-        public void DeregisterBuff(BuffID buffID) => Buffs.DeregisterBuff(buffID);
+        public List<Buff> GetBuffs() => BuffManager.GetBuffs();
+        public Buff AddNewBuff(Buff buff) => BuffManager.AddNewBuff(buff);
+        public void RemoveBuff(Buff buff) => BuffManager.RemoveBuff(buff);
+        public void RemoveBuff(BuffID buffID) => BuffManager.RemoveBuff(buffID);
+        public bool HasBuff(Buff buff) => BuffManager.HasBuff(buff);
+        public bool HasBuff(BuffID buffID) => BuffManager.HasBuff(buffID);
     }
 }
