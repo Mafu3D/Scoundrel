@@ -63,6 +63,26 @@ namespace Project.DebugCommands
     }
 
     [DebugCommand]
+    public class Heal : IDebugCommand<int>
+    {
+        public string ID => "heal";
+
+        public string Description => "Restore X hit points";
+
+        public string Format => "heal <int>";
+
+        public bool HasDefaultValue => true;
+
+        public string DefaultParameter => "0";
+
+        public void Invoke(int amount)
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            gameManager.Player.Heal(amount);
+        }
+    }
+
+    [DebugCommand]
     public class AddBuffTo0 : IDebugCommand<string>
     {
         public string ID => "addBuff0";

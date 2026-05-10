@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Inspired
   Description: +1 from being inspired by a neighboring elite ally
-  RemoveOnDeath: 0
-  RemoveOnRun: 1
-  childBuffs: []
+  IsTemporary: 0
+  RemoveOnParentCleanup: 0
+  RemoveOnDeath: 1
+  registeredChildBuffs: []
   amount: 1

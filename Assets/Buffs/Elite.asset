@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Elite
   Description: Grant allies adjacent to this card +1
+  IsTemporary: 0
+  RemoveOnParentCleanup: 0
   RemoveOnDeath: 1
-  childBuffs:
+  registeredChildBuffs:
   - {fileID: 11400000, guid: 269f9cbc8fdab8349bd500548be150da, type: 2}
