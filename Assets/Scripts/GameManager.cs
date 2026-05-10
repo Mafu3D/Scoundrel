@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         RoomNumber = 0;
         DeckManager.ResetDeck();
         OnStartNewGame?.Invoke();
-        EnterFirstRoom();
+        OpenFirstRoom();
         GameHasStarted = true;
 
         Player.OnRunSuccess += OnPlayerRun;
@@ -90,7 +90,7 @@ public class GameManager : MonoBehaviour
         OnGameOver?.Invoke();
     }
 
-    private void EnterFirstRoom()
+    private void OpenFirstRoom()
     {
         List<CardModel> drawnCards = DeckManager.Draw(CardsPerRoom);
         RoomModel room = new(CardsPerRoom, drawnCards);
@@ -161,6 +161,10 @@ public class GameManager : MonoBehaviour
             if (!Player.HasEnteredTheRoom)
             {
                 Player.EnterNewRoom();
+                foreach(CardModel otherCard in CurrentRoom.Cards)
+                {
+                    otherCard.BuffManager.TriggerEffect(BuffTrigger.OnEnterRoom);
+                }
             }
             CurrentRoom.TryRemoveCard(card);
         }

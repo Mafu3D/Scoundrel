@@ -8,8 +8,7 @@ public enum BuffTrigger
 {
     OnBuffApplied,
     OnDraw,
-    OnOpenNewRoom,
-    OnEnterNewRoom,
+    OnEnterRoom,
     OnRun,
     OnOtherDie,
     OnSelfDie,

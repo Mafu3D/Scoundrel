@@ -42,6 +42,7 @@ public abstract class Buff : ScriptableObject
     [SerializeField] public string Description;
 
     [Header("Base Buff Parameters")]
+    [SerializeField] public bool ApplyOnDraw = true;
     [SerializeField] public bool IsTemporary = false;
     [SerializeField] public bool RemoveOnParentCleanup = false;
     [SerializeField] public bool RemoveOnDeath = true;
@@ -123,8 +124,7 @@ public abstract class Buff : ScriptableObject
         {
             BuffTrigger.OnBuffApplied => OnBuffApplied,
             BuffTrigger.OnDraw => OnDraw,
-            BuffTrigger.OnOpenNewRoom => OnOpenNewRoom,
-            BuffTrigger.OnEnterNewRoom => OnEnterNewRoom,
+            BuffTrigger.OnEnterRoom => OnEnterRoom,
             BuffTrigger.OnRun => OnRun,
             BuffTrigger.OnOtherDie => OnOtherDie,
             BuffTrigger.OnSelfDie => OnSelfDie,
@@ -179,8 +179,7 @@ public abstract class Buff : ScriptableObject
     /// </summary>
     protected abstract void OnUpdate();
 
-    protected abstract void OnOpenNewRoom();
-    protected abstract void OnEnterNewRoom();
+    protected abstract void OnEnterRoom();
     protected abstract void OnRun();
     protected abstract void OnSelfDie();
     protected abstract void OnOtherDie();

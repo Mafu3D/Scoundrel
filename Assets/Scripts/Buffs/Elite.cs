@@ -23,13 +23,11 @@ public class Elite : Buff
 
     protected override void OnDrinkPotion() { }
 
-    protected override void OnEnterNewRoom() { }
+    protected override void OnEnterRoom() { }
 
     protected override void OnEquipWeapon() { }
 
     protected override void OnOtherDie() { }
-
-    protected override void OnOpenNewRoom() { }
 
     protected override void OnRun() { }
 
