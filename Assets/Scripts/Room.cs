@@ -57,6 +57,55 @@ public class RoomModel
         return remaining;
     }
 
+    public List<CardModel> GetNeighbors(CardModel card)
+    {
+        if (!Cards.Contains(card))
+        {
+            Debug.LogWarning("card is not in the current room!");
+            return default;
+        }
+
+        int index = Array.IndexOf(Cards, card);
+        List<CardModel> neighbors = new();
+        if (index > 0)
+        {
+            CardModel neighbor = Cards[index - 1];
+            if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
+            {
+                neighbors.Add(neighbor);
+            }
+        }
+        if (index < Size - 1)
+        {
+            CardModel neighbor = Cards[index + 1];
+            if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
+            {
+                neighbors.Add(neighbor);
+            }
+        }
+
+        return neighbors;
+    }
+
+    public List<CardModel> GetOthers(CardModel card)
+    {
+        if (!Cards.Contains(card))
+        {
+            Debug.LogWarning("card is not in the current room!");
+            return default;
+        }
+
+        List<CardModel> others = new();
+        foreach (CardModel other in Cards)
+        {
+            if (other != null && other != card)
+            {
+                others.Add(other);
+            }
+        }
+        return others;
+    }
+
     public bool TryRemoveCard(CardModel card)
     {
         if (!Cards.Contains(card))
@@ -92,15 +141,7 @@ public class RoomModel
 
     public int RemainingCount => RemainingCards().Count;
 
-    public bool IsEmpty
-    {
-        get
-        {
-            Debug.Log(Cards.Count(x => x == null));
-            Debug.Log(Cards.Count());
-            return Cards.Count(x => x == null) == Cards.Count();
-        }
-    }
+    public bool IsEmpty => Cards.Count(x => x == null) == Cards.Length;
 
     public void OnRun()
     {

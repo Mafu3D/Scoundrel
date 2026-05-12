@@ -4,11 +4,9 @@ using Mafu.UnityServiceLocator;
 using Project.Decks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Inspiring", menuName="Abilities/Inspiring")]
-public class Inspiring : Buff
+[CreateAssetMenu(fileName="Bloodthirsty", menuName="Abilities/Bloodthirsty")]
+public class Bloodthirsty : Buff
 {
-    List<KeyValuePair<CardModel, BuffID>> neighborsBuffMap = new();
-
     protected override void OnBuffInitialized() {
     }
 
@@ -18,7 +16,6 @@ public class Inspiring : Buff
 
     protected override void OnDraw()
     {
-        DoBuffEffect(); // Replace with apply when drawn parameter
     }
 
     protected override void OnDrinkPotion() { }
@@ -27,7 +24,10 @@ public class Inspiring : Buff
 
     protected override void OnEquipWeapon() { }
 
-    protected override void OnOtherDie() { }
+    protected override void OnOtherDie()
+    {
+        Owner.RegisterValueModifier(1);
+    }
 
     protected override void OnRun() { }
 
@@ -35,22 +35,10 @@ public class Inspiring : Buff
 
     protected override void OnBuffApplied()
     {
-        DoBuffEffect();
     }
 
     protected override void OnCleanup()
     {
-    }
-
-    private void DoBuffEffect()
-    {
-        Buff buffToApply = GetRegisteredChildBuffByName("Inspired");
-        List<CardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner);
-        foreach (CardModel neighbor in neighbors)
-        {
-            Buff buff = AddBuff(neighbor, buffToApply);
-            neighborsBuffMap.Add(new(neighbor, buff.ID));
-        }
     }
 
     protected override void OnLeave()

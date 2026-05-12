@@ -114,6 +114,11 @@ namespace Project.Decks
             buffManager.TriggerEffect(BuffTrigger.OnDraw);
         }
 
+        public void HandleOnOtherDie()
+        {
+            buffManager.TriggerEffect(BuffTrigger.OnOtherDie);
+        }
+
         public List<Buff> GetBuffs() => BuffManager.GetBuffs();
         public Buff AddNewBuff(Buff buff) => BuffManager.AddNewBuff(buff);
         public void RemoveBuff(Buff buff) => BuffManager.RemoveBuff(buff);

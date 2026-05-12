@@ -172,9 +172,17 @@ public class GameManager : MonoBehaviour
             if (card.Suit == Suit.CLUBS || card.Suit == Suit.SPADES)
             {
                 Player.AddGold(1);
+
+                // also broadcast to other cards that this died
+                foreach (CardModel other in CurrentRoom.GetOthers(card))
+                {
+                    if (other == null) { continue; }
+                    other.HandleOnOtherDie();
+                }
             }
 
             CurrentRoom.TryRemoveCard(card);
+
 
             // Add gold if its the last card in the room
             Debug.Log(CurrentRoom.IsEmpty);

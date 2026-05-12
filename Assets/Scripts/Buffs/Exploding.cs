@@ -7,8 +7,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Exploding", menuName="Abilities/Exploding")]
 public class Exploding : Buff
 {
-    List<KeyValuePair<CardModel, BuffID>> neighborsBuffMap = new();
-
     protected override void OnBuffInitialized() {
     }
 
@@ -46,26 +44,7 @@ public class Exploding : Buff
 
     protected override void OnSelfDie()
     {
-        // ServiceLocator.Global.Get(out gameManager);
-        int myIndex = Array.IndexOf(gameManager.CurrentRoom.Cards, Owner);
-        List<CardModel> neighbors = new();
-        if (myIndex > 0)
-        {
-            CardModel neighbor = gameManager.CurrentRoom.Cards[myIndex - 1];
-            if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
-            {
-                neighbors.Add(neighbor);
-            }
-        }
-        if (myIndex < gameManager.CardsPerRoom - 1)
-        {
-            CardModel neighbor = gameManager.CurrentRoom.Cards[myIndex + 1];
-            if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
-            {
-                neighbors.Add(neighbor);
-            }
-        }
-
+        List<CardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner);
         foreach (CardModel neighbor in neighbors)
         {
             neighbor.RegisterValueModifier(-Owner.Value);
