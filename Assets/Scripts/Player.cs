@@ -176,5 +176,6 @@ public class Player : MonoBehaviour
         runTokenOnCooldown = false;
         HasRunToken = true;
         Weapon = null;
+        CurrentGold = 0;
     }
 }
