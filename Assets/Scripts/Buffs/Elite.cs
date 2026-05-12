@@ -7,8 +7,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Elite", menuName="Abilities/Elite")]
 public class Elite : Buff
 {
-    List<KeyValuePair<CardModel, BuffID>> neighborsBuffMap = new();
-
     protected override void OnBuffInitialized() {
     }
 
@@ -40,46 +38,13 @@ public class Elite : Buff
 
     protected override void OnCleanup()
     {
-        // foreach(KeyValuePair<CardModel, BuffID> buffMap in neighborsBuffMap)
-        // {
-        //     Debug.Log("Elite is deregistering: " + buffMap.Key.ToString());
-        //     // Clean up the child buffs
-        //     if (buffMap.Key.HasBuff(buffMap.Value))
-        //     {
-        //         buffMap.Key.RemoveBuff(buffMap.Value);
-        //     }
-        // }
-        Debug.Log("elite cleaning up");
+        Owner.DeregisterValueModifier(1);
     }
 
     private void DoBuffEffect()
     {
         // ServiceLocator.Global.Get(out gameManager);
-        int myIndex = Array.IndexOf(gameManager.CurrentRoom.Cards, Owner);
-        List<CardModel> neighbors = new();
-        if (myIndex > 0)
-        {
-            CardModel neighbor = gameManager.CurrentRoom.Cards[myIndex - 1];
-            if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
-            {
-                neighbors.Add(neighbor);
-            }
-        }
-        if (myIndex < gameManager.CardsPerRoom - 1)
-        {
-            CardModel neighbor = gameManager.CurrentRoom.Cards[myIndex + 1];
-            if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
-            {
-                neighbors.Add(neighbor);
-            }
-        }
-
-        Buff buffToApply = GetRegisteredChildBuffByName("Inspired");
-        foreach (CardModel neighbor in neighbors)
-        {
-            Buff buff = AddBuff(neighbor, buffToApply);
-            neighborsBuffMap.Add(new(neighbor, buff.ID));
-        }
+        Owner.RegisterValueModifier(1);
     }
 
     protected override void OnLeave()
@@ -88,6 +53,7 @@ public class Elite : Buff
 
     protected override void OnSelfDie()
     {
+        gameManager.Player.AddGold(1);
     }
 }
 
