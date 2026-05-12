@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2db5b1d10172aa4ab8d384ef1795043, type: 3}
   m_Name: Exploding
   m_EditorClassIdentifier: 
-  Name: 
-  Description: 
+  Name: Exploding
+  Description: This card deals its damage to its neighbors when it dies. It destroys
+    any gold.
   ApplyOnDraw: 1
   IsTemporary: 0
   RemoveOnParentCleanup: 0

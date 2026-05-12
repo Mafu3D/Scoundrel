@@ -23,6 +23,7 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
     [Header("Card Visuals")]
     [SerializeField] private List<TMP_Text> valueTMPTexts = new();
     [SerializeField] private SpriteRenderer suitSprite;
+    [SerializeField] private GameObject isBuffedIndicator;
 
     [Header("Card Colors")]
     [SerializeField] private Color red;
@@ -112,6 +113,15 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
         }
 
         HandleMousePosition();
+
+        if (Card.BuffManager.GetBuffs().Count > 0 )
+        {
+            isBuffedIndicator.SetActive(true);
+        }
+        else
+        {
+            isBuffedIndicator.SetActive(false);
+        }
     }
 
     private void UpdateView()
@@ -291,11 +301,11 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
         content = "";
         foreach (Buff buff in Card.BuffManager.GetBuffs())
         {
-            content += $"\n{buff.Name}({buff.ID}) - {buff.Description}";
-            foreach (Buff childBuff in buff.ChildBuffInstances)
-            {
-                content += $"\n   + {childBuff.Name}({childBuff.ID})";
-            }
+            content += $"\n{buff.Name} - {buff.Description}";
+            // foreach (Buff childBuff in buff.ChildBuffInstances)
+            // {
+            //     content += $"\n   + {childBuff.Name}({childBuff.ID})";
+            // }
         }
         foreach (int value in Card.ValueModifiers)
         {

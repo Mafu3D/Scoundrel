@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c5714cd4f02a4d4b8ddab8972ec50b8, type: 3}
   m_Name: Bloodthirsty
   m_EditorClassIdentifier: 
-  Name: 
-  Description: 
+  Name: Bloodthirsty
+  Description: Gain 1 power every time another card dies
   ApplyOnDraw: 1
   IsTemporary: 0
   RemoveOnParentCleanup: 0
