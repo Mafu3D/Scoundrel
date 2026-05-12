@@ -69,6 +69,8 @@ public class GameManager : MonoBehaviour
     {
         RoomNumber = 0;
         DeckManager.ResetDeck();
+        TEMP_RandomizeBuffsInDeck();
+
         OnStartNewGame?.Invoke();
         OpenFirstRoom();
         GameHasStarted = true;
@@ -76,6 +78,27 @@ public class GameManager : MonoBehaviour
         Player.OnRunSuccess += OnPlayerRun;
         Player.OnDeath += GameOver;
         Player.StartNewGame();
+    }
+
+    private void TEMP_RandomizeBuffsInDeck()
+    {
+
+        // TEMP:
+        List<string> buffs = new() { "Inspiring", "Elite", "Bloodthirsty", "Exploding" };
+        int amount = UnityEngine.Random.Range(4, 7);
+        List<CardModel> cardsToBuff = new();
+        List<CardModel> monsterCards = DeckManager.GetRemainingOfSuit(new() { Suit.CLUBS, Suit.SPADES });
+        for (int i = 0; i < amount; i++)
+        {
+            int randIndex = UnityEngine.Random.Range(0, 26);
+            cardsToBuff.Add(monsterCards[randIndex]);
+        }
+        foreach (CardModel card in cardsToBuff)
+        {
+            int randBuff = UnityEngine.Random.Range(0, buffs.Count);
+            Buff buff = BuffRegistry.GetBuffFromName(buffs[randBuff]);
+            card.AddNewBuff(buff);
+        }
     }
 
     private void EndGame()

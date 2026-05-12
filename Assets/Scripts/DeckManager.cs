@@ -67,4 +67,17 @@ public class DeckManager : MonoBehaviour
         }
         return remaining;
     }
+
+    public List<CardModel> GetRemainingOfSuit(List<Suit> suits)
+    {
+        List<CardModel> remaining = new();
+        foreach (CardModel card in Deck.RemainingItems)
+        {
+            if (suits.Contains(card.Suit))
+            {
+                remaining.Add(card);
+            }
+        }
+        return remaining;
+    }
 }

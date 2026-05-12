@@ -35,7 +35,6 @@ public class Inspiring : Buff
 
     protected override void OnBuffApplied()
     {
-        DoBuffEffect();
     }
 
     protected override void OnCleanup()

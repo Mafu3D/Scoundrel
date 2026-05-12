@@ -35,7 +35,7 @@ public class WeaponModel
     {
         if (SlainCards.Count == 0)
         {
-            return 15;
+            return 99;
         }
 
         return SlainCards[^1].Value;

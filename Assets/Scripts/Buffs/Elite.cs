@@ -16,7 +16,6 @@ public class Elite : Buff
 
     protected override void OnDraw()
     {
-        DoBuffEffect(); // Replace with apply when drawn parameter
     }
 
     protected override void OnDrinkPotion() { }
