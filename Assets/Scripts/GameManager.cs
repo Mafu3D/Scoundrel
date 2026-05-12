@@ -160,13 +160,28 @@ public class GameManager : MonoBehaviour
         {
             if (!Player.HasEnteredTheRoom)
             {
+                // Player enter room
                 Player.EnterNewRoom();
                 foreach(CardModel otherCard in CurrentRoom.Cards)
                 {
                     otherCard.BuffManager.TriggerEffect(BuffTrigger.OnEnterRoom);
                 }
             }
+
+            // Add gold for defeating a monster
+            if (card.Suit == Suit.CLUBS || card.Suit == Suit.SPADES)
+            {
+                Player.AddGold(1);
+            }
+
             CurrentRoom.TryRemoveCard(card);
+
+            // Add gold if its the last card in the room
+            Debug.Log(CurrentRoom.IsEmpty);
+            if (CurrentRoom.IsEmpty)
+            {
+                Player.AddGold(2);
+            }
         }
     }
 

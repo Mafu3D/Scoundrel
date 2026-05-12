@@ -14,8 +14,10 @@ public class Player : MonoBehaviour
     public int ExtraRunTokens { get; private set; } = 0;
     public bool HasDrankPotionThisRoom { get; private set; } = false;
     public bool IsAtMaxHealth => CurrentHealth == MaxHealth;
+    public int CurrentGold { get; private set; }
 
     public Action<int> OnHealthChanged;
+    public Action<int> OnGoldChanged;
     public Action OnDeath;
     public Action OnWeaponChanged;
     public Action OnRunSuccess;
@@ -37,6 +39,7 @@ public class Player : MonoBehaviour
         ResetPlayer();
         OnHealthChanged?.Invoke(CurrentHealth);
         OnWeaponChanged?.Invoke();
+        OnGoldChanged?.Invoke(CurrentGold);
     }
 
     public void RoundReset()
@@ -100,6 +103,24 @@ public class Player : MonoBehaviour
     {
         CurrentHealth = Math.Clamp(CurrentHealth + Math.Abs(amount), 0, MaxHealth);
         OnHealthChanged?.Invoke(CurrentHealth);
+    }
+
+    public void AddGold(int amount)
+    {
+        CurrentGold = Math.Clamp(CurrentGold + Math.Abs(amount), 0, 9999999);
+        OnGoldChanged?.Invoke(CurrentGold);
+    }
+
+    public bool TryRemoveGold(int amount)
+    {
+        int newAmount = Math.Clamp(CurrentGold - Math.Abs(amount), 0, 9999999);
+        if (newAmount < 0)
+        {
+            return false;
+        }
+        CurrentGold = newAmount;
+        OnGoldChanged?.Invoke(CurrentGold);
+        return true;
     }
 
     #region Card Actions

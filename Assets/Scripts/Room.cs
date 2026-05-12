@@ -92,6 +92,16 @@ public class RoomModel
 
     public int RemainingCount => RemainingCards().Count;
 
+    public bool IsEmpty
+    {
+        get
+        {
+            Debug.Log(Cards.Count(x => x == null));
+            Debug.Log(Cards.Count());
+            return Cards.Count(x => x == null) == Cards.Count();
+        }
+    }
+
     public void OnRun()
     {
         foreach(CardModel card in Cards)
