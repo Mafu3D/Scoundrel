@@ -706,10 +706,12 @@ MonoBehaviour:
   black: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
   valueIncreasedColor: {r: 0.019607844, g: 0.7490196, b: 0, a: 1}
   valueDecreasedColor: {r: 1, g: 0, b: 0.22352941, a: 1}
-  diamondsSprite: {fileID: -598977684, guid: 1c91adeb3f2321e468f8db4cf3a7672b, type: 3}
-  heartsSprite: {fileID: -691466565, guid: 1c91adeb3f2321e468f8db4cf3a7672b, type: 3}
-  clubsSprite: {fileID: -1895802982, guid: 1c91adeb3f2321e468f8db4cf3a7672b, type: 3}
-  spadesSprite: {fileID: 7850636975361493352, guid: 1c91adeb3f2321e468f8db4cf3a7672b, type: 3}
+  diamondsSprite: {fileID: -820856043912040040, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
+  heartsSprite: {fileID: -6334201207039719469, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
+  clubsSprite: {fileID: -7023996695818602368, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
+  spadesSprite: {fileID: -3337833091399901211, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
+  doorsSprite: {fileID: -2223897727537074547, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
+  treasuresSprite: {fileID: 2771461146944217657, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
   topHoverContext: {fileID: 3668722419022172137}
   botHoverContext: {fileID: 2443363397008048952}
   fullHoverContext: {fileID: 8308200117013749687}
@@ -1297,8 +1299,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.035736095}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4203964957157243235}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1346,7 +1348,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 7850636975361493352, guid: 1c91adeb3f2321e468f8db4cf3a7672b, type: 3}
+  m_Sprite: {fileID: -3337833091399901211, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

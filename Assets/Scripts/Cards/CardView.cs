@@ -36,6 +36,8 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
     [SerializeField] private Sprite heartsSprite;
     [SerializeField] private Sprite clubsSprite;
     [SerializeField] private Sprite spadesSprite;
+    [SerializeField] private Sprite doorsSprite;
+    [SerializeField] private Sprite treasuresSprite;
 
     [Header("Hover")]
     [SerializeField] CardHoverContextView topHoverContext;
@@ -185,6 +187,12 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
                 break;
             case Suit.DIAMONDS:
                 suitSprite.sprite = diamondsSprite;
+                break;
+            case Suit.DOORS:
+                suitSprite.sprite = doorsSprite;
+                break;
+            case Suit.TREASURES:
+                suitSprite.sprite = treasuresSprite;
                 break;
         }
     }

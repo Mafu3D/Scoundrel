@@ -8,7 +8,14 @@ namespace Project.Decks
         SPADES,
         HEARTS,
         DIAMONDS,
-        CLUBS
+        CLUBS,
+        SKULLS,
+        GOBLINS,
+        POTIONS,
+        WEAPONS,
+        DOORS,
+        TREASURES,
+        QUESTS
     }
 
     public class CardModel : IDeckStorable, IBuffRegisterable
@@ -111,6 +118,7 @@ namespace Project.Decks
 
         public void HandleOnDraw()
         {
+
             buffManager.TriggerEffect(BuffTrigger.OnDraw);
         }
 

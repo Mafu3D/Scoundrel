@@ -4119,11 +4119,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_Pivot.x
-      value: 0.29326048
+      value: 0.3078261
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_Pivot.y
-      value: 1.2953074
+      value: 1.2778637
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_SizeDelta.x
@@ -4143,11 +4143,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -528.9618
+      value: -518.95654
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 510.38254
+      value: 504.69562
       objectReference: {fileID: 0}
     - target: {fileID: 5689954502834935825, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag

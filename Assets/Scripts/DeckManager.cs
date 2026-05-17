@@ -29,6 +29,12 @@ public class DeckManager : MonoBehaviour
             cards.Add(new CardModel(Suit.DIAMONDS, i));
         }
 
+        // Special cards
+        cards.Add(new CardModel(Suit.DOORS, 14));
+        cards.Add(new CardModel(Suit.DOORS, 14));
+        cards.Add(new CardModel(Suit.TREASURES, 14));
+        cards.Add(new CardModel(Suit.TREASURES, 14));
+
         // Create deck
         Deck = new Deck<CardModel>(cards);
         Deck.Shuffle();
