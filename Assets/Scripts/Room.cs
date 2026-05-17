@@ -132,6 +132,7 @@ public class RoomModel
         {
             Cards[i] = null;
         }
+        OnCardsChanged?.Invoke();
     }
 
     public void DEBUG_REMOVECARD(CardModel card)

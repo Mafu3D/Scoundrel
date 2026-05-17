@@ -12,7 +12,7 @@ public class DeckManager : MonoBehaviour
 
     public Action OnCardDraw;
 
-    public void ResetDeck()
+    public void TEMP_CreateNewDeck()
     {
         // Create black cards
         List<CardModel> cards = new();
@@ -38,6 +38,11 @@ public class DeckManager : MonoBehaviour
         // Create deck
         Deck = new Deck<CardModel>(cards);
         Deck.Shuffle();
+    }
+
+    public void ResetDeck()
+    {
+        Deck.Reset();
     }
 
 

@@ -19,13 +19,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] public Player Player;
 
     public bool GameHasStarted {get; private set;}
-    public int RoomNumber { get; private set; }= 0;
+    public int RoomNumber { get; private set; } = 0;
+    public int FloorNumber { get; private set; } = 0;
     public RoomModel CurrentRoom { get; private set; } = null;
     public ScoreKeeper ScoreKeeper { get; private set; } = null;
 
     public Action OnStartNewGame;
     public Action OnGameOver;
     public Action OnOpenNewRoom;
+    public Action OnGoToNextFloor;
 
     public int CardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
     private readonly int remainingToMove = 1;
@@ -68,8 +70,10 @@ public class GameManager : MonoBehaviour
     public void StartNewGame()
     {
         RoomNumber = 0;
-        DeckManager.ResetDeck();
-        TEMP_RandomizeBuffsInDeck();
+        DeckManager.TEMP_CreateNewDeck();
+        TEMP_AddRandomBuffs(4, 7);
+        FloorNumber = 1;
+        OnGoToNextFloor?.Invoke();
 
         OnStartNewGame?.Invoke();
         OpenFirstRoom();
@@ -80,18 +84,21 @@ public class GameManager : MonoBehaviour
         Player.StartNewGame();
     }
 
-    private void TEMP_RandomizeBuffsInDeck()
+    private void TEMP_AddRandomBuffs(int min, int max)
     {
 
         // TEMP:
         List<string> buffs = new() { "Inspiring", "Elite", "Bloodthirsty", "Exploding" };
-        int amount = UnityEngine.Random.Range(4, 7);
+        int amount = UnityEngine.Random.Range(min, max);
         List<CardModel> cardsToBuff = new();
-        List<CardModel> monsterCards = DeckManager.GetRemainingOfSuit(new() { Suit.CLUBS, Suit.SPADES });
-        for (int i = 0; i < amount; i++)
+        foreach (Suit suit in new List<Suit>() { Suit.CLUBS, Suit.SPADES})
         {
-            int randIndex = UnityEngine.Random.Range(0, 26);
-            cardsToBuff.Add(monsterCards[randIndex]);
+            List<CardModel> monsterCards = DeckManager.GetRemainingOfSuit(new() {suit});
+            for (int i = 0; i < amount; i++)
+            {
+                int randIndex = UnityEngine.Random.Range(0, monsterCards.Count);
+                cardsToBuff.Add(monsterCards[randIndex]);
+            }
         }
         foreach (CardModel card in cardsToBuff)
         {
@@ -111,6 +118,24 @@ public class GameManager : MonoBehaviour
     {
         EndGame();
         OnGameOver?.Invoke();
+    }
+
+    public void DEBUG_GOTONEXTFLOOR()
+    {
+        GoToNextFloor();
+    }
+
+    private void GoToNextFloor()
+    {
+        Debug.Log("Going to next floor");
+        CurrentRoom.ClearCards();
+        Player.FloorReset();
+        FloorNumber += 1;
+        DeckManager.ResetDeck();
+        TEMP_AddRandomBuffs(3, 5);
+
+        OnGoToNextFloor?.Invoke();
+
     }
 
     private void OpenFirstRoom()
@@ -176,6 +201,8 @@ public class GameManager : MonoBehaviour
             Suit.HEARTS => HandlePotion(card),
             Suit.DIAMONDS => Player.TryEquipWeapon(card),
             Suit.SPADES or Suit.CLUBS => HandleEnemy(card, context),
+            Suit.DOORS => HandleDoor(),
+            Suit.TREASURES => HandleTreasure(),
             _ => false
         };
 
@@ -214,6 +241,18 @@ public class GameManager : MonoBehaviour
                 Player.AddGold(2);
             }
         }
+    }
+
+    private bool HandleDoor()
+    {
+        GoToNextFloor();
+        return true;
+    }
+
+    private bool HandleTreasure()
+    {
+        Player.AddGold(3);
+        return true;
     }
 
     public void GoToNextRoom()

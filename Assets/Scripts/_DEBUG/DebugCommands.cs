@@ -185,4 +185,20 @@ namespace Project.DebugCommands
             gameManager.CurrentRoom.Cards[3].AddNewBuff(buff);
         }
     }
+
+    [DebugCommand]
+    public class GoToNextFloor : IDebugCommand
+    {
+        public string ID => "nextFloor";
+
+        public string Description => "Immediately go to the next floor";
+
+        public string Format => "nextFloor";
+
+        public void Invoke()
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            gameManager.DEBUG_GOTONEXTFLOOR();
+        }
+    }
 }

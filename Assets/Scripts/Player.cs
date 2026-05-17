@@ -28,10 +28,7 @@ public class Player : MonoBehaviour
 
     public void Update()
     {
-        if (Weapon != null)
-        {
-            Weapon.Update();
-        }
+        Weapon?.Update();
     }
 
     public void StartNewGame()
@@ -62,6 +59,15 @@ public class Player : MonoBehaviour
         // Reset other things
         HasEnteredTheRoom = false;
         HasDrankPotionThisRoom = false;
+    }
+
+    public void FloorReset()
+    {
+        CurrentHealth = MaxHealth;
+        runCooldownCounter = 0;
+        runTokenOnCooldown = false;
+        HasRunToken = true;
+        OnHealthChanged?.Invoke(CurrentHealth);
     }
 
     public void EnterNewRoom()
