@@ -720,6 +720,9 @@ MonoBehaviour:
   equipColor: {r: 0.16470589, g: 0.2, b: 0.5372549, a: 0.6}
   drinkColor: {r: 0.5764706, g: 0, b: 0, a: 0.6}
   discardColor: {r: 0.09411765, g: 0.09411765, b: 0.09411765, a: 0.6}
+  treasureColor: {r: 0.745283, g: 0.65710086, b: 0.2214756, a: 0.6}
+  doorLockedColor: {r: 0.3679245, g: 0.0763617, b: 0.0763617, a: 0.6}
+  doorUnlockedColor: {r: 0.21026166, g: 0.7075472, b: 0.29495865, a: 0.6}
   gameManager: {fileID: 0}
 --- !u!61 &964506102154751877
 BoxCollider2D:

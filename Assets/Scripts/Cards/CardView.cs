@@ -50,6 +50,9 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
     [SerializeField] private Color equipColor;
     [SerializeField] private Color drinkColor;
     [SerializeField] private Color discardColor;
+    [SerializeField] private Color treasureColor;
+    [SerializeField] private Color doorLockedColor;
+    [SerializeField] private Color doorUnlockedColor;
 
 
     [SerializeField] private GameManager gameManager;
@@ -238,6 +241,24 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
                 // Equip
                 cardClickContext = CardClickContext.NONE;
                 ShowHoverBox(fullHoverContext, equipColor, "Equip");
+            }
+            else if (Card.Suit == Suit.TREASURES)
+            {
+                cardClickContext = CardClickContext.NONE;
+                ShowHoverBox(fullHoverContext, treasureColor, "+3 gold");
+            }
+            else if (Card.Suit == Suit.DOORS)
+            {
+                cardClickContext = CardClickContext.NONE;
+                int scoreNeeded = gameManager.GetScoreToGoToNextFloor();
+                if (gameManager.ScoreKeeper.GetScore() >= scoreNeeded)
+                {
+                    ShowHoverBox(fullHoverContext, doorUnlockedColor, $"{scoreNeeded}\nGo to next floor");
+                }
+                else
+                {
+                    ShowHoverBox(fullHoverContext, doorLockedColor, $"{scoreNeeded}\nLocked");
+                }
             }
         }
         else

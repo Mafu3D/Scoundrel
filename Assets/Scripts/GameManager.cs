@@ -32,7 +32,8 @@ public class GameManager : MonoBehaviour
     public int CardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
     private readonly int remainingToMove = 1;
 
-    public bool CanGoToNextRoom => CurrentRoom != null && CurrentRoom.RemainingCount <= remainingToMove;
+    public bool CanGoToNextRoom => CurrentRoom != null &&
+                                   CurrentRoom.CanGoToNextRoom();
 
     void OnEnable()
     {
@@ -136,6 +137,11 @@ public class GameManager : MonoBehaviour
 
         OnGoToNextFloor?.Invoke();
 
+    }
+
+    public int GetScoreToGoToNextFloor()
+    {
+        return FloorNumber * 10000;
     }
 
     private void OpenFirstRoom()
@@ -254,8 +260,12 @@ public class GameManager : MonoBehaviour
 
     private bool HandleDoor()
     {
-        GoToNextFloor();
-        return true;
+        if (ScoreKeeper.GetScore() >= GetScoreToGoToNextFloor())
+        {
+            GoToNextFloor();
+            return true;
+        }
+        return false;
     }
 
     private bool HandleTreasure()

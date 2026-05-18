@@ -44,6 +44,20 @@ public class RoomModel
         }
     }
 
+    public bool CanGoToNextRoom()
+    {
+        List<CardModel> remaining = RemainingCards();
+        int remainingCount = remaining.Count;
+        foreach(CardModel cardModel in remaining)
+        {
+            if (cardModel.Suit == Suit.DOORS)
+            {
+                remainingCount -= 1;
+            }
+        }
+        return remainingCount <= 1;
+    }
+
     public List<CardModel> RemainingCards()
     {
         List<CardModel> remaining = new();
