@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     public int RoomNumber { get; private set; } = 0;
     public int FloorNumber { get; private set; } = 0;
     public RoomModel CurrentRoom { get; private set; } = null;
-    public ScoreKeeper ScoreKeeper { get; private set; } = null;
+    public AdvancedScoreKeeper ScoreKeeper { get; private set; } = null;
 
     public Action OnStartNewGame;
     public Action OnGameOver;
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        ScoreKeeper = new ScoreKeeper(this);
+        ScoreKeeper = new(this);
     }
 
     void Update()
@@ -171,6 +171,7 @@ public class GameManager : MonoBehaviour
         RoomNumber++;
 
         Player.RoundReset();
+        ScoreKeeper.ResetRoomMultiplier();
 
         OnOpenNewRoom?.Invoke();
     }
@@ -214,7 +215,7 @@ public class GameManager : MonoBehaviour
                 Player.EnterNewRoom();
                 foreach(CardModel otherCard in CurrentRoom.Cards)
                 {
-                    otherCard.BuffManager.TriggerEffect(BuffTrigger.OnEnterRoom);
+                    otherCard?.BuffManager.TriggerEffect(BuffTrigger.OnEnterRoom);
                 }
             }
 
@@ -233,13 +234,16 @@ public class GameManager : MonoBehaviour
 
             CurrentRoom.TryRemoveCard(card);
 
-
             // Add gold if its the last card in the room
             Debug.Log(CurrentRoom.IsEmpty);
             if (CurrentRoom.IsEmpty)
             {
                 Player.AddGold(2);
             }
+
+            ScoreKeeper.AddToScore(card);
+            ScoreKeeper.IncRoomMultiplier();
+            Debug.Log(ScoreKeeper.GetScore());
         }
     }
 

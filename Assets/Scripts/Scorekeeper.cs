@@ -1,10 +1,57 @@
+using System;
 using Project.Decks;
 
-public class ScoreKeeper
+public interface IScoreKeeper
+{
+    public int GetScore();
+}
+
+public class AdvancedScoreKeeper : IScoreKeeper
+{
+    private readonly GameManager gameManager;
+    private int score;
+
+    private float roomMultipler = 0f;
+
+    public AdvancedScoreKeeper(GameManager gameManager)
+    {
+        this.gameManager = gameManager;
+    }
+
+    public void AddToScore(CardModel card)
+    {
+        if (card.Suit != Suit.CLUBS && card.Suit != Suit.SPADES)
+        {
+            return;
+        }
+
+        float floorMultiplier = (gameManager.FloorNumber - 1) * 0.2f;
+
+        float cardScore = card.Value + (card.Value * floorMultiplier) + (card.Value * roomMultipler);
+
+        score += (int)Math.Ceiling(cardScore);
+    }
+
+    public void IncRoomMultiplier()
+    {
+        roomMultipler += 0.5f;
+    }
+
+    public void ResetRoomMultiplier()
+    {
+        roomMultipler = 0;
+    }
+
+    public int GetScore() => score;
+
+    public bool HasPlayerWon() => false; // REMOVE THIS!
+}
+
+public class ClassicScoreKeeper : IScoreKeeper
 {
     private GameManager gameManager;
 
-    public ScoreKeeper(GameManager gameManager)
+    public ClassicScoreKeeper(GameManager gameManager)
     {
         this.gameManager = gameManager;
     }
