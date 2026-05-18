@@ -230,6 +230,8 @@ public class GameManager : MonoBehaviour
                     if (other == null) { continue; }
                     other.HandleOnOtherDie();
                 }
+
+
             }
 
             CurrentRoom.TryRemoveCard(card);
@@ -241,9 +243,12 @@ public class GameManager : MonoBehaviour
                 Player.AddGold(2);
             }
 
-            ScoreKeeper.AddToScore(card);
-            ScoreKeeper.IncRoomMultiplier();
-            Debug.Log(ScoreKeeper.GetScore());
+            if (card.Suit == Suit.CLUBS || card.Suit == Suit.SPADES)
+            {
+                ScoreKeeper.AddToScore(card);
+                // TEMP: Inc score keeper multiplier here
+                ScoreKeeper.IncRoomMultiplier();
+            }
         }
     }
 

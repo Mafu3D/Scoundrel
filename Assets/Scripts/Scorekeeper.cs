@@ -11,7 +11,9 @@ public class AdvancedScoreKeeper : IScoreKeeper
     private readonly GameManager gameManager;
     private int score;
 
-    private float roomMultipler = 0f;
+    private float roomMultipler = 1f;
+
+    public Action<int> OnScoreUpdated;
 
     public AdvancedScoreKeeper(GameManager gameManager)
     {
@@ -25,11 +27,15 @@ public class AdvancedScoreKeeper : IScoreKeeper
             return;
         }
 
-        float floorMultiplier = (gameManager.FloorNumber - 1) * 0.2f;
+        float floorMultiplier = 1 + ((gameManager.FloorNumber - 1) * 0.2f);
 
-        float cardScore = card.Value + (card.Value * floorMultiplier) + (card.Value * roomMultipler);
+        float cardScore = card.Value * 100;
+        cardScore *= roomMultipler;
+        cardScore *= floorMultiplier;
 
         score += (int)Math.Ceiling(cardScore);
+
+        OnScoreUpdated?.Invoke(score);
     }
 
     public void IncRoomMultiplier()
@@ -39,7 +45,7 @@ public class AdvancedScoreKeeper : IScoreKeeper
 
     public void ResetRoomMultiplier()
     {
-        roomMultipler = 0;
+        roomMultipler = 1;
     }
 
     public int GetScore() => score;
