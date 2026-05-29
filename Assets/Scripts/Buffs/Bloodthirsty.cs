@@ -5,7 +5,7 @@ using Project.Decks;
 using UnityEngine;
 
 [CreateAssetMenu(fileName="Bloodthirsty", menuName="Abilities/Bloodthirsty")]
-public class Bloodthirsty : Buff
+public class Bloodthirsty : CardBuff
 {
     protected override void OnBuffInitialized() {
     }
@@ -26,7 +26,7 @@ public class Bloodthirsty : Buff
 
     protected override void OnOtherDie()
     {
-        Owner.RegisterValueModifier(1);
+        Owner.RegisterPowerModifier(1);
     }
 
     protected override void OnRun() { }

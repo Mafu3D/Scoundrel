@@ -5,7 +5,7 @@ using Project.Decks;
 using UnityEngine;
 
 [CreateAssetMenu(fileName="Elite", menuName="Abilities/Elite")]
-public class Elite : Buff
+public class Elite : CardBuff
 {
     protected override void OnBuffInitialized() {
     }
@@ -37,13 +37,13 @@ public class Elite : Buff
 
     protected override void OnCleanup()
     {
-        Owner.DeregisterValueModifier(1);
+        Owner.DeregisterPowerModifier(1);
     }
 
     private void DoBuffEffect()
     {
         // ServiceLocator.Global.Get(out gameManager);
-        Owner.RegisterValueModifier(1);
+        Owner.RegisterPowerModifier(1);
     }
 
     protected override void OnLeave()

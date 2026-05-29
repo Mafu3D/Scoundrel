@@ -143,22 +143,22 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
         }
         foreach (var TMPText in valueTMPTexts)
         {
-            string valueString = Card.Value.ToString();
-            if (Card.Value > 10)
+            string valueString = Card.Power.ToString();
+            if (Card.Power > 10)
             {
-                if (Card.Value == 11)
+                if (Card.Power == 11)
                 {
                     valueString = "J";
                 }
-                else if (Card.Value == 12)
+                else if (Card.Power == 12)
                 {
                     valueString = "Q";
                 }
-                else if (Card.Value == 13)
+                else if (Card.Power == 13)
                 {
                     valueString = "K";
                 }
-                else if (Card.Value == 14)
+                else if (Card.Power == 14)
                 {
                     valueString = "A";
                 }
@@ -166,11 +166,11 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
             TMPText.text = valueString;
 
             Color textColor = color;
-            if (Card.Value > Card.BaseValue)
+            if (Card.Power > Card.BasePower)
             {
                 textColor = valueIncreasedColor;
             }
-            else if (Card.Value < Card.BaseValue)
+            else if (Card.Power < Card.BasePower)
             {
                 textColor = valueDecreasedColor;
             }
@@ -328,7 +328,7 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
         header = Card.ToString();
 
         content = "";
-        foreach (Buff buff in Card.BuffManager.GetBuffs())
+        foreach (CardBuff buff in Card.BuffManager.GetBuffs())
         {
             content += $"\n{buff.Name} - {buff.Description}";
             // foreach (Buff childBuff in buff.ChildBuffInstances)
@@ -336,7 +336,7 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
             //     content += $"\n   + {childBuff.Name}({childBuff.ID})";
             // }
         }
-        foreach (int value in Card.ValueModifiers)
+        foreach (int value in Card.PowerModifiers)
         {
             content += $"\n{value}";
         }

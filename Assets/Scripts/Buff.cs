@@ -3,15 +3,16 @@ using Mafu.UnityServiceLocator;
 using System.Collections.Generic;
 using Project.Decks;
 using UnityEngine;
+using System.Linq;
 
-public interface IBuffRegisterable
+public interface IBuffRegisterable<T> where T : CardModel
 {
     public BuffManager BuffManager { get; }
-    public List<Buff> GetBuffs();
-    public Buff AddNewBuff(Buff buff);
-    public void RemoveBuff(Buff buff);
+    public List<Buff<T>> GetBuffs();
+    public Buff<T> AddNewBuff(Buff<T> buff);
+    public void RemoveBuff(Buff<T> buff);
     public void RemoveBuff(BuffID buffID);
-    public bool HasBuff(Buff buff);
+    public bool HasBuff(Buff<T> buff);
     public bool HasBuff(BuffID buffID);
 }
 
@@ -19,10 +20,10 @@ public class BuffID
 {
     public Guid Guid;
     public string Name;
-    public BuffID(Buff buff)
+    public BuffID(string name)
     {
         Guid = Guid.NewGuid();
-        Name = buff.Name;
+        Name = name;
     }
 
     public override string ToString()
@@ -31,11 +32,7 @@ public class BuffID
     }
 }
 
-/// <summary>
-/// Main class for buffs.
-///
-/// </summary>
-public abstract class Buff : ScriptableObject
+public abstract class Buff<T> : ScriptableObject where T : CardModel
 {
     [Header("Buff Meta")]
     [SerializeField] public string Name;
@@ -46,20 +43,20 @@ public abstract class Buff : ScriptableObject
     [SerializeField] public bool IsTemporary = false;
     [SerializeField] public bool RemoveOnParentCleanup = false;
     [SerializeField] public bool RemoveOnDeath = true;
-    [SerializeField] public List<Buff> registeredChildBuffs = new();
+    [SerializeField] public List<Buff<T>> registeredChildBuffs = new();
 
-    public List<Buff> ChildBuffInstances { get; private set; } = new();
+    public List<Buff<T>> ChildBuffInstances { get; private set; } = new();
 
     public BuffID ID;
-    public CardModel Owner { get; private set; }
+    public virtual T Owner { get; protected set; }
 
     protected GameManager gameManager;
 
     public override string ToString() => $"{Name}({ID})";
 
-    public Buff GetRegisteredChildBuffByName(string name)
+    public TBuff GetRegisteredChildBuffByName<TBuff>(string name) where TBuff : Buff<T>
     {
-        foreach (Buff buff in registeredChildBuffs)
+        foreach (TBuff buff in registeredChildBuffs.Cast<TBuff>())
         {
             if (buff.Name == name)
             {
@@ -69,9 +66,9 @@ public abstract class Buff : ScriptableObject
         throw new ArgumentException($"{name} is not a registered child buff of {this.name}", "name");
     }
 
-    public Buff GetChildBuffInstanceByName(string name)
+    public TBuff GetChildBuffInstanceByName<TBuff>(string name) where TBuff : Buff<T>
     {
-        foreach (Buff buff in ChildBuffInstances)
+        foreach (TBuff buff in ChildBuffInstances.Cast<TBuff>())
         {
             if (buff.Name == name)
             {
@@ -81,35 +78,25 @@ public abstract class Buff : ScriptableObject
         throw new ArgumentException($"There is no instance of {name} registered to {this.name}", "name");
     }
 
-    public void Initialize(CardModel owner)
+    public void Initialize(T owner)
     {
         this.Owner = owner;
         ServiceLocator.Global.Get(out gameManager);
-        ID = new(this);
+        ID = new(Name);
         OnBuffInitialized();
     }
 
-    public void Remove()
-    {
-        Owner.RemoveBuff(this);
-    }
+    // public void Remove()
+    // {
+    //     Owner.RemoveBuff(this);
+    // }
 
     private void OnDestroy()
     {
-        // Cleanup();
-        Debug.Log("destroyed");
     }
 
     public void Cleanup()
     {
-        // foreach (Buff buff in childBuffInstances)
-        // {
-        //     if (!buff.CleanupWithParent)
-        //     {
-        //         continue;
-        //     }
-        //     buff.Cleanup();
-        // }
         OnCleanup();
     }
 
@@ -137,12 +124,12 @@ public abstract class Buff : ScriptableObject
         };
     }
 
-    protected Buff AddBuff(CardModel target, Buff buff)
-    {
-        Buff newInstance = target.AddNewBuff(buff);
-        ChildBuffInstances.Add(newInstance);
-        return newInstance;
-    }
+    // protected TBuff AddBuff<TBuff>(IBuffRegisterable target, TBuff buff) where TBuff : Buff<T>
+    // {
+    //     TBuff newInstance = target.AddNewBuff(buff);
+    //     ChildBuffInstances.Add(newInstance);
+    //     return newInstance;
+    // }
 
     /// <summary>
     /// Called at initialization of the buff by the Buff Manager when adding a new buff.
@@ -187,4 +174,32 @@ public abstract class Buff : ScriptableObject
     protected abstract void OnDrinkPotion();
     protected abstract void OnDiscardPotion();
     protected abstract void OnAttack();
+}
+
+public abstract class CardBuff : Buff<CardModel>
+{
+    public override CardModel Owner { get; protected set; }
+
+    public override string ToString() => $"{Name}({ID})";
+
+    protected CardBuff AddBuff(CardModel target, CardBuff buff)
+    {
+        CardBuff newInstance = target.AddNewBuff(buff);
+        ChildBuffInstances.Add(newInstance);
+        return newInstance;
+    }
+}
+
+public abstract class WeaponBuff : Buff<WeaponModel>
+{
+    public override WeaponModel Owner { get; protected set; }
+
+    public override string ToString() => $"{Name}({ID})";
+
+    protected WeaponBuff AddBuff(WeaponModel target, WeaponBuff buff)
+    {
+        WeaponBuff newInstance = target.AddNewBuff(buff);
+        ChildBuffInstances.Add(newInstance);
+        return newInstance;
+    }
 }

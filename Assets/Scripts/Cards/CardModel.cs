@@ -18,23 +18,23 @@ namespace Project.Decks
         QUESTS
     }
 
-    public class CardModel : IDeckStorable, IBuffRegisterable
+    public class CardModel : IDeckStorable, IBuffRegisterable<CardModel>
     {
         public Suit Suit { get; private set; }
 
-        public int Value
+        public int Power
         {
             get
             {
-                int value = BaseValue;
-                foreach (int val in ValueModifiers)
+                int value = BasePower;
+                foreach (int val in PowerModifiers)
                 {
                     value += val;
                 }
                 return value;
             }
         }
-        public int BaseValue { get; private set; }
+        public int BasePower { get; protected set; }
 
         public string ID => uuid.ToString();
 
@@ -42,23 +42,23 @@ namespace Project.Decks
 
         public BuffManager BuffManager => buffManager;
         private BuffManager buffManager;
-        public List<int> ValueModifiers = new();
+        public List<int> PowerModifiers = new();
 
         private Guid uuid;
 
         public CardModel(Suit suit, int value) {
             this.Suit = suit;
-            this.BaseValue = value;
+            this.BasePower = value;
             this.buffManager = new BuffManager(this);
 
             uuid = Guid.NewGuid();
         }
 
-        public CardModel(Suit suit, int value, List<Buff> buffs) {
+        public CardModel(Suit suit, int value, List<CardBuff> buffs) {
             this.Suit = suit;
-            this.BaseValue = value;
+            this.BasePower = value;
             this.buffManager = new BuffManager(this);
-            foreach(Buff buff in buffs)
+            foreach(CardBuff buff in buffs)
             {
                 this.buffManager.AddNewBuff(buff);
             }
@@ -66,7 +66,7 @@ namespace Project.Decks
             uuid = Guid.NewGuid();
         }
 
-        public void Update()
+        public virtual void Update()
         {
             buffManager.Update();
             OnUpdate?.Invoke();
@@ -74,37 +74,37 @@ namespace Project.Decks
 
         public override string ToString()
         {
-            string output = Value.ToString();
-            if (Value != BaseValue)
+            string output = Power.ToString();
+            if (Power != BasePower)
             {
-                output += $"({BaseValue})";
+                output += $"({BasePower})";
             }
             output += $" of {Suit}";
             return output;
         }
 
-        public void RegisterValueModifier(int value)
+        public void RegisterPowerModifier(int value)
         {
-            ValueModifiers.Add(value);
+            PowerModifiers.Add(value);
         }
 
-        public void DeregisterValueModifier(int value)
+        public void DeregisterPowerModifier(int value)
         {
             Debug.Log("Deregistering: " + value + $" from {this.ToString()}");
             string before = "Before: ";
-            for (int i = 0; i < ValueModifiers.Count; i++)
+            for (int i = 0; i < PowerModifiers.Count; i++)
             {
-                before += "\n" + ValueModifiers[i].ToString();
+                before += "\n" + PowerModifiers[i].ToString();
             }
-            if (ValueModifiers.Contains(value))
+            if (PowerModifiers.Contains(value))
             {
-                ValueModifiers.Remove(value);
+                PowerModifiers.Remove(value);
                 return;
             }
             string after = "After: ";
-            for (int i = 0; i < ValueModifiers.Count; i++)
+            for (int i = 0; i < PowerModifiers.Count; i++)
             {
-                after += "\n" + ValueModifiers[i].ToString();
+                after += "\n" + PowerModifiers[i].ToString();
             }
             Debug.Log(after);
             Debug.LogWarning($"Tried to deregister modifier value of {value} from {this.ToString()} but failed!");
@@ -127,11 +127,32 @@ namespace Project.Decks
             buffManager.TriggerEffect(BuffTrigger.OnOtherDie);
         }
 
-        public List<Buff> GetBuffs() => BuffManager.GetBuffs();
-        public Buff AddNewBuff(Buff buff) => BuffManager.AddNewBuff(buff);
-        public void RemoveBuff(Buff buff) => BuffManager.RemoveBuff(buff);
-        public void RemoveBuff(BuffID buffID) => BuffManager.RemoveBuff(buffID);
-        public bool HasBuff(Buff buff) => BuffManager.HasBuff(buff);
-        public bool HasBuff(BuffID buffID) => BuffManager.HasBuff(buffID);
+        // public List<CardBuff> GetBuffs() => BuffManager.GetBuffs();
+        // public CardBuff AddNewBuff(CardBuff buff) => BuffManager.AddNewBuff(buff);
+        // public void RemoveBuff(CardBuff buff) => BuffManager.RemoveBuff(buff);
+        // public void RemoveBuff(BuffID buffID) => BuffManager.RemoveBuff(buffID);
+        // public bool HasBuff(CardBuff buff) => BuffManager.HasBuff(buff);
+        // public bool HasBuff(BuffID buffID) => BuffManager.HasBuff(buffID);
+
+        List<Buff<CardModel>> IBuffRegisterable<CardModel>.GetBuffs()
+        {
+            // return BuffManager.GetBuffs();
+            throw new NotImplementedException();
+        }
+
+        public Buff<CardModel> AddNewBuff(Buff<CardModel> buff)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveBuff(Buff<CardModel> buff)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasBuff(Buff<CardModel> buff)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

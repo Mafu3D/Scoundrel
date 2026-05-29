@@ -133,17 +133,17 @@ public class Player : MonoBehaviour
     public bool TryFightUnarmed(CardModel card)
     {
         // Setting this up to return a bool so that conditions can be added later
-        TakeDamage(card.Value);
+        TakeDamage(card.Power);
         return true;
     }
 
     public bool TryFightWeapon(CardModel card)
     {
-        if (Weapon == null || Weapon.GetCurrentStrength() <= card.Value)
+        if (Weapon == null || Weapon.Strength <= card.Power)
         {
             return false;
         }
-        int damage = Math.Clamp(card.Value - Weapon.Power, 0, 999);
+        int damage = Math.Clamp(card.Power - Weapon.Power, 0, 999);
         TakeDamage(damage);
         Weapon.AddMonsterToSlain(card);
         return true;
@@ -161,7 +161,7 @@ public class Player : MonoBehaviour
     {
         if (!HasDrankPotionThisRoom)
         {
-            Heal(card.Value);
+            Heal(card.Power);
             HasDrankPotionThisRoom = true;
             return true;
         }

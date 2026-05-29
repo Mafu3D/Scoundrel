@@ -5,7 +5,7 @@ using Project.Decks;
 using UnityEngine;
 
 [CreateAssetMenu(fileName="Exploding", menuName="Abilities/Exploding")]
-public class Exploding : Buff
+public class Exploding : CardBuff
 {
     protected override void OnBuffInitialized() {
     }
@@ -47,8 +47,8 @@ public class Exploding : Buff
         List<CardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner);
         foreach (CardModel neighbor in neighbors)
         {
-            neighbor.RegisterValueModifier(-Owner.Value);
-            if (neighbor.Value <= 0)
+            neighbor.RegisterPowerModifier(-Owner.Power);
+            if (neighbor.Power <= 0)
             {
                 gameManager.CurrentRoom.TryRemoveCard(neighbor);
             }

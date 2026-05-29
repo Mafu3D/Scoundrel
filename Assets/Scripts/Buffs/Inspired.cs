@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName="Inspired", menuName="Buff/Inspired")]
-public class Inspired : Buff
+public class Inspired : CardBuff
 {
     [SerializeField] private int amount = 1;
 
@@ -10,13 +10,13 @@ public class Inspired : Buff
 
     protected override void OnBuffApplied()
     {
-        Owner.RegisterValueModifier(amount);
+        Owner.RegisterPowerModifier(amount);
     }
 
 
     protected override void OnCleanup()
     {
-        Owner.DeregisterValueModifier(amount);
+        Owner.DeregisterPowerModifier(amount);
         Debug.Log("inspired cleaning up");
     }
 
