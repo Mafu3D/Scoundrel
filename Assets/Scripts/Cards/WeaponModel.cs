@@ -43,31 +43,3 @@ public class WeaponCardModel : RuntimeCardModel
         OnWeaponUpdate?.Invoke();
     }
 }
-
-public class MonsterCardModel : RuntimeCardModel
-{
-    public MonsterCardModel(Suit suit, int value) : base(suit,  CardType.MONSTER, value)
-    {
-    }
-}
-
-public class PotionCardModel : RuntimeCardModel
-{
-    public PotionCardModel(Suit suit, int value) : base(suit,  CardType.POTION, value)
-    {
-    }
-}
-
-public class DoorCardModel : RuntimeCardModel
-{
-    public DoorCardModel(Suit suit, int value) : base(suit,  CardType.DOOR, value)
-    {
-    }
-}
-
-public class TreasureCardModel : RuntimeCardModel
-{
-    public TreasureCardModel(Suit suit, int value) : base(suit,  CardType.TREASURE, value)
-    {
-    }
-}
