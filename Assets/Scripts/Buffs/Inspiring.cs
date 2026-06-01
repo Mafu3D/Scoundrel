@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Inspiring", menuName="Abilities/Inspiring")]
 public class Inspiring : Buff
 {
-    List<KeyValuePair<CardModel, BuffID>> neighborsBuffMap = new();
+    List<KeyValuePair<RuntimeCardModel, BuffID>> neighborsBuffMap = new();
 
     protected override void OnBuffInitialized() {
     }
@@ -44,8 +44,8 @@ public class Inspiring : Buff
     private void DoBuffEffect()
     {
         Buff buffToApply = GetRegisteredChildBuffByName("Inspired");
-        List<CardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner);
-        foreach (CardModel neighbor in neighbors)
+        List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner);
+        foreach (RuntimeCardModel neighbor in neighbors)
         {
             Buff buff = AddBuff(neighbor, buffToApply);
             neighborsBuffMap.Add(new(neighbor, buff.ID));

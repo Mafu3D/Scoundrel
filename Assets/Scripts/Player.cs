@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField] public int RunCooldownTime = 1;
 
     public int CurrentHealth { get; private set; }
-    public WeaponModel Weapon { get; private set; }
+    public WeaponCardModel Weapon { get; private set; }
     public bool HasRunToken { get; private set; } = true;
     public bool HasEnteredTheRoom { get; private set; } = false;
     public int ExtraRunTokens { get; private set; } = 0;
@@ -130,14 +130,14 @@ public class Player : MonoBehaviour
     }
 
     #region Card Actions
-    public bool TryFightUnarmed(CardModel card)
+    public bool TryFightUnarmed(RuntimeCardModel card)
     {
         // Setting this up to return a bool so that conditions can be added later
         TakeDamage(card.Value);
         return true;
     }
 
-    public bool TryFightWeapon(CardModel card)
+    public bool TryFightWeapon(RuntimeCardModel card)
     {
         if (Weapon == null || Weapon.GetCurrentStrength() <= card.Value)
         {
@@ -149,15 +149,15 @@ public class Player : MonoBehaviour
         return true;
     }
 
-    public bool TryEquipWeapon(CardModel card)
+    public bool TryEquipWeapon(RuntimeCardModel card)
     {
         // Setting this up to return a bool so that conditions can be added later
-        this.Weapon = new WeaponModel(card);
+        this.Weapon = new WeaponCardModel(card.Suit, card.Value);
         OnWeaponChanged?.Invoke();
         return true;
     }
 
-    public bool TryDrinkPotion(CardModel card)
+    public bool TryDrinkPotion(RuntimeCardModel card)
     {
         if (!HasDrankPotionThisRoom)
         {

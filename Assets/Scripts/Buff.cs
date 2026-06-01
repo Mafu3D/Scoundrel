@@ -40,6 +40,7 @@ public abstract class Buff : ScriptableObject
     [Header("Buff Meta")]
     [SerializeField] public string Name;
     [SerializeField] public string Description;
+    [SerializeField] public CardType CardType;
 
     [Header("Base Buff Parameters")]
     [SerializeField] public bool ApplyOnDraw = true;
@@ -51,7 +52,7 @@ public abstract class Buff : ScriptableObject
     public List<Buff> ChildBuffInstances { get; private set; } = new();
 
     public BuffID ID;
-    public CardModel Owner { get; private set; }
+    public RuntimeCardModel Owner { get; private set; }
 
     protected GameManager gameManager;
 
@@ -81,7 +82,7 @@ public abstract class Buff : ScriptableObject
         throw new ArgumentException($"There is no instance of {name} registered to {this.name}", "name");
     }
 
-    public void Initialize(CardModel owner)
+    public void Initialize(RuntimeCardModel owner)
     {
         this.Owner = owner;
         ServiceLocator.Global.Get(out gameManager);
@@ -137,7 +138,7 @@ public abstract class Buff : ScriptableObject
         };
     }
 
-    protected Buff AddBuff(CardModel target, Buff buff)
+    protected Buff AddBuff(RuntimeCardModel target, Buff buff)
     {
         Buff newInstance = target.AddNewBuff(buff);
         ChildBuffInstances.Add(newInstance);

@@ -8,13 +8,13 @@ using System.Linq;
 public class RoomModel
 {
     public int Size = 4;
-    public CardModel[] Cards;
+    public RuntimeCardModel[] Cards;
 
     public Action OnCardsChanged;
 
-    public RoomModel(int roomSize, List<CardModel> cards)
+    public RoomModel(int roomSize, List<RuntimeCardModel> cards)
     {
-        Cards = new CardModel[roomSize];
+        Cards = new RuntimeCardModel[roomSize];
 
         for (int i = 0; i < Cards.Length; i++)
         {
@@ -24,7 +24,7 @@ public class RoomModel
 
     public void InitializeRoom()
     {
-        foreach (CardModel card in Cards)
+        foreach (RuntimeCardModel card in Cards)
         {
             if (card != null)
             {
@@ -35,7 +35,7 @@ public class RoomModel
 
     public void Update()
     {
-        foreach (CardModel card in Cards)
+        foreach (RuntimeCardModel card in Cards)
         {
             if (card != null)
             {
@@ -46,9 +46,9 @@ public class RoomModel
 
     public bool CanGoToNextRoom()
     {
-        List<CardModel> remaining = RemainingCards();
+        List<RuntimeCardModel> remaining = RemainingCards();
         int remainingCount = remaining.Count;
-        foreach(CardModel cardModel in remaining)
+        foreach(RuntimeCardModel cardModel in remaining)
         {
             if (cardModel.Suit == Suit.DOORS)
             {
@@ -58,9 +58,9 @@ public class RoomModel
         return remainingCount <= 1;
     }
 
-    public List<CardModel> RemainingCards()
+    public List<RuntimeCardModel> RemainingCards()
     {
-        List<CardModel> remaining = new();
+        List<RuntimeCardModel> remaining = new();
         foreach (var card in Cards)
         {
             if (card != null)
@@ -71,7 +71,7 @@ public class RoomModel
         return remaining;
     }
 
-    public List<CardModel> GetNeighbors(CardModel card)
+    public List<RuntimeCardModel> GetNeighbors(RuntimeCardModel card)
     {
         if (!Cards.Contains(card))
         {
@@ -80,10 +80,10 @@ public class RoomModel
         }
 
         int index = Array.IndexOf(Cards, card);
-        List<CardModel> neighbors = new();
+        List<RuntimeCardModel> neighbors = new();
         if (index > 0)
         {
-            CardModel neighbor = Cards[index - 1];
+            RuntimeCardModel neighbor = Cards[index - 1];
             if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
             {
                 neighbors.Add(neighbor);
@@ -91,7 +91,7 @@ public class RoomModel
         }
         if (index < Size - 1)
         {
-            CardModel neighbor = Cards[index + 1];
+            RuntimeCardModel neighbor = Cards[index + 1];
             if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
             {
                 neighbors.Add(neighbor);
@@ -101,7 +101,7 @@ public class RoomModel
         return neighbors;
     }
 
-    public List<CardModel> GetOthers(CardModel card)
+    public List<RuntimeCardModel> GetOthers(RuntimeCardModel card)
     {
         if (!Cards.Contains(card))
         {
@@ -109,8 +109,8 @@ public class RoomModel
             return default;
         }
 
-        List<CardModel> others = new();
-        foreach (CardModel other in Cards)
+        List<RuntimeCardModel> others = new();
+        foreach (RuntimeCardModel other in Cards)
         {
             if (other != null && other != card)
             {
@@ -120,7 +120,7 @@ public class RoomModel
         return others;
     }
 
-    public bool TryRemoveCard(CardModel card)
+    public bool TryRemoveCard(RuntimeCardModel card)
     {
         if (!Cards.Contains(card))
         {
@@ -132,7 +132,7 @@ public class RoomModel
         return true;
     }
 
-    private void RemoveCard(CardModel card)
+    private void RemoveCard(RuntimeCardModel card)
     {
         int index = Array.IndexOf(Cards, card);
         card.HandleDeath();
@@ -149,7 +149,7 @@ public class RoomModel
         OnCardsChanged?.Invoke();
     }
 
-    public void DEBUG_REMOVECARD(CardModel card)
+    public void DEBUG_REMOVECARD(RuntimeCardModel card)
     {
         RemoveCard(card);
     }
@@ -160,7 +160,7 @@ public class RoomModel
 
     public void OnRun()
     {
-        foreach(CardModel card in Cards)
+        foreach(RuntimeCardModel card in Cards)
         {
             if (card != null)
             {

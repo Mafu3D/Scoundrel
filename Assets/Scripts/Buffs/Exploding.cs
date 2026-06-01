@@ -44,8 +44,8 @@ public class Exploding : Buff
 
     protected override void OnSelfDie()
     {
-        List<CardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner);
-        foreach (CardModel neighbor in neighbors)
+        List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner);
+        foreach (RuntimeCardModel neighbor in neighbors)
         {
             neighbor.RegisterValueModifier(-Owner.Value);
             if (neighbor.Value <= 0)

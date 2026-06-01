@@ -25,9 +25,9 @@ public class BuffManager
     Dictionary<BuffID, Buff> registeredBuffs = new();
     public List<Buff> GetBuffs() => orderedBuffs;
 
-    CardModel owner;
+    RuntimeCardModel owner;
 
-    public BuffManager(CardModel owner)
+    public BuffManager(RuntimeCardModel owner)
     {
         this.owner = owner;
     }

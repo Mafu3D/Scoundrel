@@ -20,7 +20,7 @@ public class AdvancedScoreKeeper : IScoreKeeper
         this.gameManager = gameManager;
     }
 
-    public void AddToScore(CardModel card)
+    public void AddToScore(RuntimeCardModel card)
     {
         if (card.Suit != Suit.CLUBS && card.Suit != Suit.SPADES)
         {
@@ -65,14 +65,14 @@ public class ClassicScoreKeeper : IScoreKeeper
     public bool HasPlayerWon()
     {
         int monsterScore = 0;
-        foreach (CardModel card in gameManager.DeckManager.Deck.RemainingItems)
+        foreach (RuntimeCardModel card in gameManager.DeckManager.Deck.RemainingItems)
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
                 monsterScore += card.BaseValue;
             }
         }
-        foreach (CardModel card in gameManager.CurrentRoom.Cards)
+        foreach (RuntimeCardModel card in gameManager.CurrentRoom.Cards)
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
@@ -90,14 +90,14 @@ public class ClassicScoreKeeper : IScoreKeeper
     {
         int monsterScore = 0;
         bool monstersInRoom = false;
-        foreach (CardModel card in gameManager.DeckManager.Deck.RemainingItems)
+        foreach (RuntimeCardModel card in gameManager.DeckManager.Deck.RemainingItems)
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
                 monsterScore += card.BaseValue;
             }
         }
-        foreach (CardModel card in gameManager.CurrentRoom.Cards)
+        foreach (RuntimeCardModel card in gameManager.CurrentRoom.Cards)
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
@@ -111,7 +111,7 @@ public class ClassicScoreKeeper : IScoreKeeper
             if (gameManager.Player.CurrentHealth == gameManager.Player.MaxHealth)
             {
                 int potionScore = 0;
-                foreach (CardModel card in gameManager.CurrentRoom.Cards)
+                foreach (RuntimeCardModel card in gameManager.CurrentRoom.Cards)
                 {
                     if (card.Suit == Suit.HEARTS)
                     {

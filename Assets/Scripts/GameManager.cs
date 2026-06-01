@@ -91,17 +91,17 @@ public class GameManager : MonoBehaviour
         // TEMP:
         List<string> buffs = new() { "Inspiring", "Elite", "Bloodthirsty", "Exploding" };
         int amount = UnityEngine.Random.Range(min, max);
-        List<CardModel> cardsToBuff = new();
+        List<RuntimeCardModel> cardsToBuff = new();
         foreach (Suit suit in new List<Suit>() { Suit.CLUBS, Suit.SPADES})
         {
-            List<CardModel> monsterCards = DeckManager.GetRemainingOfSuit(new() {suit});
+            List<RuntimeCardModel> monsterCards = DeckManager.GetRemainingOfSuit(new() {suit});
             for (int i = 0; i < amount; i++)
             {
                 int randIndex = UnityEngine.Random.Range(0, monsterCards.Count);
                 cardsToBuff.Add(monsterCards[randIndex]);
             }
         }
-        foreach (CardModel card in cardsToBuff)
+        foreach (RuntimeCardModel card in cardsToBuff)
         {
             int randBuff = UnityEngine.Random.Range(0, buffs.Count);
             Buff buff = BuffRegistry.GetBuffFromName(buffs[randBuff]);
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
 
     private void OpenFirstRoom()
     {
-        List<CardModel> drawnCards = DeckManager.Draw(CardsPerRoom);
+        List<RuntimeCardModel> drawnCards = DeckManager.Draw(CardsPerRoom);
         RoomModel room = new(CardsPerRoom, drawnCards);
         CurrentRoom = room;
         CurrentRoom.OnCardsChanged += CheckForGameResolution;
@@ -164,10 +164,10 @@ public class GameManager : MonoBehaviour
             CurrentRoom.OnCardsChanged -= CheckForGameResolution;
         }
 
-        List<CardModel> newCards = new();
+        List<RuntimeCardModel> newCards = new();
 
         newCards.AddRange(CurrentRoom.RemainingCards());
-        List<CardModel> drawnCards = DeckManager.Draw(CardsPerRoom - CurrentRoom.RemainingCount);
+        List<RuntimeCardModel> drawnCards = DeckManager.Draw(CardsPerRoom - CurrentRoom.RemainingCount);
         newCards.AddRange(drawnCards);
 
         RoomModel NextRoom = new(CardsPerRoom, newCards);
@@ -195,7 +195,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnCardClicked(CardModel card, CardClickContext context)
+    public void OnCardClicked(RuntimeCardModel card, CardClickContext context)
     {
         if (!CurrentRoom.Cards.Contains(card))
         {
@@ -219,7 +219,7 @@ public class GameManager : MonoBehaviour
             {
                 // Player enter room
                 Player.EnterNewRoom();
-                foreach(CardModel otherCard in CurrentRoom.Cards)
+                foreach(RuntimeCardModel otherCard in CurrentRoom.Cards)
                 {
                     otherCard?.BuffManager.TriggerEffect(BuffTrigger.OnEnterRoom);
                 }
@@ -231,7 +231,7 @@ public class GameManager : MonoBehaviour
                 Player.AddGold(1);
 
                 // also broadcast to other cards that this died
-                foreach (CardModel other in CurrentRoom.GetOthers(card))
+                foreach (RuntimeCardModel other in CurrentRoom.GetOthers(card))
                 {
                     if (other == null) { continue; }
                     other.HandleOnOtherDie();
@@ -280,13 +280,13 @@ public class GameManager : MonoBehaviour
         OpenNewRoom();
     }
 
-    private bool HandlePotion(CardModel card)
+    private bool HandlePotion(RuntimeCardModel card)
     {
         Player.TryDrinkPotion(card);
         return true;
     }
 
-    private bool HandleEnemy(CardModel card, CardClickContext context) => context == CardClickContext.TOP ? Player.TryFightWeapon(card) : Player.TryFightUnarmed(card);
+    private bool HandleEnemy(RuntimeCardModel card, CardClickContext context) => context == CardClickContext.TOP ? Player.TryFightWeapon(card) : Player.TryFightUnarmed(card);
 
     private void OnPlayerRun()
     {
