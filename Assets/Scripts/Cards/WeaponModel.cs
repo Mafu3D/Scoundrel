@@ -4,12 +4,15 @@ using Project.Decks;
 
 public class WeaponCardModel : RuntimeCardModel
 {
-    public int StartingPower { get; private set; }
-    public int Power { get; private set; }
     public List<RuntimeCardModel> SlainCards { get; private set; } = new();
     public Action OnWeaponUpdate;
 
     public WeaponCardModel(Suit suit, int value) : base(suit, CardType.WEAPON, value) { }
+
+    public WeaponCardModel(RuntimeCardModel baseCard) : base(baseCard.Suit, CardType.WEAPON, baseCard.BaseValue, baseCard.BuffManager.GetBuffs())
+    {
+
+    }
 
     public override void Update()
     {
@@ -22,7 +25,7 @@ public class WeaponCardModel : RuntimeCardModel
 
     public string GetWeaponInfoString()
     {
-        return $"Pow: {Power} Str: {GetCurrentStrength()} Slain: {SlainCards.Count}";
+        return $"Pow: {Value} Str: {GetCurrentStrength()} Slain: {SlainCards.Count}";
     }
 
     public int GetCurrentStrength()

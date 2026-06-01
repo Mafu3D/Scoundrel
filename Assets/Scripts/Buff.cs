@@ -132,10 +132,29 @@ public abstract class Buff : ScriptableObject
             BuffTrigger.OnEquipWeapon => OnEquipWeapon,
             BuffTrigger.OnDrinkPotion => OnDrinkPotion,
             BuffTrigger.OnDiscardPotion => OnDiscardPotion,
-            BuffTrigger.OnAttack => OnAttack,
-            BuffTrigger.OnUpdate => OnAttack,
+            BuffTrigger.OnUpdate => OnUpdate,
             _ => throw new ArgumentOutOfRangeException(nameof(trigger), $"{nameof(trigger)} has not been registered as a callable trigger.")
         };
+    }
+
+    public void HandleOnAttackedPreDamage(WeaponCardModel weapon)
+    {
+        OnAttackedPreDamage(weapon);
+    }
+
+    public void HandleOnAttackedPostDamage(WeaponCardModel weapon)
+    {
+        OnAttackedPostDamage(weapon);
+    }
+
+    public void HandleOnWeaponAttackPreDamage(MonsterCardModel defender)
+    {
+        OnWeaponAttackPreDamage(defender);
+    }
+
+    public void HandleOnWeaponAttackPostDamage(MonsterCardModel defender)
+    {
+        OnWeaponAttackPostDamage(defender);
     }
 
     protected Buff AddBuff(RuntimeCardModel target, Buff buff)
@@ -187,5 +206,8 @@ public abstract class Buff : ScriptableObject
     protected abstract void OnEquipWeapon();
     protected abstract void OnDrinkPotion();
     protected abstract void OnDiscardPotion();
-    protected abstract void OnAttack();
+    protected abstract void OnWeaponAttackPreDamage(MonsterCardModel target);
+    protected abstract void OnWeaponAttackPostDamage(MonsterCardModel target);
+    protected abstract void OnAttackedPreDamage(WeaponCardModel weapon);
+    protected abstract void OnAttackedPostDamage(WeaponCardModel weapon);
 }

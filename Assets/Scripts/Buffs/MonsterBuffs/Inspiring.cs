@@ -12,7 +12,13 @@ public class Inspiring : Buff
     protected override void OnBuffInitialized() {
     }
 
-    protected override void OnAttack() { }
+    protected override void OnWeaponAttackPreDamage(MonsterCardModel target) { }
+
+    protected override void OnWeaponAttackPostDamage(MonsterCardModel target) { }
+
+    protected override void OnAttackedPreDamage(WeaponCardModel weapon) { }
+
+    protected override void OnAttackedPostDamage(WeaponCardModel weapon) { }
 
     protected override void OnDiscardPotion() { }
 

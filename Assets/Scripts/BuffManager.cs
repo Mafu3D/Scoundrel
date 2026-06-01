@@ -151,4 +151,36 @@ public class BuffManager
             buff.TriggerEffect(trigger);
         }
     }
+
+    public void HandleOnAttackedPreDamage(WeaponCardModel weapon)
+    {
+        foreach(Buff buff in orderedBuffs)
+        {
+            buff.HandleOnAttackedPreDamage(weapon);
+        }
+    }
+
+    public void HandleOnAttackedPostDamage(WeaponCardModel weapon)
+    {
+        foreach(Buff buff in orderedBuffs)
+        {
+            buff.HandleOnAttackedPostDamage(weapon);
+        }
+    }
+
+    public void HandleOnWeaponAttackPreDamage(MonsterCardModel defender)
+    {
+        foreach(Buff buff in orderedBuffs)
+        {
+            buff.HandleOnWeaponAttackPreDamage(defender);
+        }
+    }
+
+    public void HandleOnWeaponAttackPostDamage(MonsterCardModel defender)
+    {
+        foreach(Buff buff in orderedBuffs)
+        {
+            buff.HandleOnWeaponAttackPostDamage(defender);
+        }
+    }
 }

@@ -129,30 +129,53 @@ public class Player : MonoBehaviour
         return true;
     }
 
-    #region Card Actions
-    public bool TryFightUnarmed(RuntimeCardModel card)
+    public void UnequipWeapon()
     {
+        this.Weapon = null;
+        OnWeaponChanged?.Invoke();
+    }
+
+    #region Card Actions
+    public bool TryFightUnarmed(RuntimeCardModel defender)
+    {
+        defender.BuffManager.HandleOnAttackedPreDamage(null);
+
         // Setting this up to return a bool so that conditions can be added later
-        TakeDamage(card.Value);
+        TakeDamage(defender.Value);
+
+        defender.BuffManager.HandleOnAttackedPostDamage(null);
         return true;
     }
 
-    public bool TryFightWeapon(RuntimeCardModel card)
+    public bool TryFightWeapon(RuntimeCardModel defender)
     {
-        if (Weapon == null || Weapon.GetCurrentStrength() <= card.Value)
+        if (Weapon == null || Weapon.GetCurrentStrength() <= defender.Value)
         {
             return false;
         }
-        int damage = Math.Clamp(card.Value - Weapon.Power, 0, 999);
+
+        if (defender is MonsterCardModel)
+        {
+            Weapon.BuffManager.HandleOnWeaponAttackPreDamage(defender as MonsterCardModel);
+        }
+        defender.BuffManager.HandleOnAttackedPreDamage(Weapon);
+
+        int damage = Math.Clamp(defender.Value - Weapon.Value, 0, 999);
         TakeDamage(damage);
-        Weapon.AddMonsterToSlain(card);
+        Weapon.AddMonsterToSlain(defender);
+
+        if (defender is MonsterCardModel)
+        {
+            Weapon.BuffManager.HandleOnWeaponAttackPostDamage(defender as MonsterCardModel);
+        }
+        defender.BuffManager.HandleOnAttackedPostDamage(Weapon);
         return true;
     }
 
     public bool TryEquipWeapon(RuntimeCardModel card)
     {
         // Setting this up to return a bool so that conditions can be added later
-        this.Weapon = new WeaponCardModel(card.Suit, card.Value);
+        this.Weapon = new WeaponCardModel(card);
         OnWeaponChanged?.Invoke();
         return true;
     }

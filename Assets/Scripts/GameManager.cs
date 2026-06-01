@@ -243,7 +243,6 @@ public class GameManager : MonoBehaviour
             CurrentRoom.TryRemoveCard(card);
 
             // Add gold if its the last card in the room
-            Debug.Log(CurrentRoom.IsEmpty);
             if (CurrentRoom.IsEmpty)
             {
                 Player.AddGold(2);
