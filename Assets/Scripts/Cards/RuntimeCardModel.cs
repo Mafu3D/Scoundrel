@@ -28,7 +28,7 @@ namespace Project.Decks
         TREASURE
     }
 
-    public abstract class RuntimeCardModel : IDeckStorable, IBuffRegisterable
+    public abstract class RuntimeCardModel : IDeckStorable
     {
         public Suit Suit { get; private set; }
         public CardType CardType { get; private set; }

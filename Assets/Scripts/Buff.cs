@@ -40,7 +40,7 @@ public abstract class Buff : ScriptableObject
     [Header("Buff Meta")]
     [SerializeField] public string Name;
     [SerializeField] public string Description;
-    [SerializeField] public CardType CardType;
+    [SerializeField] public List<CardType> ValidCardTypes;
 
     [Header("Base Buff Parameters")]
     [SerializeField] public bool ApplyOnDraw = true;

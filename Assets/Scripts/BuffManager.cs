@@ -88,6 +88,11 @@ public class BuffManager
         {
             Debug.LogWarning($"{buff.name} is being added but has already been initialized with id {buff.ID.ToString()}");
         }
+        if (!buff.ValidCardTypes.Contains(owner.CardType))
+        {
+            Debug.LogError($"Tried to add {buff.name} to {owner.ToString()}. Card was not of expected type. Instead was {owner.CardType}");
+            return null;
+        }
         Buff newInstance = UnityEngine.Object.Instantiate(buff);
         RegisterBuff(newInstance);
         return newInstance;

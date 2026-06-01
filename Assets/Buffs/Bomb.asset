@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2db5b1d10172aa4ab8d384ef1795043, type: 3}
-  m_Name: Exploding
+  m_Script: {fileID: 11500000, guid: 34f057da3657ef34d9ff915848162944, type: 3}
+  m_Name: Bomb
   m_EditorClassIdentifier: 
-  Name: Exploding
-  Description: This card deals its damage to its neighbors when it dies. It destroys
-    any gold.
-  ValidCardTypes: 00000000
+  Name: Bomb
+  Description: Gain +5 and destroy itself on the first monster slain
+  ValidCardTypes: 01000000
   ApplyOnDraw: 1
   IsTemporary: 0
   RemoveOnParentCleanup: 0
