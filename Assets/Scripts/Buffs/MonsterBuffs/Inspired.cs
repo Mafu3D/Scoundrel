@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Inspired", menuName="Buff/Inspired")]
+[CreateAssetMenu(fileName="Inspired", menuName="Buffs/Monster/Inspired")]
 public class Inspired : Buff
 {
     [SerializeField] private int amount = 1;

@@ -4,7 +4,7 @@ using Mafu.UnityServiceLocator;
 using Project.Decks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Exploding", menuName="Abilities/Exploding")]
+[CreateAssetMenu(fileName="Exploding", menuName="Buffs/Monster/Exploding")]
 public class Exploding : Buff
 {
     public override void OnSelfDie()

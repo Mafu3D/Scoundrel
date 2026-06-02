@@ -4,7 +4,7 @@ using Mafu.UnityServiceLocator;
 using Project.Decks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Bloodthirsty", menuName="Abilities/Bloodthirsty")]
+[CreateAssetMenu(fileName="Bloodthirsty", menuName="Buffs/Monster/Bloodthirsty")]
 public class Bloodthirsty : Buff
 {
     public override void OnOtherDie(MonsterCardModel other)

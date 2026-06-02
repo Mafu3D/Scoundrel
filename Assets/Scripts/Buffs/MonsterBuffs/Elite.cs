@@ -4,7 +4,7 @@ using Mafu.UnityServiceLocator;
 using Project.Decks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Elite", menuName="Abilities/Elite")]
+[CreateAssetMenu(fileName="Elite", menuName="Buffs/Monster/Elite")]
 public class Elite : Buff
 {
     public override void OnBuffApplied()

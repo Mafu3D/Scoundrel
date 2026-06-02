@@ -4,7 +4,7 @@ using Mafu.UnityServiceLocator;
 using Project.Decks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Bomb", menuName="Abilities/Weapons/Bomb")]
+[CreateAssetMenu(fileName="Bomb", menuName="Buffs/Weapons/Bomb")]
 public class Bomb : Buff
 {
     public override void OnWeaponAttackPostDamage(MonsterCardModel target)
@@ -17,4 +17,3 @@ public class Bomb : Buff
         Owner.RegisterValueModifier(5);
     }
 }
-

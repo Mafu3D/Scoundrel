@@ -4,7 +4,7 @@ using Mafu.UnityServiceLocator;
 using Project.Decks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="Inspiring", menuName="Abilities/Inspiring")]
+[CreateAssetMenu(fileName="Inspiring", menuName="Buffs/Monster/Inspiring")]
 public class Inspiring : Buff
 {
     List<KeyValuePair<RuntimeCardModel, BuffID>> neighborsBuffMap = new();

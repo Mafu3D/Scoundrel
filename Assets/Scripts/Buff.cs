@@ -51,10 +51,10 @@ public abstract class Buff : ScriptableObject
 
     public List<Buff> ChildBuffInstances { get; private set; } = new();
 
-    public BuffID ID;
+    public BuffID ID  { get; private set; }
     public RuntimeCardModel Owner { get; private set; }
 
-    public GameManager gameManager;
+    public GameManager gameManager { get; private set; }
 
     public override string ToString() => $"{Name}({ID})";
 
@@ -84,8 +84,9 @@ public abstract class Buff : ScriptableObject
 
     public void Initialize(RuntimeCardModel owner)
     {
-        this.Owner = owner;
-        ServiceLocator.Global.Get(out gameManager);
+        Owner = owner;
+        ServiceLocator.Global.Get(out GameManager _gameManager);
+        gameManager = _gameManager;
         ID = new(this);
         OnBuffInitialized();
     }

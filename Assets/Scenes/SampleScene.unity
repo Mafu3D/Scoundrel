@@ -3551,6 +3551,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fc6435cae49304f4994783afd540476e, type: 2}
   - {fileID: 11400000, guid: ca8da16d64138e34aba014511ee7a04e, type: 2}
   - {fileID: 11400000, guid: 834aeeebc7218004790b23f209bedfcd, type: 2}
+  - {fileID: 11400000, guid: f4beeb244ef6edc4784ae0d6dff326e7, type: 2}
 --- !u!1 &1000473789
 GameObject:
   m_ObjectHideFlags: 0
@@ -4405,11 +4406,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1441688731339803809, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 26.504147
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1441688731339803809, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -24.81871
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1441688731339803809, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -4521,11 +4522,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_Pivot.x
-      value: 0.34455958
+      value: 0.34801382
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_Pivot.y
-      value: 1.1574501
+      value: 1.1758833
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_SizeDelta.x
@@ -4537,19 +4538,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -507.08118
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 486.01038
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -507.08118
+      value: -504.31778
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 486.01038
+      value: 494.30054
       objectReference: {fileID: 0}
     - target: {fileID: 5689954502834935825, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
@@ -4589,11 +4590,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6918140077764579590, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.254154
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6918140077764579590, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -49.51371
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6918140077764579590, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AnchoredPosition.x
