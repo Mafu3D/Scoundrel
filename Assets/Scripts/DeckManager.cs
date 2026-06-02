@@ -8,35 +8,35 @@ using System;
 
 public class DeckManager : MonoBehaviour
 {
-    public Deck<CardModel> Deck { get; private set; }
+    public Deck<RuntimeCardModel> Deck { get; private set; }
 
     public Action OnCardDraw;
 
     public void TEMP_CreateNewDeck()
     {
         // Create black cards
-        List<CardModel> cards = new();
+        List<RuntimeCardModel> cards = new();
         for (int i = 2; i <= 14; i++)
         {
-            cards.Add(new CardModel(Suit.CLUBS, i));
-            cards.Add(new CardModel(Suit.SPADES, i));
+            cards.Add(new MonsterCardModel(Suit.CLUBS, i));
+            cards.Add(new MonsterCardModel(Suit.SPADES, i));
         }
 
         // Create red cards
         for (int i = 2; i <= 10; i++)
         {
-            cards.Add(new CardModel(Suit.HEARTS, i));
-            cards.Add(new CardModel(Suit.DIAMONDS, i));
+            cards.Add(new PotionCardModel(Suit.HEARTS, i));
+            cards.Add(new WeaponCardModel(Suit.DIAMONDS, i));
         }
 
         // Special cards
-        cards.Add(new CardModel(Suit.DOORS, 14));
-        cards.Add(new CardModel(Suit.DOORS, 14));
-        cards.Add(new CardModel(Suit.TREASURES, 14));
-        cards.Add(new CardModel(Suit.TREASURES, 14));
+        cards.Add(new DoorCardModel(Suit.DOORS, 14));
+        cards.Add(new DoorCardModel(Suit.DOORS, 14));
+        cards.Add(new TreasureCardModel(Suit.TREASURES, 14));
+        cards.Add(new TreasureCardModel(Suit.TREASURES, 14));
 
         // Create deck
-        Deck = new Deck<CardModel>(cards);
+        Deck = new Deck<RuntimeCardModel>(cards);
         Deck.Shuffle();
     }
 
@@ -46,9 +46,9 @@ public class DeckManager : MonoBehaviour
     }
 
 
-    public List<CardModel> Draw(int amount)
+    public List<RuntimeCardModel> Draw(int amount)
     {
-        List<CardModel> drawn = Deck.DrawMultiple(amount);
+        List<RuntimeCardModel> drawn = Deck.DrawMultiple(amount);
         OnCardDraw?.Invoke();
         return drawn;
     }
@@ -56,7 +56,7 @@ public class DeckManager : MonoBehaviour
     public int RemainingOfSuit(Suit suit)
     {
         int remaining = 0;
-        foreach (CardModel card in Deck.RemainingItems)
+        foreach (RuntimeCardModel card in Deck.RemainingItems)
         {
             if (card.Suit == suit)
             {
@@ -69,7 +69,7 @@ public class DeckManager : MonoBehaviour
     public int RemainingOfSuit(List<Suit> suits)
     {
         int remaining = 0;
-        foreach (CardModel card in Deck.RemainingItems)
+        foreach (RuntimeCardModel card in Deck.RemainingItems)
         {
             if (suits.Contains(card.Suit))
             {
@@ -79,10 +79,10 @@ public class DeckManager : MonoBehaviour
         return remaining;
     }
 
-    public List<CardModel> GetRemainingOfSuit(List<Suit> suits)
+    public List<RuntimeCardModel> GetRemainingOfSuit(List<Suit> suits)
     {
-        List<CardModel> remaining = new();
-        foreach (CardModel card in Deck.RemainingItems)
+        List<RuntimeCardModel> remaining = new();
+        foreach (RuntimeCardModel card in Deck.RemainingItems)
         {
             if (suits.Contains(card.Suit))
             {

@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField] public int RunCooldownTime = 1;
 
     public int CurrentHealth { get; private set; }
-    public WeaponModel Weapon { get; private set; }
+    public WeaponCardModel Weapon { get; private set; }
     public bool HasRunToken { get; private set; } = true;
     public bool HasEnteredTheRoom { get; private set; } = false;
     public int ExtraRunTokens { get; private set; } = 0;
@@ -21,6 +21,10 @@ public class Player : MonoBehaviour
     public Action OnDeath;
     public Action OnWeaponChanged;
     public Action OnRunSuccess;
+    public Action<WeaponCardModel> OnAttackedPreDamage;
+    public Action<WeaponCardModel> OnAttackedPostDamage;
+    public Action<MonsterCardModel> OnWeaponAttackPreDamage;
+    public Action<MonsterCardModel> OnWeaponAttackPostDamage;
 
     private bool runTokenOnCooldown = false;
 
@@ -129,35 +133,58 @@ public class Player : MonoBehaviour
         return true;
     }
 
-    #region Card Actions
-    public bool TryFightUnarmed(CardModel card)
+    public void UnequipWeapon()
     {
+        this.Weapon = null;
+        OnWeaponChanged?.Invoke();
+    }
+
+    #region Card Actions
+    public bool TryFightUnarmed(RuntimeCardModel defender)
+    {
+        OnAttackedPreDamage?.Invoke(null);
+
         // Setting this up to return a bool so that conditions can be added later
-        TakeDamage(card.Value);
+        TakeDamage(defender.Value);
+
+        OnAttackedPostDamage?.Invoke(null);
         return true;
     }
 
-    public bool TryFightWeapon(CardModel card)
+    public bool TryFightWeapon(RuntimeCardModel defender)
     {
-        if (Weapon == null || Weapon.GetCurrentStrength() <= card.Value)
+        if (Weapon == null || Weapon.GetCurrentStrength() <= defender.Value)
         {
             return false;
         }
-        int damage = Math.Clamp(card.Value - Weapon.Power, 0, 999);
+
+        if (defender is MonsterCardModel)
+        {
+            OnWeaponAttackPreDamage?.Invoke(defender as MonsterCardModel);
+        }
+        OnAttackedPreDamage?.Invoke(Weapon);
+
+        int damage = Math.Clamp(defender.Value - Weapon.Value, 0, 999);
         TakeDamage(damage);
-        Weapon.AddMonsterToSlain(card);
+        Weapon.AddMonsterToSlain(defender);
+
+        if (defender is MonsterCardModel)
+        {
+            OnWeaponAttackPostDamage?.Invoke(defender as MonsterCardModel);
+        }
+        OnAttackedPostDamage?.Invoke(Weapon);
         return true;
     }
 
-    public bool TryEquipWeapon(CardModel card)
+    public bool TryEquipWeapon(RuntimeCardModel card)
     {
         // Setting this up to return a bool so that conditions can be added later
-        this.Weapon = new WeaponModel(card);
+        this.Weapon = new WeaponCardModel(card);
         OnWeaponChanged?.Invoke();
         return true;
     }
 
-    public bool TryDrinkPotion(CardModel card)
+    public bool TryDrinkPotion(RuntimeCardModel card)
     {
         if (!HasDrankPotionThisRoom)
         {

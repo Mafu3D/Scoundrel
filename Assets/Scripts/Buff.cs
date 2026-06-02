@@ -40,6 +40,7 @@ public abstract class Buff : ScriptableObject
     [Header("Buff Meta")]
     [SerializeField] public string Name;
     [SerializeField] public string Description;
+    [SerializeField] public List<CardType> ValidCardTypes;
 
     [Header("Base Buff Parameters")]
     [SerializeField] public bool ApplyOnDraw = true;
@@ -51,9 +52,9 @@ public abstract class Buff : ScriptableObject
     public List<Buff> ChildBuffInstances { get; private set; } = new();
 
     public BuffID ID;
-    public CardModel Owner { get; private set; }
+    public RuntimeCardModel Owner { get; private set; }
 
-    protected GameManager gameManager;
+    public GameManager gameManager;
 
     public override string ToString() => $"{Name}({ID})";
 
@@ -81,7 +82,7 @@ public abstract class Buff : ScriptableObject
         throw new ArgumentException($"There is no instance of {name} registered to {this.name}", "name");
     }
 
-    public void Initialize(CardModel owner)
+    public void Initialize(RuntimeCardModel owner)
     {
         this.Owner = owner;
         ServiceLocator.Global.Get(out gameManager);
@@ -97,7 +98,6 @@ public abstract class Buff : ScriptableObject
     private void OnDestroy()
     {
         // Cleanup();
-        Debug.Log("destroyed");
     }
 
     public void Cleanup()
@@ -113,31 +113,7 @@ public abstract class Buff : ScriptableObject
         OnCleanup();
     }
 
-    public void TriggerEffect(BuffTrigger trigger)
-    {
-        GetTriggerCallable(trigger)();
-    }
-
-    private Action GetTriggerCallable(BuffTrigger trigger)
-    {
-        return trigger switch
-        {
-            BuffTrigger.OnBuffApplied => OnBuffApplied,
-            BuffTrigger.OnDraw => OnDraw,
-            BuffTrigger.OnEnterRoom => OnEnterRoom,
-            BuffTrigger.OnRun => OnRun,
-            BuffTrigger.OnOtherDie => OnOtherDie,
-            BuffTrigger.OnSelfDie => OnSelfDie,
-            BuffTrigger.OnEquipWeapon => OnEquipWeapon,
-            BuffTrigger.OnDrinkPotion => OnDrinkPotion,
-            BuffTrigger.OnDiscardPotion => OnDiscardPotion,
-            BuffTrigger.OnAttack => OnAttack,
-            BuffTrigger.OnUpdate => OnAttack,
-            _ => throw new ArgumentOutOfRangeException(nameof(trigger), $"{nameof(trigger)} has not been registered as a callable trigger.")
-        };
-    }
-
-    protected Buff AddBuff(CardModel target, Buff buff)
+    public Buff AddBuff(RuntimeCardModel target, Buff buff)
     {
         Buff newInstance = target.AddNewBuff(buff);
         ChildBuffInstances.Add(newInstance);
@@ -149,42 +125,45 @@ public abstract class Buff : ScriptableObject
     /// This is for any extra initialization that needs to be
     /// done for the construction of this buff.
     /// </summary>
-    protected abstract void OnBuffInitialized();
+    public virtual void OnBuffInitialized() { }
 
     /// <summary>
     /// Called whenever the buff is removed, no matter the source.
     /// This is for logic that needs to run if the buff ever becomes
     /// no longe active. Like state changes.
     /// </summary>
-    protected abstract void OnCleanup();
+    public virtual void OnCleanup() { }
 
     /// <summary>
     /// Called when the buff is considered active, after initialization.
     /// </summary>
-    protected abstract void OnBuffApplied();
+    public virtual void OnBuffApplied() { }
 
     /// <summary>
     /// Called when the card is drawn, before the room has been fully created.
     /// Use this for logic that affects how cards are drawn?
     /// </summary>
-    protected abstract void OnDraw();
+    public virtual void OnDraw() { }
 
     /// <summary>
     /// Called when the card leaves the table for any reason.
     /// </summary>
-    protected abstract void OnLeave();
+    public virtual void OnLeave() { }
 
     /// <summary>
     /// Called every update cycle of the Game Manager update loop.
     /// </summary>
-    protected abstract void OnUpdate();
+    public virtual void OnUpdate() { }
 
-    protected abstract void OnEnterRoom();
-    protected abstract void OnRun();
-    protected abstract void OnSelfDie();
-    protected abstract void OnOtherDie();
-    protected abstract void OnEquipWeapon();
-    protected abstract void OnDrinkPotion();
-    protected abstract void OnDiscardPotion();
-    protected abstract void OnAttack();
+    public virtual void OnEnterRoom() { }
+    public virtual void OnRun() { }
+    public virtual void OnSelfDie() { }
+    public virtual void OnOtherDie(MonsterCardModel other) { }
+    public virtual void OnEquipWeapon() { }
+    public virtual void OnDrinkPotion() { }
+    public virtual void OnDiscardPotion() { }
+    public virtual void OnWeaponAttackPreDamage(MonsterCardModel target) { }
+    public virtual void OnWeaponAttackPostDamage(MonsterCardModel target) { }
+    public virtual void OnAttackedPreDamage(WeaponCardModel weapon) { }
+    public virtual void OnAttackedPostDamage(WeaponCardModel weapon) { }
 }

@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Inspired
   Description: +1 from being inspired by a neighboring elite ally
+  ValidCardTypes: 00000000
   ApplyOnDraw: 1
   IsTemporary: 0
   RemoveOnParentCleanup: 1
   RemoveOnDeath: 1
   registeredChildBuffs: []
+  gameManager: {fileID: 0}
   amount: 1

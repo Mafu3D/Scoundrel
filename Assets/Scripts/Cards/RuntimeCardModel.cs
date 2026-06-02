@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Project.Decks
 {
+    // TODO: Turn suit into a map that connects a suit with a card type?
     public enum Suit {
         SPADES,
         HEARTS,
@@ -18,9 +19,19 @@ namespace Project.Decks
         QUESTS
     }
 
-    public class CardModel : IDeckStorable, IBuffRegisterable
+    public enum CardType
+    {
+        MONSTER,
+        WEAPON,
+        POTION,
+        DOOR,
+        TREASURE
+    }
+
+    public abstract class RuntimeCardModel : IDeckStorable, IDisposable
     {
         public Suit Suit { get; private set; }
+        public CardType CardType { get; private set; }
 
         public int Value
         {
@@ -39,36 +50,37 @@ namespace Project.Decks
         public string ID => uuid.ToString();
 
         public Action OnUpdate;
+        public Action OnDeath;
+        public Action OnDraw;
+        public Action<MonsterCardModel> OnWatchOtherDie;
 
-        public BuffManager BuffManager => buffManager;
-        private BuffManager buffManager;
+
+        public BuffManager BuffManager { get; private set; }
         public List<int> ValueModifiers = new();
 
-        private Guid uuid;
+        private readonly Guid uuid;
 
-        public CardModel(Suit suit, int value) {
-            this.Suit = suit;
-            this.BaseValue = value;
-            this.buffManager = new BuffManager(this);
+        public RuntimeCardModel(Suit suit, CardType cardType, int value)
+        {
+            Suit = suit;
+            CardType = cardType;
+            BaseValue = value;
+            BuffManager = new BuffManager(this);
 
             uuid = Guid.NewGuid();
         }
 
-        public CardModel(Suit suit, int value, List<Buff> buffs) {
-            this.Suit = suit;
-            this.BaseValue = value;
-            this.buffManager = new BuffManager(this);
+        public RuntimeCardModel(Suit suit, CardType cardType, int value, List<Buff> buffs) : this(suit, cardType, value)
+        {
             foreach(Buff buff in buffs)
             {
-                this.buffManager.AddNewBuff(buff);
+                BuffManager.AddNewBuff(buff);
             }
-
-            uuid = Guid.NewGuid();
         }
 
-        public void Update()
+        public virtual void Update()
         {
-            buffManager.Update();
+            BuffManager.Update();
             OnUpdate?.Invoke();
         }
 
@@ -79,7 +91,7 @@ namespace Project.Decks
             {
                 output += $"({BaseValue})";
             }
-            output += $" of {Suit}";
+            output += $" of {Suit} ({CardType})";
             return output;
         }
 
@@ -90,41 +102,30 @@ namespace Project.Decks
 
         public void DeregisterValueModifier(int value)
         {
-            Debug.Log("Deregistering: " + value + $" from {this.ToString()}");
-            string before = "Before: ";
-            for (int i = 0; i < ValueModifiers.Count; i++)
-            {
-                before += "\n" + ValueModifiers[i].ToString();
-            }
             if (ValueModifiers.Contains(value))
             {
                 ValueModifiers.Remove(value);
                 return;
             }
-            string after = "After: ";
-            for (int i = 0; i < ValueModifiers.Count; i++)
-            {
-                after += "\n" + ValueModifiers[i].ToString();
-            }
-            Debug.Log(after);
-            Debug.LogWarning($"Tried to deregister modifier value of {value} from {this.ToString()} but failed!");
         }
 
         public void HandleDeath()
         {
-            buffManager.TriggerEffect(BuffTrigger.OnSelfDie);
-            buffManager.CleanupRemoveOnDeathBuffs();
+            OnDeath?.Invoke();
+            BuffManager.CleanupRemoveOnDeathBuffs();
+
+            BuffManager.Dispose();
+            this.Dispose();
         }
 
         public void HandleOnDraw()
         {
-
-            buffManager.TriggerEffect(BuffTrigger.OnDraw);
+            OnDraw?.Invoke();
         }
 
-        public void HandleOnOtherDie()
+        public void HandleOnWatchOtherDie(MonsterCardModel other)
         {
-            buffManager.TriggerEffect(BuffTrigger.OnOtherDie);
+            OnWatchOtherDie?.Invoke(other);
         }
 
         public List<Buff> GetBuffs() => BuffManager.GetBuffs();
@@ -133,5 +134,10 @@ namespace Project.Decks
         public void RemoveBuff(BuffID buffID) => BuffManager.RemoveBuff(buffID);
         public bool HasBuff(Buff buff) => BuffManager.HasBuff(buff);
         public bool HasBuff(BuffID buffID) => BuffManager.HasBuff(buffID);
+
+        public void Dispose()
+        {
+            //
+        }
     }
 }

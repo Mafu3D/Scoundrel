@@ -58,8 +58,8 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
     [SerializeField] private GameManager gameManager;
 
     public bool IsActive { get; private set; } = false;
-    public CardModel Card {get; private set; }
-    public Action<CardModel, CardClickContext> OnCardClicked; // Not used?
+    public RuntimeCardModel Card {get; private set; }
+    public Action<RuntimeCardModel, CardClickContext> OnCardClicked; // Not used?
 
     private BoxCollider2D myCollider;
     private SortingGroup mySortingGroup;
@@ -79,7 +79,7 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
         HideAllHoverBoxes();
     }
 
-    public void RegisterCard(CardModel card)
+    public void RegisterCard(RuntimeCardModel card)
     {
         Card = card;
         if (card == null) return;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mafu.UnityServiceLocator;
 using Project.Decks;
 using UnityEngine;
 
@@ -19,17 +20,50 @@ public enum BuffTrigger
     OnUpdate,
 }
 
-public class BuffManager
+public class BuffManager : IDisposable
 {
     List<Buff> orderedBuffs = new();
     Dictionary<BuffID, Buff> registeredBuffs = new();
     public List<Buff> GetBuffs() => orderedBuffs;
 
-    CardModel owner;
+    RuntimeCardModel owner;
+    GameManager gameManager;
+    Player player;
 
-    public BuffManager(CardModel owner)
+    public BuffManager(RuntimeCardModel owner)
     {
         this.owner = owner;
+
+        ServiceLocator.Global.Get(out gameManager);
+        player = gameManager.Player;
+
+        player.OnAttackedPreDamage += HandleOnAttackedPreDamage;
+        player.OnAttackedPostDamage += HandleOnAttackedPostDamage;
+        player.OnWeaponAttackPreDamage += HandleOnWeaponAttackPreDamage;
+        player.OnWeaponAttackPostDamage += HandleOnWeaponAttackPostDamage;
+
+        owner.OnDeath += HandleOnSelfDie;
+        owner.OnDraw += HandleOnDraw;
+        owner.OnWatchOtherDie += HandleOnWatchOtherDie;
+
+        gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
+        gameManager.OnPlayerRun += HandleOnPlayerRun;
+    }
+
+
+    public void Dispose()
+    {
+        player.OnAttackedPreDamage -= HandleOnAttackedPreDamage;
+        player.OnAttackedPostDamage -= HandleOnAttackedPostDamage;
+        player.OnWeaponAttackPreDamage -= HandleOnWeaponAttackPreDamage;
+        player.OnWeaponAttackPostDamage -= HandleOnWeaponAttackPostDamage;
+
+        owner.OnDeath -= HandleOnSelfDie;
+        owner.OnDraw -= HandleOnDraw;
+        owner.OnWatchOtherDie -= HandleOnWatchOtherDie;
+
+        gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
+        gameManager.OnPlayerRun += HandleOnPlayerRun;
     }
 
     public bool HasBuff(BuffID buffID) => registeredBuffs.Keys.Contains(buffID);
@@ -37,7 +71,7 @@ public class BuffManager
 
     public void Update()
     {
-        TriggerEffect(BuffTrigger.OnUpdate);
+        orderedBuffs.ForEach(n => n.OnUpdate());
     }
 
     public void CleanupTemporaryBuffs()
@@ -88,6 +122,11 @@ public class BuffManager
         {
             Debug.LogWarning($"{buff.name} is being added but has already been initialized with id {buff.ID.ToString()}");
         }
+        if (!buff.ValidCardTypes.Contains(owner.CardType))
+        {
+            Debug.LogError($"Tried to add {buff.name} to {owner.ToString()}. Card was not of expected type. Instead was {owner.CardType}");
+            return null;
+        }
         Buff newInstance = UnityEngine.Object.Instantiate(buff);
         RegisterBuff(newInstance);
         return newInstance;
@@ -98,7 +137,7 @@ public class BuffManager
         buff.Initialize(owner);
         registeredBuffs.Add(buff.ID, buff);
         orderedBuffs.Add(buff);
-        buff.TriggerEffect(BuffTrigger.OnBuffApplied);
+        buff.OnBuffApplied();
     }
 
     public void RemoveBuff(BuffID buffID)
@@ -139,11 +178,21 @@ public class BuffManager
     }
 
 
-    public void TriggerEffect(BuffTrigger trigger)
-    {
-        foreach(Buff buff in orderedBuffs)
-        {
-            buff.TriggerEffect(trigger);
-        }
-    }
+    private void HandleOnWeaponAttackPostDamage(MonsterCardModel defender) => orderedBuffs.ForEach(n => n.OnWeaponAttackPostDamage(defender));
+
+    private void HandleOnWeaponAttackPreDamage(MonsterCardModel defender) => orderedBuffs.ForEach(n => n.OnWeaponAttackPreDamage(defender));
+
+    private void HandleOnAttackedPostDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPostDamage(weapon));
+
+    private void HandleOnAttackedPreDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPreDamage(weapon));
+
+    private void HandleOnPlayerEnterRoom() => orderedBuffs.ForEach(n => n.OnEnterRoom());
+
+    private void HandleOnPlayerRun() => orderedBuffs.ForEach(n => n.OnRun());
+
+    private void HandleOnWatchOtherDie(MonsterCardModel model) => orderedBuffs.ForEach(n => n.OnUpdate());
+
+    private void HandleOnDraw() => orderedBuffs.ForEach(n => n.OnDraw());
+
+    private void HandleOnSelfDie() => orderedBuffs.ForEach(n => n.OnSelfDie());
 }

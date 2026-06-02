@@ -13,7 +13,7 @@ public class WeaponView : MonoBehaviour
     [SerializeField] List<CardView> defeatedCardsPool;
     [SerializeField] float cardOffset = -0.755f;
 
-    WeaponModel weapon;
+    WeaponCardModel weapon;
 
     void Start()
     {
@@ -25,10 +25,10 @@ public class WeaponView : MonoBehaviour
         RefreshView();
     }
 
-    public void RegisterWeapon(WeaponModel weapon)
+    public void RegisterWeapon(WeaponCardModel weapon)
     {
         this.weapon = weapon;
-        weaponCard.RegisterCard(weapon.Card);
+        weaponCard.RegisterCard(weapon);
         weapon.OnWeaponUpdate += OnWeaponUpdate;
         weaponCard.gameObject.SetActive(true);
 
