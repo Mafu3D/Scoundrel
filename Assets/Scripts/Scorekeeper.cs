@@ -29,7 +29,7 @@ public class AdvancedScoreKeeper : IScoreKeeper
 
         float floorMultiplier = 1 + ((gameManager.FloorNumber - 1) * 0.2f);
 
-        float cardScore = card.Power * 100;
+        float cardScore = card.Value * 100;
         cardScore *= roomMultipler;
         cardScore *= floorMultiplier;
 
@@ -69,14 +69,14 @@ public class ClassicScoreKeeper : IScoreKeeper
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
-                monsterScore += card.BasePower;
+                monsterScore += card.BaseValue;
             }
         }
         foreach (CardModel card in gameManager.CurrentRoom.Cards)
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
-                monsterScore += card.BasePower;
+                monsterScore += card.BaseValue;
             }
         }
         if (gameManager.DeckManager.Deck.CurrentCount == 0 && monsterScore == 0)
@@ -94,7 +94,7 @@ public class ClassicScoreKeeper : IScoreKeeper
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
-                monsterScore += card.BasePower;
+                monsterScore += card.BaseValue;
             }
         }
         foreach (CardModel card in gameManager.CurrentRoom.Cards)
@@ -102,7 +102,7 @@ public class ClassicScoreKeeper : IScoreKeeper
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
                 monstersInRoom = true;
-                monsterScore += card.BasePower;
+                monsterScore += card.BaseValue;
             }
         }
 
@@ -115,9 +115,9 @@ public class ClassicScoreKeeper : IScoreKeeper
                 {
                     if (card.Suit == Suit.HEARTS)
                     {
-                        if (card.BasePower > potionScore)
+                        if (card.BaseValue > potionScore)
                         {
-                            potionScore = card.BasePower;
+                            potionScore = card.BaseValue;
                         }
                     }
                 }

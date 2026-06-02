@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
         foreach (CardModel card in cardsToBuff)
         {
             int randBuff = UnityEngine.Random.Range(0, buffs.Count);
-            CardBuff buff = BuffRegistry.GetBuffFromName(buffs[randBuff]);
+            Buff buff = BuffRegistry.GetBuffFromName(buffs[randBuff]);
             card.AddNewBuff(buff);
         }
     }

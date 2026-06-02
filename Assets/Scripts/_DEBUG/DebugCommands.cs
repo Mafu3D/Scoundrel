@@ -98,7 +98,7 @@ namespace Project.DebugCommands
         public void Invoke(string buffName)
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
-            CardBuff buff = gameManager.BuffRegistry.GetBuffFromName(buffName);
+            Buff buff = gameManager.BuffRegistry.GetBuffFromName(buffName);
             if (buff == null)
             {
                 UnityEngine.Debug.Log($"{buffName} not found!");
@@ -124,7 +124,7 @@ namespace Project.DebugCommands
         public void Invoke(string buffName)
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
-            CardBuff buff = gameManager.BuffRegistry.GetBuffFromName(buffName);
+            Buff buff = gameManager.BuffRegistry.GetBuffFromName(buffName);
             if (buff == null)
             {
                 UnityEngine.Debug.Log($"{buffName} not found!");
@@ -150,7 +150,7 @@ namespace Project.DebugCommands
         public void Invoke(string buffName)
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
-            CardBuff ability = gameManager.BuffRegistry.GetBuffFromName(buffName);
+            Buff ability = gameManager.BuffRegistry.GetBuffFromName(buffName);
             if (ability == null)
             {
                 UnityEngine.Debug.Log($"{buffName} not found!");
@@ -176,7 +176,7 @@ namespace Project.DebugCommands
         public void Invoke(string buffName)
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
-            CardBuff buff = gameManager.BuffRegistry.GetBuffFromName(buffName);
+            Buff buff = gameManager.BuffRegistry.GetBuffFromName(buffName);
             if (buff == null)
             {
                 UnityEngine.Debug.Log($"{buffName} not found!");

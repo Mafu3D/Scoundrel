@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class GlobalBuffRegistry : MonoBehaviour
 {
-    [SerializeField] public List<CardBuff> GlobalBuffs;
+    [SerializeField] public List<Buff> GlobalBuffs;
 
     // TODO: Refactor this as a hash map instead of a list
-    public CardBuff GetBuffFromName(string name)
+    public Buff GetBuffFromName(string name)
     {
-        foreach (CardBuff buff in GlobalBuffs)
+        foreach (Buff buff in GlobalBuffs)
         {
             if (name.ToLower() == buff.Name.ToLower())
             {

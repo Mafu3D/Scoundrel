@@ -21,9 +21,9 @@ public enum BuffTrigger
 
 public class BuffManager
 {
-    List<CardBuff> orderedBuffs = new();
-    Dictionary<BuffID, CardBuff> registeredBuffs = new();
-    public List<CardBuff> GetBuffs() => orderedBuffs;
+    List<Buff> orderedBuffs = new();
+    Dictionary<BuffID, Buff> registeredBuffs = new();
+    public List<Buff> GetBuffs() => orderedBuffs;
 
     CardModel owner;
 
@@ -33,7 +33,7 @@ public class BuffManager
     }
 
     public bool HasBuff(BuffID buffID) => registeredBuffs.Keys.Contains(buffID);
-    public bool HasBuff(CardBuff buff) => registeredBuffs.Values.Contains(buff);
+    public bool HasBuff(Buff buff) => registeredBuffs.Values.Contains(buff);
 
     public void Update()
     {
@@ -42,16 +42,16 @@ public class BuffManager
 
     public void CleanupTemporaryBuffs()
     {
-        foreach(CardBuff buff in GetTemporaryBuffs())
+        foreach(Buff buff in GetTemporaryBuffs())
         {
             DeregisterBuff(buff);
         }
     }
 
-    private List<CardBuff> GetTemporaryBuffs()
+    private List<Buff> GetTemporaryBuffs()
     {
-        List<CardBuff> buffs = new();
-        foreach (CardBuff buff in orderedBuffs)
+        List<Buff> buffs = new();
+        foreach (Buff buff in orderedBuffs)
         {
             if (buff.IsTemporary)
             {
@@ -63,16 +63,16 @@ public class BuffManager
 
     public void CleanupRemoveOnDeathBuffs()
     {
-        foreach(CardBuff buff in GetRemoveOnDeathBuffs())
+        foreach(Buff buff in GetRemoveOnDeathBuffs())
         {
             DeregisterBuff(buff);
         }
     }
 
-    private List<CardBuff> GetRemoveOnDeathBuffs()
+    private List<Buff> GetRemoveOnDeathBuffs()
     {
-        List<CardBuff> buffs = new();
-        foreach (CardBuff buff in orderedBuffs)
+        List<Buff> buffs = new();
+        foreach (Buff buff in orderedBuffs)
         {
             if (buff.RemoveOnDeath)
             {
@@ -82,18 +82,18 @@ public class BuffManager
         return buffs;
     }
 
-    public CardBuff AddNewBuff(CardBuff buff)
+    public Buff AddNewBuff(Buff buff)
     {
         if (buff.ID != null)
         {
             Debug.LogWarning($"{buff.name} is being added but has already been initialized with id {buff.ID.ToString()}");
         }
-        CardBuff newInstance = UnityEngine.Object.Instantiate(buff);
+        Buff newInstance = UnityEngine.Object.Instantiate(buff);
         RegisterBuff(newInstance);
         return newInstance;
     }
 
-    private void RegisterBuff(CardBuff buff)
+    private void RegisterBuff(Buff buff)
     {
         buff.Initialize(owner);
         registeredBuffs.Add(buff.ID, buff);
@@ -111,7 +111,7 @@ public class BuffManager
         DeregisterBuff(registeredBuffs[buffID]);
     }
 
-    public void RemoveBuff(CardBuff buff)
+    public void RemoveBuff(Buff buff)
     {
         if (!HasBuff(buff))
         {
@@ -121,9 +121,9 @@ public class BuffManager
         DeregisterBuff(buff);
     }
 
-    private void DeregisterBuff(CardBuff buff)
+    private void DeregisterBuff(Buff buff)
     {
-        foreach(CardBuff childBuff in buff.ChildBuffInstances)
+        foreach(Buff childBuff in buff.ChildBuffInstances)
         {
             // TODO: If a child buff is destroyed or deregistered before
             // its parent the object may become null?
@@ -141,7 +141,7 @@ public class BuffManager
 
     public void TriggerEffect(BuffTrigger trigger)
     {
-        foreach(CardBuff buff in orderedBuffs)
+        foreach(Buff buff in orderedBuffs)
         {
             buff.TriggerEffect(trigger);
         }

@@ -8,6 +8,6 @@ namespace Project.Decks
     {
         public Suit Suit;
         public int Value;
-        public List<CardBuff> Buffs;
+        public List<Buff> Buffs;
     }
 }

@@ -2,40 +2,24 @@ using System;
 using System.Collections.Generic;
 using Project.Decks;
 
-public class WeaponModel : CardModel
+public class WeaponModel
 {
-    public WeaponModel(Suit suit, int value) : base(suit, value)
-    {
-    }
-
-    public WeaponModel(Suit suit, int value, List<CardBuff> buffs) : base(suit, value, buffs)
-    {
-    }
-
+    public int StartingPower { get; private set; }
+    public int Power { get; private set; }
+    public CardModel Card;
     public List<CardModel> SlainCards { get; private set; } = new();
+    public Action OnWeaponUpdate;
 
-    // Strength is what cards the weapon can fight
-    public int Strength
+    public WeaponModel(CardModel card)
     {
-        get
-        {
-            if (SlainCards.Count == 0)
-            {
-                return 99;
-            }
-
-            return SlainCards[^1].Power;
-        }
+        Card = card;
+        StartingPower = card.Value;
+        Power = card.Value;
     }
 
-    // public WeaponModel(CardModel card)
-    // {
-    //     BasePower = card.BasePower;
-    // }
-
-    public override void Update()
+    public void Update()
     {
-        base.Update();
+        Card.Update();
         foreach(CardModel card in SlainCards)
         {
             card.Update();
@@ -44,14 +28,24 @@ public class WeaponModel : CardModel
 
     public string GetWeaponInfoString()
     {
-        return $"Pow: {Power} Str: {Strength} Slain: {SlainCards.Count}";
+        return $"Pow: {Power} Str: {GetCurrentStrength()} Slain: {SlainCards.Count}";
     }
 
-    public bool CanSlayMonster(int monsterStrength) => monsterStrength < Strength;
+    public int GetCurrentStrength()
+    {
+        if (SlainCards.Count == 0)
+        {
+            return 99;
+        }
+
+        return SlainCards[^1].Value;
+    }
+
+    public bool CanSlayMonster(int monsterStrength) => monsterStrength < GetCurrentStrength();
 
     public void AddMonsterToSlain(CardModel card)
     {
         SlainCards.Add(card);
-        OnUpdate?.Invoke();
+        OnWeaponUpdate?.Invoke();
     }
 }

@@ -43,11 +43,11 @@ public class Inspiring : Buff
 
     private void DoBuffEffect()
     {
-        CardBuff buffToApply = GetRegisteredChildBuffByName("Inspired");
+        Buff buffToApply = GetRegisteredChildBuffByName("Inspired");
         List<CardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner);
         foreach (CardModel neighbor in neighbors)
         {
-            CardBuff buff = AddBuff(neighbor, buffToApply);
+            Buff buff = AddBuff(neighbor, buffToApply);
             neighborsBuffMap.Add(new(neighbor, buff.ID));
         }
     }
