@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Project.Decks;
+using UnityEngine;
 
 public class WeaponCardModel : RuntimeCardModel
 {
@@ -43,6 +44,25 @@ public class WeaponCardModel : RuntimeCardModel
     public void AddMonsterToSlain(RuntimeCardModel card)
     {
         SlainCards.Add(card);
+        OnWeaponUpdate?.Invoke();
+    }
+
+    public void RemoveMonsterFromSlain(int index)
+    {
+        if (index >+ SlainCards.Count)
+        {
+            Debug.LogWarning($"Tried to remove a slain card from {this} at index {index}. Index out of range!");
+            return;
+        }
+        RemoveMonsterFromSlain(SlainCards[index]);
+    }
+
+    public void RemoveMonsterFromSlain(RuntimeCardModel card)
+    {
+        if (SlainCards.Contains(card))
+        {
+            SlainCards.Remove(card);
+        }
         OnWeaponUpdate?.Invoke();
     }
 }
