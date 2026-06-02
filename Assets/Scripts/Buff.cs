@@ -182,9 +182,9 @@ public abstract class CardBuff : Buff<CardModel>
 
     public override string ToString() => $"{Name}({ID})";
 
-    protected Buff<CardModel> AddBuff(CardModel target, Buff<CardModel> buff)
+    protected CardBuff AddBuff(CardModel target, CardBuff buff)
     {
-        Buff<CardModel> newInstance = target.AddNewBuff(buff);
+        CardBuff newInstance = target.AddNewBuff(buff);
         ChildBuffInstances.Add(newInstance);
         return newInstance;
     }
