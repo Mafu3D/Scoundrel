@@ -62,8 +62,8 @@ public class BuffManager : IDisposable
         owner.OnDraw -= HandleOnDraw;
         owner.OnWatchOtherDie -= HandleOnWatchOtherDie;
 
-        gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
-        gameManager.OnPlayerRun += HandleOnPlayerRun;
+        gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
+        gameManager.OnPlayerRun -= HandleOnPlayerRun;
     }
 
     public bool HasBuff(BuffID buffID) => registeredBuffs.Keys.Contains(buffID);
