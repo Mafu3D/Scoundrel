@@ -53,6 +53,13 @@ namespace Project.Decks
             }
         }
 
+        public void ShuffleIn(T item)
+        {
+            System.Random random = new();
+            int randomIndex = random.Next(RemainingItems.Count - 1);
+            RemainingItems.Insert(randomIndex, item);
+        }
+
         public void Shuffle()
         {
             RemainingItems.Shuffle();

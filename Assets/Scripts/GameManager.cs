@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
     {
         RoomNumber = 0;
         DeckManager.TEMP_CreateNewDeck();
-        TEMP_AddRandomBuffs(4, 7);
+        TEMP_AddRandomMonsterBuffs(4, 7);
         FloorNumber = 1;
         OnGoToNextFloor?.Invoke();
 
@@ -87,28 +87,53 @@ public class GameManager : MonoBehaviour
         Player.StartNewGame();
     }
 
-    private void TEMP_AddRandomBuffs(int min, int max)
+    private void TEMP_AddRandomMonsterBuffs(int min, int max)
     {
-
-        // TEMP:
+        string outputString = "Random monster buffs:\n";
+        // TEMP: add random monster buffs
         List<string> buffs = new() { "Inspiring", "Elite", "Bloodthirsty", "Exploding" };
         int amount = UnityEngine.Random.Range(min, max);
         List<RuntimeCardModel> cardsToBuff = new();
+        List<RuntimeCardModel> monsterCards = new();
         foreach (Suit suit in new List<Suit>() { Suit.CLUBS, Suit.SPADES})
         {
-            List<RuntimeCardModel> monsterCards = DeckManager.GetRemainingOfSuit(new() {suit});
-            for (int i = 0; i < amount; i++)
-            {
-                int randIndex = UnityEngine.Random.Range(0, monsterCards.Count);
-                cardsToBuff.Add(monsterCards[randIndex]);
-            }
+            monsterCards.AddRange(DeckManager.GetRemainingOfSuit(new() {suit}));
+        }
+        for (int i = 0; i < amount; i++)
+        {
+            int randIndex = UnityEngine.Random.Range(0, monsterCards.Count);
+            cardsToBuff.Add(monsterCards[randIndex]);
         }
         foreach (RuntimeCardModel card in cardsToBuff)
         {
             int randBuff = UnityEngine.Random.Range(0, buffs.Count);
             Buff buff = BuffRegistry.GetBuffFromName(buffs[randBuff]);
             card.AddNewBuff(buff);
+            outputString += $"{card} >>> {buff}\n";
         }
+        Debug.Log(outputString);
+    }
+
+    private void TEMP_AddRandomWeaponBuffs(int min, int max)
+    {
+        string outputString = "Random weapon buffs:\n";
+        // TEMP: add random weapon buffs
+        List<string> buffs = new() { "Bomb", "Cleaving", "Honed", "Reinforced" };
+        int amount = UnityEngine.Random.Range(min, max);
+        List<RuntimeCardModel> cardsToBuff = new();
+        List<RuntimeCardModel> weaponCards = DeckManager.GetRemainingOfSuit(new() {Suit.DIAMONDS});
+        for (int i = 0; i < amount; i++)
+        {
+            int randIndex = UnityEngine.Random.Range(0, weaponCards.Count);
+            cardsToBuff.Add(weaponCards[randIndex]);
+        }
+        foreach (RuntimeCardModel card in cardsToBuff)
+        {
+            int randBuff = UnityEngine.Random.Range(0, buffs.Count);
+            Buff buff = BuffRegistry.GetBuffFromName(buffs[randBuff]);
+            card.AddNewBuff(buff);outputString += $"{card} >>> {buff}\n";
+        }
+        Debug.Log(outputString);
     }
 
     private void EndGame()
@@ -135,7 +160,8 @@ public class GameManager : MonoBehaviour
         Player.FloorReset();
         FloorNumber += 1;
         DeckManager.ResetDeck();
-        TEMP_AddRandomBuffs(3, 5);
+        TEMP_AddRandomMonsterBuffs(3, 5);
+        TEMP_AddRandomWeaponBuffs(1, 2);
 
         OnGoToNextFloor?.Invoke();
 
@@ -143,7 +169,7 @@ public class GameManager : MonoBehaviour
 
     public int GetScoreToGoToNextFloor()
     {
-        return FloorNumber * 10000;
+        return FloorNumber * 10000; // Magic number!!
     }
 
     private void OpenFirstRoom()
@@ -164,6 +190,16 @@ public class GameManager : MonoBehaviour
         if (CurrentRoom != null)
         {
             CurrentRoom.OnCardsChanged -= CheckForGameResolution;
+        }
+
+        // Shuffle in any doors
+        foreach(RuntimeCardModel card in CurrentRoom.RemainingCards())
+        {
+            if (card is DoorCardModel)
+            {
+                CurrentRoom.TryRemoveCard(card);
+                DeckManager.Deck.ShuffleIn(card);
+            }
         }
 
         List<RuntimeCardModel> newCards = new();
