@@ -157,15 +157,4 @@ public class RoomModel
     public int RemainingCount => RemainingCards().Count;
 
     public bool IsEmpty => Cards.Count(x => x == null) == Cards.Length;
-
-    public void OnRun()
-    {
-        foreach(RuntimeCardModel card in Cards)
-        {
-            if (card != null)
-            {
-                card.BuffManager.TriggerEffect(BuffTrigger.OnRun);
-            }
-        }
-    }
 }

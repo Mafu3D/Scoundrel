@@ -28,7 +28,7 @@ namespace Project.Decks
         TREASURE
     }
 
-    public abstract class RuntimeCardModel : IDeckStorable
+    public abstract class RuntimeCardModel : IDeckStorable, IDisposable
     {
         public Suit Suit { get; private set; }
         public CardType CardType { get; private set; }
@@ -50,6 +50,10 @@ namespace Project.Decks
         public string ID => uuid.ToString();
 
         public Action OnUpdate;
+        public Action OnDeath;
+        public Action OnDraw;
+        public Action<MonsterCardModel> OnWatchOtherDie;
+
 
         public BuffManager BuffManager { get; private set; }
         public List<int> ValueModifiers = new();
@@ -107,19 +111,21 @@ namespace Project.Decks
 
         public void HandleDeath()
         {
-            BuffManager.TriggerEffect(BuffTrigger.OnSelfDie);
+            OnDeath?.Invoke();
             BuffManager.CleanupRemoveOnDeathBuffs();
+
+            BuffManager.Dispose();
+            this.Dispose();
         }
 
         public void HandleOnDraw()
         {
-
-            BuffManager.TriggerEffect(BuffTrigger.OnDraw);
+            OnDraw?.Invoke();
         }
 
-        public void HandleOnOtherDie()
+        public void HandleOnWatchOtherDie(MonsterCardModel other)
         {
-            BuffManager.TriggerEffect(BuffTrigger.OnOtherDie);
+            OnWatchOtherDie?.Invoke(other);
         }
 
         public List<Buff> GetBuffs() => BuffManager.GetBuffs();
@@ -128,5 +134,10 @@ namespace Project.Decks
         public void RemoveBuff(BuffID buffID) => BuffManager.RemoveBuff(buffID);
         public bool HasBuff(Buff buff) => BuffManager.HasBuff(buff);
         public bool HasBuff(BuffID buffID) => BuffManager.HasBuff(buffID);
+
+        public void Dispose()
+        {
+            //
+        }
     }
 }

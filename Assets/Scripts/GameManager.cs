@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
     public Action OnGameOver;
     public Action OnOpenNewRoom;
     public Action OnGoToNextFloor;
+    public Action OnPlayerEnterRoom;
+    public Action OnPlayerRun;
 
     public int CardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
     private readonly int remainingToMove = 1;
@@ -80,7 +82,7 @@ public class GameManager : MonoBehaviour
         OpenFirstRoom();
         GameHasStarted = true;
 
-        Player.OnRunSuccess += OnPlayerRun;
+        Player.OnRunSuccess += HandlePlayerRun;
         Player.OnDeath += GameOver;
         Player.StartNewGame();
     }
@@ -111,7 +113,7 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-        Player.OnRunSuccess -= OnPlayerRun;
+        Player.OnRunSuccess -= HandlePlayerRun;
         Player.OnDeath -= GameOver;
     }
 
@@ -184,7 +186,7 @@ public class GameManager : MonoBehaviour
 
     public void DEBUG_RUN()
     {
-        OnPlayerRun();
+        HandlePlayerRun();
     }
 
     private void CheckForGameResolution()
@@ -219,22 +221,18 @@ public class GameManager : MonoBehaviour
             {
                 // Player enter room
                 Player.EnterNewRoom();
-                foreach(RuntimeCardModel otherCard in CurrentRoom.Cards)
-                {
-                    otherCard?.BuffManager.TriggerEffect(BuffTrigger.OnEnterRoom);
-                }
+                OnPlayerEnterRoom?.Invoke();
             }
 
             // Add gold for defeating a monster
-            if (card.Suit == Suit.CLUBS || card.Suit == Suit.SPADES)
+            if (card is MonsterCardModel)
             {
                 Player.AddGold(1);
 
                 // also broadcast to other cards that this died
                 foreach (RuntimeCardModel other in CurrentRoom.GetOthers(card))
                 {
-                    if (other == null) { continue; }
-                    other.HandleOnOtherDie();
+                    other?.HandleOnWatchOtherDie(card as MonsterCardModel);
                 }
 
 
@@ -287,8 +285,9 @@ public class GameManager : MonoBehaviour
 
     private bool HandleEnemy(RuntimeCardModel card, CardClickContext context) => context == CardClickContext.TOP ? Player.TryFightWeapon(card) : Player.TryFightUnarmed(card);
 
-    private void OnPlayerRun()
+    private void HandlePlayerRun()
     {
+        OnPlayerRun?.Invoke();
         DeckManager.Deck.AddToRemaining(CurrentRoom.Cards.ToList(), addToTop: false, shuffle: false);
         CurrentRoom.ClearCards();
         OpenNewRoom();

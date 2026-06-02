@@ -54,7 +54,7 @@ public abstract class Buff : ScriptableObject
     public BuffID ID;
     public RuntimeCardModel Owner { get; private set; }
 
-    protected GameManager gameManager;
+    public GameManager gameManager;
 
     public override string ToString() => $"{Name}({ID})";
 
@@ -98,7 +98,6 @@ public abstract class Buff : ScriptableObject
     private void OnDestroy()
     {
         // Cleanup();
-        Debug.Log("destroyed");
     }
 
     public void Cleanup()
@@ -114,50 +113,7 @@ public abstract class Buff : ScriptableObject
         OnCleanup();
     }
 
-    public void TriggerEffect(BuffTrigger trigger)
-    {
-        GetTriggerCallable(trigger)();
-    }
-
-    private Action GetTriggerCallable(BuffTrigger trigger)
-    {
-        return trigger switch
-        {
-            BuffTrigger.OnBuffApplied => OnBuffApplied,
-            BuffTrigger.OnDraw => OnDraw,
-            BuffTrigger.OnEnterRoom => OnEnterRoom,
-            BuffTrigger.OnRun => OnRun,
-            BuffTrigger.OnOtherDie => OnOtherDie,
-            BuffTrigger.OnSelfDie => OnSelfDie,
-            BuffTrigger.OnEquipWeapon => OnEquipWeapon,
-            BuffTrigger.OnDrinkPotion => OnDrinkPotion,
-            BuffTrigger.OnDiscardPotion => OnDiscardPotion,
-            BuffTrigger.OnUpdate => OnUpdate,
-            _ => throw new ArgumentOutOfRangeException(nameof(trigger), $"{nameof(trigger)} has not been registered as a callable trigger.")
-        };
-    }
-
-    public void HandleOnAttackedPreDamage(WeaponCardModel weapon)
-    {
-        OnAttackedPreDamage(weapon);
-    }
-
-    public void HandleOnAttackedPostDamage(WeaponCardModel weapon)
-    {
-        OnAttackedPostDamage(weapon);
-    }
-
-    public void HandleOnWeaponAttackPreDamage(MonsterCardModel defender)
-    {
-        OnWeaponAttackPreDamage(defender);
-    }
-
-    public void HandleOnWeaponAttackPostDamage(MonsterCardModel defender)
-    {
-        OnWeaponAttackPostDamage(defender);
-    }
-
-    protected Buff AddBuff(RuntimeCardModel target, Buff buff)
+    public Buff AddBuff(RuntimeCardModel target, Buff buff)
     {
         Buff newInstance = target.AddNewBuff(buff);
         ChildBuffInstances.Add(newInstance);
@@ -169,45 +125,45 @@ public abstract class Buff : ScriptableObject
     /// This is for any extra initialization that needs to be
     /// done for the construction of this buff.
     /// </summary>
-    protected abstract void OnBuffInitialized();
+    public virtual void OnBuffInitialized() { }
 
     /// <summary>
     /// Called whenever the buff is removed, no matter the source.
     /// This is for logic that needs to run if the buff ever becomes
     /// no longe active. Like state changes.
     /// </summary>
-    protected abstract void OnCleanup();
+    public virtual void OnCleanup() { }
 
     /// <summary>
     /// Called when the buff is considered active, after initialization.
     /// </summary>
-    protected abstract void OnBuffApplied();
+    public virtual void OnBuffApplied() { }
 
     /// <summary>
     /// Called when the card is drawn, before the room has been fully created.
     /// Use this for logic that affects how cards are drawn?
     /// </summary>
-    protected abstract void OnDraw();
+    public virtual void OnDraw() { }
 
     /// <summary>
     /// Called when the card leaves the table for any reason.
     /// </summary>
-    protected abstract void OnLeave();
+    public virtual void OnLeave() { }
 
     /// <summary>
     /// Called every update cycle of the Game Manager update loop.
     /// </summary>
-    protected abstract void OnUpdate();
+    public virtual void OnUpdate() { }
 
-    protected abstract void OnEnterRoom();
-    protected abstract void OnRun();
-    protected abstract void OnSelfDie();
-    protected abstract void OnOtherDie();
-    protected abstract void OnEquipWeapon();
-    protected abstract void OnDrinkPotion();
-    protected abstract void OnDiscardPotion();
-    protected abstract void OnWeaponAttackPreDamage(MonsterCardModel target);
-    protected abstract void OnWeaponAttackPostDamage(MonsterCardModel target);
-    protected abstract void OnAttackedPreDamage(WeaponCardModel weapon);
-    protected abstract void OnAttackedPostDamage(WeaponCardModel weapon);
+    public virtual void OnEnterRoom() { }
+    public virtual void OnRun() { }
+    public virtual void OnSelfDie() { }
+    public virtual void OnOtherDie(MonsterCardModel other) { }
+    public virtual void OnEquipWeapon() { }
+    public virtual void OnDrinkPotion() { }
+    public virtual void OnDiscardPotion() { }
+    public virtual void OnWeaponAttackPreDamage(MonsterCardModel target) { }
+    public virtual void OnWeaponAttackPostDamage(MonsterCardModel target) { }
+    public virtual void OnAttackedPreDamage(WeaponCardModel weapon) { }
+    public virtual void OnAttackedPostDamage(WeaponCardModel weapon) { }
 }

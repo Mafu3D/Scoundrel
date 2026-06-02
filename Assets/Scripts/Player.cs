@@ -21,6 +21,10 @@ public class Player : MonoBehaviour
     public Action OnDeath;
     public Action OnWeaponChanged;
     public Action OnRunSuccess;
+    public Action<WeaponCardModel> OnAttackedPreDamage;
+    public Action<WeaponCardModel> OnAttackedPostDamage;
+    public Action<MonsterCardModel> OnWeaponAttackPreDamage;
+    public Action<MonsterCardModel> OnWeaponAttackPostDamage;
 
     private bool runTokenOnCooldown = false;
 
@@ -138,12 +142,12 @@ public class Player : MonoBehaviour
     #region Card Actions
     public bool TryFightUnarmed(RuntimeCardModel defender)
     {
-        defender.BuffManager.HandleOnAttackedPreDamage(null);
+        OnAttackedPreDamage?.Invoke(null);
 
         // Setting this up to return a bool so that conditions can be added later
         TakeDamage(defender.Value);
 
-        defender.BuffManager.HandleOnAttackedPostDamage(null);
+        OnAttackedPostDamage?.Invoke(null);
         return true;
     }
 
@@ -156,9 +160,9 @@ public class Player : MonoBehaviour
 
         if (defender is MonsterCardModel)
         {
-            Weapon.BuffManager.HandleOnWeaponAttackPreDamage(defender as MonsterCardModel);
+            OnWeaponAttackPreDamage?.Invoke(defender as MonsterCardModel);
         }
-        defender.BuffManager.HandleOnAttackedPreDamage(Weapon);
+        OnAttackedPreDamage?.Invoke(Weapon);
 
         int damage = Math.Clamp(defender.Value - Weapon.Value, 0, 999);
         TakeDamage(damage);
@@ -166,9 +170,9 @@ public class Player : MonoBehaviour
 
         if (defender is MonsterCardModel)
         {
-            Weapon.BuffManager.HandleOnWeaponAttackPostDamage(defender as MonsterCardModel);
+            OnWeaponAttackPostDamage?.Invoke(defender as MonsterCardModel);
         }
-        defender.BuffManager.HandleOnAttackedPostDamage(Weapon);
+        OnAttackedPostDamage?.Invoke(Weapon);
         return true;
     }
 
