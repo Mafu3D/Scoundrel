@@ -5976,11 +5976,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_Pivot.x
-      value: 0.32778266
+      value: 0.3330412
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_Pivot.y
-      value: 1.1838006
+      value: 1.1666666
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_SizeDelta.x
@@ -6000,11 +6000,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -520.24536
+      value: -516.0386
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 497.80893
+      value: 490.0964
       objectReference: {fileID: 0}
     - target: {fileID: 5689954502834935825, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
@@ -6427,7 +6427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1504966278
 RectTransform:
   m_ObjectHideFlags: 0

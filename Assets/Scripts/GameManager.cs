@@ -170,6 +170,7 @@ public class GameManager : MonoBehaviour
         CurrentRoom.ClearCards();
         Player.FloorReset();
         FloorNumber += 1;
+        RoomNumber = 0;
         DeckManager.ResetDeck();
         TEMP_AddRandomMonsterBuffs(4, 6);
         TEMP_AddRandomWeaponBuffs(2, 3);
@@ -177,11 +178,6 @@ public class GameManager : MonoBehaviour
         OnExitCurrentFloor?.Invoke();
 
         GoToPowerUpDungeonPhase();
-    }
-
-    private void GoToNextFloor()
-    {
-        OnGoToNextFloor?.Invoke();
     }
 
     public int GetScoreToGoToNextFloor()
@@ -221,6 +217,12 @@ public class GameManager : MonoBehaviour
     {
         OnExitChooseFloorPhase?.Invoke();
         GoToNextFloor();
+    }
+
+    private void GoToNextFloor()
+    {
+        OnGoToNextFloor?.Invoke();
+        OpenFirstRoom();
     }
 
     private void OpenFirstRoom()
