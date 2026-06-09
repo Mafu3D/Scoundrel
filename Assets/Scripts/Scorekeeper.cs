@@ -48,6 +48,12 @@ public class AdvancedScoreKeeper : IScoreKeeper
         roomMultipler = 1;
     }
 
+    public void Reset()
+    {
+        score = 0;
+        OnScoreUpdated?.Invoke(score);
+    }
+
     public int GetScore() => score;
 
     public bool HasPlayerWon() => false; // REMOVE THIS!

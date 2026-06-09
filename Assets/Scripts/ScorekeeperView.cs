@@ -22,6 +22,7 @@ public class ScorekeeperView : MonoBehaviour
         if (subscribed)
         {
             GameManager.ScoreKeeper.OnScoreUpdated -= OnScoreUpdated;
+            subscribed = false;
         }
     }
 

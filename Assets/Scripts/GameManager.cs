@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
         stateMachine.SwitchState(new TitleScreenState(stateMachine));
 
         RoomNumber = 0;
+        ScoreKeeper.Reset();
         DeckManager.TEMP_CreateNewDeck();
         TEMP_AddRandomMonsterBuffs(6, 9);
         FloorNumber = 1;

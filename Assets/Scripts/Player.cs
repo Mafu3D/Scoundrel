@@ -67,11 +67,14 @@ public class Player : MonoBehaviour
 
     public void FloorReset()
     {
-        CurrentHealth = MaxHealth;
+        UnequipWeapon();
+        // CurrentHealth = MaxHealth;
         runCooldownCounter = 0;
         runTokenOnCooldown = false;
+        HasEnteredTheRoom = false;
         HasRunToken = true;
         OnHealthChanged?.Invoke(CurrentHealth);
+
     }
 
     public void EnterNewRoom()
