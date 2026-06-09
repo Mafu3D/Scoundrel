@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using TMPro;
 using Mafu.UnityServiceLocator;
+using Mafu.StateMachineSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,12 +28,19 @@ public class GameManager : MonoBehaviour
     public Action OnStartNewGame;
     public Action OnGameOver;
     public Action OnOpenNewRoom;
+    public Action OnExitCurrentFloor;
     public Action OnGoToNextFloor;
     public Action OnPlayerEnterRoom;
     public Action OnPlayerRun;
+    public Action OnEnterPowerUpDungeonPhase;
+    public Action OnEnterShopPhase;
+    public Action OnExitShopPhase;
+    public Action OnEnterChooseFloorPhase;
+    public Action OnExitChooseFloorPhase;
 
     public int CardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
     private readonly int remainingToMove = 1;
+    private StateMachine stateMachine;
 
     public bool CanGoToNextRoom => CurrentRoom != null &&
                                    CurrentRoom.CanGoToNextRoom();
@@ -53,6 +61,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         ScoreKeeper = new(this);
+        stateMachine = new();
+        stateMachine.SwitchState(new TitleScreenState(stateMachine));
     }
 
     void Update()
@@ -72,9 +82,11 @@ public class GameManager : MonoBehaviour
 
     public void StartNewGame()
     {
+        stateMachine.SwitchState(new TitleScreenState(stateMachine));
+
         RoomNumber = 0;
         DeckManager.TEMP_CreateNewDeck();
-        TEMP_AddRandomMonsterBuffs(4, 7);
+        TEMP_AddRandomMonsterBuffs(6, 9);
         FloorNumber = 1;
         OnGoToNextFloor?.Invoke();
 
@@ -150,26 +162,65 @@ public class GameManager : MonoBehaviour
 
     public void DEBUG_GOTONEXTFLOOR()
     {
-        GoToNextFloor();
+        ExitCurrentFloor();
     }
 
-    private void GoToNextFloor()
+    private void ExitCurrentFloor()
     {
-        Debug.Log("Going to next floor");
         CurrentRoom.ClearCards();
         Player.FloorReset();
         FloorNumber += 1;
         DeckManager.ResetDeck();
-        TEMP_AddRandomMonsterBuffs(3, 5);
-        TEMP_AddRandomWeaponBuffs(1, 2);
+        TEMP_AddRandomMonsterBuffs(4, 6);
+        TEMP_AddRandomWeaponBuffs(2, 3);
 
+        OnExitCurrentFloor?.Invoke();
+
+        GoToPowerUpDungeonPhase();
+    }
+
+    private void GoToNextFloor()
+    {
         OnGoToNextFloor?.Invoke();
-
     }
 
     public int GetScoreToGoToNextFloor()
     {
         return FloorNumber * 10000; // Magic number!!
+    }
+
+    private void GoToPowerUpDungeonPhase()
+    {
+        OnEnterPowerUpDungeonPhase?.Invoke();
+        // StartCoroutine(PowerUpDungeonPhaseRoutine());
+    }
+
+    // private IEnumerator PowerUpDungeonPhaseRoutine()
+    // {
+    //     yield return new WaitForSecondsRealtime(4);
+    //     GoToShopPhase();
+    // }
+
+    public void GoToShopPhase()
+    {
+        OnEnterShopPhase?.Invoke();
+    }
+
+    public void ExitShopPhase()
+    {
+        OnExitShopPhase?.Invoke();
+        GoToChooseFloorPhase();
+    }
+
+    private void GoToChooseFloorPhase()
+    {
+        OnEnterChooseFloorPhase?.Invoke();
+    }
+
+    public void ExitGoToFloorPhase()
+    {
+        OnExitChooseFloorPhase?.Invoke();
+        GoToNextFloor();
     }
 
     private void OpenFirstRoom()
@@ -295,7 +346,7 @@ public class GameManager : MonoBehaviour
     {
         if (ScoreKeeper.GetScore() >= GetScoreToGoToNextFloor())
         {
-            GoToNextFloor();
+            ExitCurrentFloor();
             return true;
         }
         return false;
