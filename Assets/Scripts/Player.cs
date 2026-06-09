@@ -123,7 +123,7 @@ public class Player : MonoBehaviour
 
     public bool TryRemoveGold(int amount)
     {
-        int newAmount = Math.Clamp(CurrentGold - Math.Abs(amount), 0, 9999999);
+        int newAmount = CurrentGold - Math.Abs(amount);
         if (newAmount < 0)
         {
             return false;

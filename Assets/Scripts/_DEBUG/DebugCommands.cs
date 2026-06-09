@@ -83,6 +83,26 @@ namespace Project.DebugCommands
     }
 
     [DebugCommand]
+    public class AddGold : IDebugCommand<int>
+    {
+        public string ID => "addGold";
+
+        public string Description => "Gain X gold";
+
+        public string Format => "addGold <int>";
+
+        public bool HasDefaultValue => true;
+
+        public string DefaultParameter => "10";
+
+        public void Invoke(int amount)
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            gameManager.Player.AddGold(amount);
+        }
+    }
+
+    [DebugCommand]
     public class AddBuffTo0 : IDebugCommand<string>
     {
         public string ID => "addBuff0";

@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Services")]
     [SerializeField] public DeckManager DeckManager;
+    [SerializeField] public ShopManager ShopManager;
     [SerializeField] public GlobalBuffRegistry BuffRegistry;
     [SerializeField] public Player Player;
 
@@ -60,6 +61,8 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        ShopManager.gameObject.SetActive(false);
+
         ScoreKeeper = new(this);
         stateMachine = new();
         stateMachine.SwitchState(new TitleScreenState(stateMachine));
@@ -199,11 +202,15 @@ public class GameManager : MonoBehaviour
 
     public void GoToShopPhase()
     {
+        ShopManager.StartNewShopPhase();
+        ShopManager.gameObject.SetActive(true);
         OnEnterShopPhase?.Invoke();
     }
 
     public void ExitShopPhase()
     {
+        ShopManager.gameObject.SetActive(false);
+        ShopManager.ExitShopPhase();
         OnExitShopPhase?.Invoke();
         GoToChooseFloorPhase();
     }
