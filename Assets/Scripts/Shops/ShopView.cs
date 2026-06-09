@@ -20,8 +20,8 @@ public class ShopView : MonoBehaviour
         for (int i = 0; i < shopActionViews.Count; i++)
         {
             ShopActionView view = shopActionViews[i];
-            view.RegisterShop(this.shop);
-            ShopAction shopAction = this.shop.GetShopAction(i);
+            view.RegisterShop(shop);
+            ShopAction shopAction = shop.GetShopAction(i);
             view.DeregisterShopAction();
             if (shopAction == null)
             {

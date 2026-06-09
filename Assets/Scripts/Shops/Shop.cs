@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using Mafu.UnityServiceLocator;
+using Project.Decks;
 using UnityEngine;
 
 public abstract class Shop
@@ -92,19 +93,51 @@ public class Merchant : Shop
 
 public class Blacksmith : Shop
 {
+    readonly List<string> buffs = new() { "Bomb", "Cleaving", "Honed", "Reinforced" };
+
     public Blacksmith(GameManager gameManager) : base(gameManager) { }
 
     protected override void PopulateShopActions()
     {
+        int AMOUNT = 4; // Magic number!!
         shopActions = new();
-        for (int i = 0; i < 8; i++) // Magic number!!!
+
+        // Get cards
+        RuntimeCardModel[] cardsToBuff = new RuntimeCardModel[AMOUNT];
+        List<RuntimeCardModel> weaponCards = gameManager.DeckManager.GetRemainingOfSuit(new() {Suit.DIAMONDS});
+        for (int i = 0; i < AMOUNT; i++)
         {
-            ShopAction newAction = new("Test Blacksmith Action", "This is a test description for a new blacksmith action", 5,
+            int randIndex = UnityEngine.Random.Range(0, weaponCards.Count);
+            cardsToBuff[i] = weaponCards[randIndex];
+        }
+
+        // Create the shop actions
+        foreach (RuntimeCardModel card in cardsToBuff)
+        {
+            // Get the random buff
+            int randBuff = UnityEngine.Random.Range(0, buffs.Count);
+            Buff buff = gameManager.BuffRegistry.GetBuffFromName(buffs[randBuff]);
+
+            // Create the action
+            string title = $"{card.GetName()} - {buff.Name}";
+            string description = $"{buff.Description}";
+            // string description = $"{buff.Description}\n\nAdd to {card.GetName()}";
+            // foreach(Buff existingBuff in card.GetBuffs())
+            // {
+            //     description += $"\n   -{existingBuff.Name}";
+            // }
+
+            ShopAction newAction = new(
+                title,
+                description,
+                5,
                 (gameManager) =>
                 {
-                    Debug.Log("Successfully purchased the blacksmith action!");
+                    card.AddNewBuff(buff);
                 });
             shopActions.Add(newAction);
         }
     }
+
+
 }

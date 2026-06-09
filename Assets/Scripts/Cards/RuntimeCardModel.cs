@@ -95,6 +95,17 @@ namespace Project.Decks
             return output;
         }
 
+        public string GetName()
+        {
+            string output = Value.ToString();
+            if (Value != BaseValue)
+            {
+                output += $"({BaseValue})";
+            }
+            output += $" of {Suit}";
+            return output;
+        }
+
         public void RegisterValueModifier(int value)
         {
             ValueModifiers.Add(value);

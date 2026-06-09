@@ -175,8 +175,6 @@ public class GameManager : MonoBehaviour
         FloorNumber += 1;
         RoomNumber = 0;
         DeckManager.ResetDeck();
-        TEMP_AddRandomMonsterBuffs(4, 6);
-        TEMP_AddRandomWeaponBuffs(2, 3);
 
         OnExitCurrentFloor?.Invoke();
 
@@ -191,6 +189,7 @@ public class GameManager : MonoBehaviour
     private void GoToPowerUpDungeonPhase()
     {
         OnEnterPowerUpDungeonPhase?.Invoke();
+        TEMP_AddRandomMonsterBuffs(4, 6);
         // StartCoroutine(PowerUpDungeonPhaseRoutine());
     }
 
