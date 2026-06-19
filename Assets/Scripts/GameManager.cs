@@ -328,7 +328,7 @@ public class GameManager : MonoBehaviour
                 // also broadcast to other cards that this died
                 foreach (RuntimeCardModel other in CurrentRoom.GetOthers(card))
                 {
-                    other?.HandleOnWatchOtherDie(card as MonsterCardModel);
+                    other?.HandleOnOtherDie(card as MonsterCardModel);
                 }
 
 

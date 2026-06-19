@@ -44,7 +44,7 @@ public class BuffManager : IDisposable
 
         owner.OnDeath += HandleOnSelfDie;
         owner.OnDraw += HandleOnDraw;
-        owner.OnWatchOtherDie += HandleOnWatchOtherDie;
+        owner.OnOtherDie += HandleOnOtherDie;
 
         gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
         gameManager.OnPlayerRun += HandleOnPlayerRun;
@@ -60,7 +60,7 @@ public class BuffManager : IDisposable
 
         owner.OnDeath -= HandleOnSelfDie;
         owner.OnDraw -= HandleOnDraw;
-        owner.OnWatchOtherDie -= HandleOnWatchOtherDie;
+        owner.OnOtherDie -= HandleOnOtherDie;
 
         gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
         gameManager.OnPlayerRun -= HandleOnPlayerRun;
@@ -190,7 +190,7 @@ public class BuffManager : IDisposable
 
     private void HandleOnPlayerRun() => orderedBuffs.ForEach(n => n.OnRun());
 
-    private void HandleOnWatchOtherDie(MonsterCardModel model) => orderedBuffs.ForEach(n => n.OnUpdate());
+    private void HandleOnOtherDie(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDie(other));
 
     private void HandleOnDraw() => orderedBuffs.ForEach(n => n.OnDraw());
 

@@ -17,7 +17,7 @@ public class Inspiring : Buff
     private void DoBuffEffect()
     {
         Buff buffToApply = GetRegisteredChildBuffByName("Inspired");
-        List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner);
+        List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner, new() {Suit.CLUBS, Suit.SPADES});
         foreach (RuntimeCardModel neighbor in neighbors)
         {
             Buff buff = AddBuff(neighbor, buffToApply);

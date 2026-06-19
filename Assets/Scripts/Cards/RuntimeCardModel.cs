@@ -52,7 +52,7 @@ namespace Project.Decks
         public Action OnUpdate;
         public Action OnDeath;
         public Action OnDraw;
-        public Action<MonsterCardModel> OnWatchOtherDie;
+        public Action<MonsterCardModel> OnOtherDie;
 
 
         public BuffManager BuffManager { get; private set; }
@@ -134,9 +134,9 @@ namespace Project.Decks
             OnDraw?.Invoke();
         }
 
-        public void HandleOnWatchOtherDie(MonsterCardModel other)
+        public void HandleOnOtherDie(MonsterCardModel other)
         {
-            OnWatchOtherDie?.Invoke(other);
+            OnOtherDie?.Invoke(other);
         }
 
         public List<Buff> GetBuffs() => BuffManager.GetBuffs();

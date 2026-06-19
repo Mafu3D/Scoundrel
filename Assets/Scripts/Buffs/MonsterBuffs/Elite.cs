@@ -20,7 +20,7 @@ public class Elite : Buff
     private void DoBuffEffect()
     {
         // ServiceLocator.Global.Get(out gameManager);
-        Owner.RegisterValueModifier(1);
+        Owner.RegisterValueModifier(2);
     }
 
     public override void OnSelfDie()

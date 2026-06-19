@@ -14,13 +14,9 @@ public class ShopManager : MonoBehaviour
 
     private bool hasRestedThisPhase = false;
 
-    void Start()
-    {
-        ServiceLocator.Global.Get(out gameManager);
-    }
-
     public void StartNewShopPhase()
     {
+        ServiceLocator.Global.Get(out gameManager);
         merchant = new (gameManager);
         merchantView.RegisterShop(merchant);
         blacksmith = new (gameManager);
@@ -66,6 +62,7 @@ public class ShopManager : MonoBehaviour
 
     public void OnRestClicked()
     {
+        ServiceLocator.Global.Get(out gameManager);
         if (!hasRestedThisPhase)
         {
             if (gameManager.Player.TryRemoveGold(5))

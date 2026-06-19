@@ -84,21 +84,30 @@ public class RoomModel
         if (index > 0)
         {
             RuntimeCardModel neighbor = Cards[index - 1];
-            if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
-            {
-                neighbors.Add(neighbor);
-            }
+            neighbors.Add(neighbor);
         }
         if (index < Size - 1)
         {
             RuntimeCardModel neighbor = Cards[index + 1];
-            if (neighbor != null && (neighbor.Suit == Suit.SPADES || neighbor.Suit == Suit.CLUBS))
-            {
-                neighbors.Add(neighbor);
-            }
+            neighbors.Add(neighbor);
         }
 
         return neighbors;
+    }
+
+    public List<RuntimeCardModel> GetNeighbors(RuntimeCardModel card, List<Suit> acceptedSuits)
+    {
+        List<RuntimeCardModel> unfilteredNeighbors = GetNeighbors(card);
+        List<RuntimeCardModel> filteredNeighbors = new();
+        foreach(RuntimeCardModel neighbor in unfilteredNeighbors)
+        {
+            if (!acceptedSuits.Contains(neighbor.Suit))
+            {
+                continue;
+            }
+            filteredNeighbors.Add(neighbor);
+        }
+        return filteredNeighbors;
     }
 
     public List<RuntimeCardModel> GetOthers(RuntimeCardModel card)
