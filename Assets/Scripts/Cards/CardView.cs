@@ -346,8 +346,31 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
 
     public bool TryGetTooltipInformation(out TooltipCollection tooltipCollection)
     {
+        // Handle some special cases that need default content for now
+        string content = "";
+        if (Card.Suit == Suit.DOORS)
+        {
+            content = "Proceed to the next floor of the dungeon. Only unlocks once you have received the appropriate number of points";
+        }
+        else if (Card.Suit == Suit.TREASURES)
+        {
+            content = "Gain 3 gold";
+        }
+        else if (Card.Suit == Suit.HEARTS)
+        {
+            content = $"Restore {Card.Value} health (up to max). Can only heal once per room.";
+        }
+        else if (Card.Suit == Suit.DIAMONDS)
+        {
+            content = "Equip this as a weapon, replacing your currently equipped weapon (if any)";
+        }
+        else if (Card.Suit == Suit.SPADES || Card.Suit == Suit.CLUBS)
+        {
+            content = "Fight the monster with either you fist or weapon";
+        }
+
         List<TooltipData> tooltipDatas = new();
-        TooltipData baseTooltip = new(Card.GetCardInfoString(), Card.CardType.ToString().ToFirstUppercase(), "", null);
+        TooltipData baseTooltip = new(Card.GetCardInfoString(), Card.CardType.ToString().ToFirstUppercase(), content, null);
         tooltipDatas.Add(baseTooltip);
 
         foreach (Buff buff in Card.BuffManager.GetBuffs())
