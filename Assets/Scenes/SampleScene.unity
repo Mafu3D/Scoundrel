@@ -7221,6 +7221,18 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 1739945807082925907, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2983930758097186374, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: m_Name
       value: Card
@@ -7317,9 +7329,45 @@ PrefabInstance:
       propertyPath: OnCardClicked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6223452083415739313, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8012252538548482541, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
@@ -8844,6 +8892,18 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -4.13
       objectReference: {fileID: 0}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2983930758097186374, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: m_Name
       value: Card
@@ -8952,9 +9012,45 @@ PrefabInstance:
       propertyPath: OnCardClicked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6223452083415739313, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8012252538548482541, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
@@ -10625,6 +10721,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -14136,6 +14240,18 @@ PrefabInstance:
       propertyPath: serializationData.Prefab
       value: 
       objectReference: {fileID: 1739945807082925907, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2983930758097186374, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: m_Name
       value: Card
@@ -14232,9 +14348,45 @@ PrefabInstance:
       propertyPath: OnCardClicked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6223452083415739313, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8012252538548482541, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
@@ -15928,6 +16080,18 @@ PrefabInstance:
       propertyPath: 'serializationData.PrefabModificationsReferencedUnityObjects.Array.data[0]'
       value: 
       objectReference: {fileID: 1729062421}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1966611616407994416, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2983930758097186374, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: m_Name
       value: Card
@@ -16016,9 +16180,45 @@ PrefabInstance:
       propertyPath: OnCardClicked.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6118991633109466704, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6223452083415739313, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
       value: 1801810542
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7420562124564107457, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7620933401234665635, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8012252538548482541, guid: 6c34c951d5850ef4a8f771665446da53, type: 3}
       propertyPath: 'm_ActiveFontFeatures.Array.data[0]'

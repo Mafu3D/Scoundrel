@@ -24,7 +24,7 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
     [Header("Card Visuals")]
     [SerializeField] private List<TMP_Text> valueTMPTexts = new();
     [SerializeField] private SpriteRenderer suitSprite;
-    [SerializeField] private GameObject isBuffedIndicator;
+    [SerializeField] private Transform buffIconsParent;
 
     [Header("Card Colors")]
     [SerializeField] private Color red;
@@ -120,13 +120,33 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
 
         HandleMousePosition();
 
-        if (Card.BuffManager.GetBuffs().Count > 0 )
+        int buffCount = Card.BuffManager.GetBuffs().Count;
+        if (buffCount > 0 )
         {
-            isBuffedIndicator.SetActive(true);
+            buffIconsParent.gameObject.SetActive(true);
+            for (int i = 0; i < buffIconsParent.childCount; i++)
+            {
+                Transform child = buffIconsParent.GetChild(i);
+                if (i < buffCount)
+                {
+                    child.gameObject.SetActive(true);
+                    child.GetComponent<SpriteRenderer>().sprite = Card.BuffManager.GetBuffs()[i].Sprite;
+                }
+                else
+                {
+                    child.gameObject.SetActive(false);
+                    child.GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
         }
         else
         {
-            isBuffedIndicator.SetActive(false);
+            buffIconsParent.gameObject.SetActive(false);
+            foreach (Transform child in buffIconsParent)
+            {
+                child.gameObject.SetActive(false);
+                child.GetComponent<SpriteRenderer>().sprite = null;
+            }
         }
     }
 

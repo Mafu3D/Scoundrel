@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Bloodthirsty
   m_EditorClassIdentifier: 
   Name: Bloodthirsty
+  Sprite: {fileID: 7562175800819270130, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
   Description: Gain 1 power every time another card dies
   ValidCardTypes: 00000000
   ApplyOnDraw: 1

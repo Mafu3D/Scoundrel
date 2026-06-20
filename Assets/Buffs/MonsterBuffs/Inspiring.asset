@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Inspiring
   m_EditorClassIdentifier: 
   Name: Inspiring
+  Sprite: {fileID: 4327223901659296124, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
   Description: Grant allies adjacent to this card +1
   ValidCardTypes: 00000000
   ApplyOnDraw: 1
