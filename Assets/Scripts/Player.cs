@@ -138,6 +138,10 @@ public class Player : MonoBehaviour
 
     public void UnequipWeapon()
     {
+        if (this.Weapon != null)
+        {
+            this.Weapon.Dispose();
+        }
         this.Weapon = null;
         OnWeaponChanged?.Invoke();
     }

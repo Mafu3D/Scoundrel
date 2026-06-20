@@ -155,7 +155,7 @@ namespace Project.Decks
 
         public void Dispose()
         {
-            //
+            BuffManager.Dispose();
         }
     }
 }
