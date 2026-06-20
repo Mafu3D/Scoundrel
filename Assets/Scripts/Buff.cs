@@ -44,6 +44,7 @@ public abstract class Buff : ScriptableObject
     [SerializeField] public List<CardType> ValidCardTypes;
 
     [Header("Base Buff Parameters")]
+    [SerializeField] public bool IsHidden = false;
     [SerializeField] public bool ApplyOnDraw = true;
     [SerializeField] public bool IsTemporary = false;
     [SerializeField] public bool RemoveOnParentCleanup = false;

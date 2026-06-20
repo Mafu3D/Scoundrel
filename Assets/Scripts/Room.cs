@@ -84,12 +84,18 @@ public class RoomModel
         if (index > 0)
         {
             RuntimeCardModel neighbor = Cards[index - 1];
-            neighbors.Add(neighbor);
+            if (neighbor != null)
+            {
+                neighbors.Add(neighbor);
+            }
         }
         if (index < Size - 1)
         {
             RuntimeCardModel neighbor = Cards[index + 1];
-            neighbors.Add(neighbor);
+            if (neighbor != null)
+            {
+                neighbors.Add(neighbor);
+            }
         }
 
         return neighbors;

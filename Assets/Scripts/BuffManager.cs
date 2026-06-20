@@ -24,7 +24,6 @@ public class BuffManager : IDisposable
 {
     List<Buff> orderedBuffs = new();
     Dictionary<BuffID, Buff> registeredBuffs = new();
-    public List<Buff> GetBuffs() => orderedBuffs;
 
     RuntimeCardModel owner;
     GameManager gameManager;
@@ -50,6 +49,21 @@ public class BuffManager : IDisposable
         gameManager.OnPlayerRun += HandleOnPlayerRun;
     }
 
+    public List<Buff> GetBuffs() => orderedBuffs;
+
+    public List<Buff> GetVisibleBuffs()
+    {
+        List<Buff> visibleBuffs = new();
+        foreach(Buff buff in orderedBuffs)
+        {
+            if (buff.IsHidden)
+            {
+                continue;
+            }
+            visibleBuffs.Add(buff);
+        }
+        return visibleBuffs;
+    }
 
     public void Dispose()
     {

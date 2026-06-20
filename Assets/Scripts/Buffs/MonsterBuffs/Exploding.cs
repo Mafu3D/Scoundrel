@@ -9,13 +9,19 @@ public class Exploding : Buff
 {
     public override void OnSelfDie()
     {
-        List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner);
+        List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner, new() {Suit.CLUBS, Suit.SPADES, Suit.HEARTS, Suit.DIAMONDS});
         foreach (RuntimeCardModel neighbor in neighbors)
         {
-            neighbor.RegisterValueModifier(-Owner.Value);
-            if (neighbor.Value <= 0)
+            int newValue = neighbor.Value - Owner.Value;
+            if (newValue <= 0)
             {
                 gameManager.CurrentRoom.TryRemoveCard(neighbor);
+            }
+            else
+            {
+                Buff tempDamageBuff = GetRegisteredChildBuffByName("TempDamage");
+                (tempDamageBuff as TempDamage).Amount = Owner.Value;
+                Buff buff = AddBuff(neighbor, tempDamageBuff);
             }
         }
     }

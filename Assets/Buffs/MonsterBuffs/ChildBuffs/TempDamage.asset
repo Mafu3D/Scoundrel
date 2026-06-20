@@ -9,17 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c5714cd4f02a4d4b8ddab8972ec50b8, type: 3}
-  m_Name: Bloodthirsty
+  m_Script: {fileID: 11500000, guid: 10939ce0b4c4ae7468fb7d20c8363690, type: 3}
+  m_Name: TempDamage
   m_EditorClassIdentifier: 
-  Name: Bloodthirsty
-  Sprite: {fileID: 1744348678, guid: b68ba3f6c54a41a46beb5aa4bccf6ed7, type: 3}
-  Description: Gain 2 power every time another card dies
-  ValidCardTypes: 00000000
+  Name: TempDamage
+  Sprite: {fileID: 0}
+  Description: 
+  ValidCardTypes: 000000000100000002000000
   IsHidden: 0
-  ApplyOnDraw: 1
-  IsTemporary: 0
+  ApplyOnDraw: 0
+  IsTemporary: 1
   RemoveOnParentCleanup: 0
   RemoveOnDeath: 1
   registeredChildBuffs: []
-  amount: 2
+  Amount: 3

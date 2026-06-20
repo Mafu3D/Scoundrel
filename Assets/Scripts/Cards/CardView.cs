@@ -120,7 +120,9 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
 
         HandleMousePosition();
 
-        int buffCount = Card.BuffManager.GetBuffs().Count;
+        // Display buff icons
+        List<Buff> visibleBuffs = Card.BuffManager.GetVisibleBuffs();
+        int buffCount = visibleBuffs.Count;
         if (buffCount > 0 )
         {
             buffIconsParent.gameObject.SetActive(true);
@@ -130,7 +132,7 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
                 if (i < buffCount)
                 {
                     child.gameObject.SetActive(true);
-                    child.GetComponent<SpriteRenderer>().sprite = Card.BuffManager.GetBuffs()[i].Sprite;
+                    child.GetComponent<SpriteRenderer>().sprite = visibleBuffs[i].Sprite;
                 }
                 else
                 {
@@ -375,6 +377,10 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
 
         foreach (Buff buff in Card.BuffManager.GetBuffs())
         {
+            if (buff.IsHidden)
+            {
+                continue;
+            }
             TooltipData buffTooltip = new(buff.Name, "" , buff.Description, buff.Sprite);
             tooltipDatas.Add(buffTooltip);
         }
