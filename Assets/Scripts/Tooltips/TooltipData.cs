@@ -10,14 +10,14 @@ namespace Project.UI.Tooltips
         public readonly string Header;
         public readonly string Subtitle;
         public readonly string Content;
-        public readonly Sprite Image;
+        public readonly Sprite Sprite;
 
         public TooltipData(string header, string subtitle, string content, Sprite image)
         {
             Header = header;
             Subtitle = subtitle;
             Content = content;
-            Image = image;
+            Sprite = image;
         }
     }
 

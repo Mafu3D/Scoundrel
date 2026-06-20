@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Exploding
   m_EditorClassIdentifier: 
   Name: Exploding
-  Sprite: {fileID: -4588295468015893688, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
+  Sprite: {fileID: -2206059793440528321, guid: b909f92bb4716224b839067ebf06715c, type: 3}
   Description: This card deals its damage to its neighbors when it dies. It destroys
     any gold.
   ValidCardTypes: 00000000

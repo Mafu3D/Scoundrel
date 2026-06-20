@@ -16,6 +16,7 @@ namespace Project.UI.Tooltips
         [SerializeField] private TextMeshProUGUI headerText;
         [SerializeField] private TextMeshProUGUI subtitleText;
         [SerializeField] private TextMeshProUGUI contentText;
+        [SerializeField] private Image image;
         [SerializeField] private LayoutElement layoutElement;
 
         TooltipData tooltipData;
@@ -29,6 +30,17 @@ namespace Project.UI.Tooltips
             subtitleText.text = tooltipData.Subtitle;
 
             contentText.text = tooltipData.Content;
+
+            if(tooltipData.Sprite == null)
+            {
+                image.gameObject.SetActive(false);
+                image.sprite = null;
+            }
+            else
+            {
+                image.sprite = tooltipData.Sprite;
+                image.gameObject.SetActive(true);
+            }
 
             ResizeTooltip();
         }

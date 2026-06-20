@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Inspired
   m_EditorClassIdentifier: 
   Name: Inspired
+  Sprite: {fileID: 1427359898640848927, guid: a8649cb40ea96d7499e4346c14f5d91c, type: 3}
   Description: +1 from being inspired by a neighboring elite ally
   ValidCardTypes: 00000000
   ApplyOnDraw: 1
@@ -20,5 +21,4 @@ MonoBehaviour:
   RemoveOnParentCleanup: 1
   RemoveOnDeath: 1
   registeredChildBuffs: []
-  gameManager: {fileID: 0}
   amount: 1
