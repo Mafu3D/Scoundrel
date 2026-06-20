@@ -41,6 +41,7 @@ public abstract class Buff : ScriptableObject
     [SerializeField] public string Name;
     [SerializeField] public string Description;
     [SerializeField] public List<CardType> ValidCardTypes;
+    [SerializeField] public Sprite Sprite;
 
     [Header("Base Buff Parameters")]
     [SerializeField] public bool ApplyOnDraw = true;

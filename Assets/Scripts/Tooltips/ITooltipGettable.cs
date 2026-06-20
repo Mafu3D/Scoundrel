@@ -2,7 +2,7 @@ namespace Project.UI.Tooltips
 {
     public interface ITooltipGettable
     {
-        public bool TryGetTooltipInformation(out string content, out string header);
+        public bool TryGetTooltipInformation(out TooltipCollection tooltipCollection);
     }
 
 }

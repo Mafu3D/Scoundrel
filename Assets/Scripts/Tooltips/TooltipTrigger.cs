@@ -1,29 +1,32 @@
 using System.Collections;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Mafu.Extensions;
 
 namespace Project.UI.Tooltips
 {
-    public class TooltipTrigger : SerializedMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public abstract class TooltipTrigger : SerializedMonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        [Header("Simple")]
-        [SerializeField] string header;
-        [SerializeField] string content;
-
-        [Header("Getter")]
-        [OdinSerialize] ITooltipGettable tooltipGetter;
-
         [Header("Delay")]
-        [SerializeField] float delay = 0.2f;
+        [SerializeField] private float delay = 0.2f;
+
+        [Header("Anchor")]
+        [SerializeField] private Transform anchor;
+        [SerializeField] private bool forceAnchor = false;
 
         Coroutine delayRoutine;
 
+        protected abstract TooltipCollection GetTooltipCollection();
+
         public void OnPointerEnter(PointerEventData eventData)
         {
-            delayRoutine = StartCoroutine(ShowTooltipDelayRoutine());
+            TooltipCollection tooltipCollection = GetTooltipCollection();
+            if (forceAnchor)
+            {
+                TooltipSystem.AnchorTooltipCollectionView(anchor);
+            }
+            delayRoutine = StartCoroutine(ShowTooltipDelayRoutine(tooltipCollection));
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -34,35 +37,13 @@ namespace Project.UI.Tooltips
                 delayRoutine = null;
             }
             TooltipSystem.Hide();
+            TooltipSystem.DeanchorTooltipCollectionView();
         }
 
-        private IEnumerator ShowTooltipDelayRoutine()
+        private IEnumerator ShowTooltipDelayRoutine(TooltipCollection tooltipCollection)
         {
             yield return new WaitForSeconds(delay);
-            Show();
-        }
-
-        private void Show()
-        {
-            string contentString = "";
-            string headerString = "";
-            if (tooltipGetter != null)
-            {
-                tooltipGetter.TryGetTooltipInformation(out contentString, out headerString);
-            }
-            if (!content.IsNullOrEmpty())
-            {
-                contentString = content;
-            }
-            if (!header.IsNullOrEmpty())
-            {
-                headerString = header;
-            }
-
-            if (!contentString.IsNullOrEmpty() || !headerString.IsNullOrEmpty())
-            {
-                TooltipSystem.Show(contentString, headerString);
-            }
+            TooltipSystem.Show(tooltipCollection);
         }
     }
 }

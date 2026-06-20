@@ -23,5 +23,10 @@ namespace Mafu.Extensions
         {
             return str == null || str == "";
         }
+
+        public static string ToFirstUppercase(this string str)
+        {
+            return char.ToUpper(str[0]) + str.Substring(1).ToLower();
+        }
     }
 }

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Mafu.Extensions;
+
 namespace Project.Decks
 {
     // TODO: Turn suit into a map that connects a suit with a card type?
@@ -86,12 +88,17 @@ namespace Project.Decks
 
         public override string ToString()
         {
+            return $"{GetCardInfoString()} ({CardType.ToString().ToFirstUppercase()})";
+        }
+
+        public string GetCardInfoString()
+        {
             string output = Value.ToString();
             if (Value != BaseValue)
             {
-                output += $"({BaseValue})";
+                output += $" ({BaseValue})";
             }
-            output += $" of {Suit} ({CardType})";
+            output += $" of {Suit.ToString().ToFirstUppercase()}";
             return output;
         }
 

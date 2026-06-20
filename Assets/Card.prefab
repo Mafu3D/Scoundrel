@@ -654,7 +654,7 @@ GameObject:
   - component: {fileID: 4534446496112890389}
   - component: {fileID: 964506102154751877}
   - component: {fileID: 5246920160656252357}
-  - component: {fileID: 1739945807082925907}
+  - component: {fileID: 3711235653694261329}
   m_Layer: 0
   m_Name: Card
   m_TagString: Untagged
@@ -682,6 +682,7 @@ Transform:
   - {fileID: 4394038660178110825}
   - {fileID: 7465827747147825762}
   - {fileID: 3486650149392682121}
+  - {fileID: 1826265446834506120}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4534446496112890389
@@ -782,7 +783,7 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_SortAtRoot: 0
---- !u!114 &1739945807082925907
+--- !u!114 &3711235653694261329
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -791,7 +792,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2983930758097186374}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 575471f805e83b34494d543b809770ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 78c08968f7ab43746b1d07292ef46e5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
@@ -807,9 +808,9 @@ MonoBehaviour:
     - Name: tooltipGetter
       Entry: 10
       Data: 0
-  header: 
-  content: 
   delay: 0.2
+  anchor: {fileID: 1826265446834506120}
+  forceAnchor: 1
 --- !u!1 &3610247004690400493
 GameObject:
   m_ObjectHideFlags: 0
@@ -1948,6 +1949,37 @@ SortingGroup:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_SortAtRoot: 0
+--- !u!1 &7847140118392029896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1826265446834506120}
+  m_Layer: 0
+  m_Name: TooltipAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1826265446834506120
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7847140118392029896}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4, y: 1.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4203964957157243235}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8891937768224378421
 GameObject:
   m_ObjectHideFlags: 0

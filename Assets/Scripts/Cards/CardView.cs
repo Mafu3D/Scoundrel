@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mafu.Extensions;
 using Project.Decks;
 using Project.UI.Tooltips;
 using TMPro;
@@ -323,23 +324,24 @@ public partial class CardView : MonoBehaviour, ITooltipGettable
 
     }
 
-    public bool TryGetTooltipInformation(out string content, out string header)
+    public bool TryGetTooltipInformation(out TooltipCollection tooltipCollection)
     {
-        header = Card.ToString();
+        List<TooltipData> tooltipDatas = new();
+        TooltipData baseTooltip = new(Card.GetCardInfoString(), Card.CardType.ToString().ToFirstUppercase(), "", null);
+        tooltipDatas.Add(baseTooltip);
 
-        content = "";
         foreach (Buff buff in Card.BuffManager.GetBuffs())
         {
-            content += $"\n{buff.Name} - {buff.Description}";
-            // foreach (Buff childBuff in buff.ChildBuffInstances)
-            // {
-            //     content += $"\n   + {childBuff.Name}({childBuff.ID})";
-            // }
+            TooltipData buffTooltip = new(buff.Name, "" , buff.Description, buff.Sprite);
+            tooltipDatas.Add(buffTooltip);
         }
-        foreach (int value in Card.ValueModifiers)
-        {
-            content += $"\n{value}";
-        }
+
+        tooltipCollection = new(tooltipDatas);
+
+        // foreach (int value in Card.ValueModifiers)
+        // {
+        //     content += $"\n{value}";
+        // }
         return true;
     }
 }

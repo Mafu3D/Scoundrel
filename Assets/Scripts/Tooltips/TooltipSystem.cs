@@ -5,23 +5,33 @@ namespace Project.UI.Tooltips
     public class TooltipSystem : MonoBehaviour
     {
         private static TooltipSystem current;
-        [SerializeField] Tooltip tooltip;
+        [SerializeField] TooltipCollectionView tooltipCollectionView;
 
         void Awake()
         {
             current = this;
-            current.tooltip.gameObject.SetActive(false);
         }
 
-        public static void Show(string content, string header = "")
+        public static void Show(TooltipCollection tooltipCollection)
         {
-            current.tooltip.SetText(content, header);
-            current.tooltip.gameObject.SetActive(true);
+            current.tooltipCollectionView.RegisterTooltips(tooltipCollection);
+            current.tooltipCollectionView.Show();
         }
 
         public static void Hide()
         {
-            current.tooltip.gameObject.SetActive(false);
+            current.tooltipCollectionView.Hide();
+            current.tooltipCollectionView.DeregisterTooltips();
+        }
+
+        public static void AnchorTooltipCollectionView(Transform anchor)
+        {
+            current.tooltipCollectionView.SetAnchor(anchor);
+        }
+
+        public static void DeanchorTooltipCollectionView()
+        {
+            current.tooltipCollectionView.SetAnchor(null);
         }
     }
 
