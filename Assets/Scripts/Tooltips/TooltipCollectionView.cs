@@ -73,7 +73,22 @@ namespace Project.UI.Tooltips
             if (myCanvasGroup.alpha > 0)
             {
                 UpdatePosition();
+
+                // Continue to check if a triggerable object is beneath the pointer in case the object is hidden or destroyed
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+                TooltipTrigger currentTrigger = null;
+                if (hit.collider != null)
+                {
+                    hit.transform.TryGetComponent<TooltipTrigger>(out currentTrigger);
+                }
+                if (currentTrigger == null)
+                {
+                    Hide();
+                }
             }
+
+
 
             // I had this check at some point... idk why?
             // if (Application.isEditor)

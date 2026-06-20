@@ -19,7 +19,11 @@ namespace Project.UI.Tooltips
 
         protected abstract TooltipCollection GetTooltipCollection();
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public void OnPointerEnter(PointerEventData eventData) => ShowTooltip();
+
+        public void OnPointerExit(PointerEventData eventData) => HideTooltip();
+
+        private void ShowTooltip()
         {
             TooltipCollection tooltipCollection = GetTooltipCollection();
             if (forceAnchor)
@@ -29,7 +33,13 @@ namespace Project.UI.Tooltips
             delayRoutine = StartCoroutine(ShowTooltipDelayRoutine(tooltipCollection));
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        private IEnumerator ShowTooltipDelayRoutine(TooltipCollection tooltipCollection)
+        {
+            yield return new WaitForSeconds(delay);
+            TooltipSystem.Show(tooltipCollection);
+        }
+
+        private void HideTooltip()
         {
             if (delayRoutine != null)
             {
@@ -38,12 +48,6 @@ namespace Project.UI.Tooltips
             }
             TooltipSystem.Hide();
             TooltipSystem.DeanchorTooltipCollectionView();
-        }
-
-        private IEnumerator ShowTooltipDelayRoutine(TooltipCollection tooltipCollection)
-        {
-            yield return new WaitForSeconds(delay);
-            TooltipSystem.Show(tooltipCollection);
         }
     }
 }
