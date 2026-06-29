@@ -1,10 +1,69 @@
+using System;
 using Project.Decks;
 
-public class ScoreKeeper
+public interface IScoreKeeper
+{
+    public int GetScore();
+}
+
+public class AdvancedScoreKeeper : IScoreKeeper
+{
+    private readonly GameManager gameManager;
+    private int score;
+
+    private float roomMultipler = 1f;
+
+    public Action<int> OnScoreUpdated;
+
+    public AdvancedScoreKeeper(GameManager gameManager)
+    {
+        this.gameManager = gameManager;
+    }
+
+    public void AddToScore(RuntimeCardModel card)
+    {
+        if (card.Suit != Suit.CLUBS && card.Suit != Suit.SPADES)
+        {
+            return;
+        }
+
+        float floorMultiplier = 1 + ((gameManager.FloorNumber - 1) * 0.2f);
+
+        float cardScore = card.Value * 100;
+        cardScore *= roomMultipler;
+        cardScore *= floorMultiplier;
+
+        score += (int)Math.Ceiling(cardScore);
+
+        OnScoreUpdated?.Invoke(score);
+    }
+
+    public void IncRoomMultiplier()
+    {
+        roomMultipler += 0.5f;
+    }
+
+    public void ResetRoomMultiplier()
+    {
+        roomMultipler = 1;
+    }
+
+    public void Reset()
+    {
+        score = 0;
+        OnScoreUpdated?.Invoke(score);
+    }
+
+    public int GetScore() => score;
+
+    public bool HasPlayerWon() => false; // REMOVE THIS!
+}
+
+public class ClassicScoreKeeper : IScoreKeeper
 {
     private GameManager gameManager;
 
-    public ScoreKeeper(GameManager gameManager)
+    public ClassicScoreKeeper(GameManager gameManager)
     {
         this.gameManager = gameManager;
     }
@@ -12,18 +71,18 @@ public class ScoreKeeper
     public bool HasPlayerWon()
     {
         int monsterScore = 0;
-        foreach (CardModel card in gameManager.DeckManager.Deck.RemainingItems)
+        foreach (RuntimeCardModel card in gameManager.DeckManager.Deck.RemainingItems)
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
-                monsterScore += card.Value;
+                monsterScore += card.BaseValue;
             }
         }
-        foreach (CardModel card in gameManager.CurrentRoom.Cards)
+        foreach (RuntimeCardModel card in gameManager.CurrentRoom.Cards)
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
-                monsterScore += card.Value;
+                monsterScore += card.BaseValue;
             }
         }
         if (gameManager.DeckManager.Deck.CurrentCount == 0 && monsterScore == 0)
@@ -37,19 +96,19 @@ public class ScoreKeeper
     {
         int monsterScore = 0;
         bool monstersInRoom = false;
-        foreach (CardModel card in gameManager.DeckManager.Deck.RemainingItems)
+        foreach (RuntimeCardModel card in gameManager.DeckManager.Deck.RemainingItems)
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
-                monsterScore += card.Value;
+                monsterScore += card.BaseValue;
             }
         }
-        foreach (CardModel card in gameManager.CurrentRoom.Cards)
+        foreach (RuntimeCardModel card in gameManager.CurrentRoom.Cards)
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
                 monstersInRoom = true;
-                monsterScore += card.Value;
+                monsterScore += card.BaseValue;
             }
         }
 
@@ -58,13 +117,13 @@ public class ScoreKeeper
             if (gameManager.Player.CurrentHealth == gameManager.Player.MaxHealth)
             {
                 int potionScore = 0;
-                foreach (CardModel card in gameManager.CurrentRoom.Cards)
+                foreach (RuntimeCardModel card in gameManager.CurrentRoom.Cards)
                 {
                     if (card.Suit == Suit.HEARTS)
                     {
-                        if (card.Value > potionScore)
+                        if (card.BaseValue > potionScore)
                         {
-                            potionScore = card.Value;
+                            potionScore = card.BaseValue;
                         }
                     }
                 }

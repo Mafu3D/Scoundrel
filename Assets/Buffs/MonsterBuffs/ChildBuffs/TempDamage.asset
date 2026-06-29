@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10939ce0b4c4ae7468fb7d20c8363690, type: 3}
+  m_Name: TempDamage
+  m_EditorClassIdentifier: 
+  Name: TempDamage
+  Sprite: {fileID: 0}
+  Description: 
+  ValidCardTypes: 000000000100000002000000
+  IsHidden: 0
+  ApplyOnDraw: 0
+  IsTemporary: 1
+  RemoveOnParentCleanup: 0
+  RemoveOnDeath: 1
+  registeredChildBuffs: []
+  Amount: 3

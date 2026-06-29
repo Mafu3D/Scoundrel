@@ -1,0 +1,125 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Project.Decks;
+using UnityEngine;
+
+public class WeaponView : MonoBehaviour
+{
+    [SerializeField] Player Player;
+    [SerializeField] GameObject CardViewPrefab;
+    [SerializeField] CardView weaponCard;
+    [SerializeField] List<CardView> defeatedCardsPool;
+    [SerializeField] float cardOffset = -0.755f;
+
+    WeaponCardModel weapon;
+
+    void Start()
+    {
+        RefreshView();
+    }
+
+    public void OnStartNewGame()
+    {
+        RefreshView();
+    }
+
+    public void RegisterWeapon(WeaponCardModel weapon)
+    {
+        this.weapon = weapon;
+        weaponCard.RegisterCard(weapon);
+        weapon.OnWeaponUpdate += OnWeaponUpdate;
+        weaponCard.gameObject.SetActive(true);
+
+        RefreshView();
+    }
+
+    public void DeregisterWeapon()
+    {
+        if (weapon != null)
+        {
+            weapon.OnWeaponUpdate -= OnWeaponUpdate;
+        }
+        this.weapon = null;
+
+        RefreshView();
+    }
+
+    private void RefreshView()
+    {
+        if (weapon == null)
+        {
+            weaponCard.gameObject.SetActive(false);
+            foreach (CardView card in defeatedCardsPool)
+            {
+                if (card.Card != null)
+                {
+                    card.DeregisterCard();
+                }
+                card.gameObject.SetActive(false);
+            }
+            return;
+        }
+
+        // If a CardView has not already been created in the object pool, create a new one
+        int difference = weapon.SlainCards.Count - defeatedCardsPool.Count;
+        if (difference > 0)
+        {
+            for (int i = 0; i < difference; i++)
+            {
+                GameObject newCardGO = Instantiate(CardViewPrefab);
+                CardView newCardView = newCardGO.GetComponent<CardView>();
+                newCardGO.transform.SetParent(this.transform);
+                newCardGO.transform.localPosition = this.transform.position;
+                newCardView.Clickable = false;
+                defeatedCardsPool.Add(newCardView);
+                newCardView.SetSortingLayer((defeatedCardsPool.Count + 1) * -1);
+            }
+        }
+
+        // Iterate through the pool - turn on & register views that have a slain card
+        for (int i = 0; i < defeatedCardsPool.Count; i++)
+        {
+            CardView card = defeatedCardsPool[i];
+            if (i < weapon.SlainCards.Count)
+            {
+                card.RegisterCard(weapon.SlainCards[i]);
+                card.gameObject.SetActive(true);
+                card.transform.localPosition = new Vector3(cardOffset*(i+1), 0, 0);
+            }
+            else
+            {
+                if (card.Card != null)
+                {
+                    card.DeregisterCard();
+                }
+                card.gameObject.SetActive(false);
+            }
+        }
+
+        // Offset the cards
+        for (int i = 0; i < weapon.SlainCards.Count + 1; i++)
+        {
+            CardView card = i == 0 ? weaponCard : defeatedCardsPool[i-1];
+            float midPoint = (weapon.SlainCards.Count + 1) / 2;
+            if (i < midPoint)
+            {
+                // Positive
+                int step = (int)Math.Floor(midPoint - i);
+                card.transform.localPosition = Vector3.zero + new Vector3(cardOffset * step, 0f, 0f);
+            }
+            else
+            {
+                // Negative
+                int step = (int)Math.Ceiling(i - midPoint);
+                card.transform.localPosition = Vector3.zero + new Vector3(cardOffset * -step, 0f, 0f);
+            }
+        }
+    }
+
+    private void OnWeaponUpdate()
+    {
+        RefreshView();
+    }
+}

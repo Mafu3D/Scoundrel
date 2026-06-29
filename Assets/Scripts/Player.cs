@@ -1,34 +1,59 @@
 using System;
+using System.Collections.Generic;
 using Project.Decks;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IPlayerBuffRegisterable
 {
     [SerializeField] public int MaxHealth = 20;
     [SerializeField] public int RunCooldownTime = 1;
 
     public int CurrentHealth { get; private set; }
-    public WeaponModel Weapon { get; private set; }
+    public WeaponCardModel Weapon { get; private set; }
     public bool HasRunToken { get; private set; } = true;
     public bool HasEnteredTheRoom { get; private set; } = false;
     public int ExtraRunTokens { get; private set; } = 0;
     public bool HasDrankPotionThisRoom { get; private set; } = false;
     public bool IsAtMaxHealth => CurrentHealth == MaxHealth;
+    public int CurrentGold { get; private set; }
+
+    public PlayerBuffManager BuffManager => buffManager;
+
+    private PlayerBuffManager buffManager;
 
     public Action<int> OnHealthChanged;
+    public Action<int> OnGoldChanged;
     public Action OnDeath;
+    public Action<MonsterCardModel> OnOtherDie;
     public Action OnWeaponChanged;
     public Action OnRunSuccess;
+    public Action<WeaponCardModel> OnAttackedPreDamage;
+    public Action<WeaponCardModel> OnAttackedPostDamage;
+    public Action<MonsterCardModel> OnWeaponAttackPreDamage;
+    public Action<MonsterCardModel> OnWeaponAttackPostDamage;
 
     private bool runTokenOnCooldown = false;
 
     private int runCooldownCounter = 0;
+
+    public void Update()
+    {
+        Weapon?.Update();
+
+        if (buffManager != null)
+        {
+            buffManager.Update();
+        }
+    }
 
     public void StartNewGame()
     {
         ResetPlayer();
         OnHealthChanged?.Invoke(CurrentHealth);
         OnWeaponChanged?.Invoke();
+        OnGoldChanged?.Invoke(CurrentGold);
+
+        buffManager = new PlayerBuffManager(this);
     }
 
     public void RoundReset()
@@ -51,6 +76,18 @@ public class Player : MonoBehaviour
         // Reset other things
         HasEnteredTheRoom = false;
         HasDrankPotionThisRoom = false;
+    }
+
+    public void FloorReset()
+    {
+        UnequipWeapon();
+        // CurrentHealth = MaxHealth;
+        runCooldownCounter = 0;
+        runTokenOnCooldown = false;
+        HasEnteredTheRoom = false;
+        HasRunToken = true;
+        OnHealthChanged?.Invoke(CurrentHealth);
+
     }
 
     public void EnterNewRoom()
@@ -94,35 +131,80 @@ public class Player : MonoBehaviour
         OnHealthChanged?.Invoke(CurrentHealth);
     }
 
-    #region Card Actions
-    public bool TryFightUnarmed(CardModel card)
+    public void AddGold(int amount)
     {
-        // Setting this up to return a bool so that conditions can be added later
-        TakeDamage(card.Value);
-        return true;
+        CurrentGold = Math.Clamp(CurrentGold + Math.Abs(amount), 0, 9999999);
+        OnGoldChanged?.Invoke(CurrentGold);
     }
 
-    public bool TryFightWeapon(CardModel card)
+    public bool TryRemoveGold(int amount)
     {
-        if (Weapon == null || Weapon.GetCurrentStrength() <= card.Value)
+        int newAmount = CurrentGold - Math.Abs(amount);
+        if (newAmount < 0)
         {
             return false;
         }
-        int damage = Math.Clamp(card.Value - Weapon.Power, 0, 999);
-        TakeDamage(damage);
-        Weapon.AddMonsterToSlain(card);
+        CurrentGold = newAmount;
+        OnGoldChanged?.Invoke(CurrentGold);
         return true;
     }
 
-    public bool TryEquipWeapon(CardModel card)
+    public void UnequipWeapon()
+    {
+        if (this.Weapon != null)
+        {
+            this.Weapon.Dispose();
+        }
+        this.Weapon = null;
+        OnWeaponChanged?.Invoke();
+    }
+
+    #region Card Actions
+    public bool TryFightUnarmed(RuntimeCardModel defender)
+    {
+        OnAttackedPreDamage?.Invoke(null);
+
+        // Setting this up to return a bool so that conditions can be added later
+        TakeDamage(defender.Value);
+
+        OnAttackedPostDamage?.Invoke(null);
+        return true;
+    }
+
+    public bool TryFightWeapon(RuntimeCardModel defender)
+    {
+        if (Weapon == null || Weapon.GetCurrentStrength() <= defender.Value)
+        {
+            return false;
+        }
+
+        if (defender is MonsterCardModel)
+        {
+            OnWeaponAttackPreDamage?.Invoke(defender as MonsterCardModel);
+        }
+        OnAttackedPreDamage?.Invoke(Weapon);
+
+        int damage = Math.Clamp(defender.Value - Weapon.Value, 0, 999);
+        TakeDamage(damage);
+        Weapon.AddMonsterToSlain(defender);
+
+        if (defender is MonsterCardModel)
+        {
+            OnWeaponAttackPostDamage?.Invoke(defender as MonsterCardModel);
+        }
+        OnAttackedPostDamage?.Invoke(Weapon);
+        return true;
+    }
+
+    public bool TryEquipWeapon(RuntimeCardModel card)
     {
         // Setting this up to return a bool so that conditions can be added later
-        this.Weapon = new WeaponModel(card);
+        this.Weapon = new WeaponCardModel(card);
         OnWeaponChanged?.Invoke();
         return true;
     }
 
-    public bool TryDrinkPotion(CardModel card)
+    public bool TryDrinkPotion(RuntimeCardModel card)
     {
         if (!HasDrankPotionThisRoom)
         {
@@ -147,5 +229,18 @@ public class Player : MonoBehaviour
         runTokenOnCooldown = false;
         HasRunToken = true;
         Weapon = null;
+        CurrentGold = 0;
     }
+
+    public List<PlayerBuff> GetBuffs() => buffManager.GetBuffs();
+
+    public PlayerBuff AddNewBuff(PlayerBuff buff) => buffManager.AddNewBuff(buff);
+
+    public void RemoveBuff(PlayerBuff buff) => buffManager.RemoveBuff(buff);
+
+    public void RemoveBuff(PlayerBuffID buffID) => buffManager.RemoveBuff(buffID);
+
+    public bool HasBuff(PlayerBuff buff) => buffManager.HasBuff(buff);
+
+    public bool HasBuff(PlayerBuffID buffID) => buffManager.HasBuff(buffID);
 }

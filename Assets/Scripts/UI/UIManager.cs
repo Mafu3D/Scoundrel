@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mafu.UnityServiceLocator;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -11,60 +12,99 @@ public class UIManager : MonoBehaviour
     [SerializeField] private List<GameObject> titleObjects = new();
 
     [Header("During Game")]
-    [SerializeField] private List<GameObject> duringGameObjects = new();
+    [SerializeField] private List<GameObject> currentRunUI = new();
+    [SerializeField] private List<GameObject> cardsUI = new();
 
     [Header("Game Over")]
     [SerializeField] private List<GameObject> gameOverObjects = new();
     [SerializeField] private GameOverCanvas gameOverCanvas;
 
+    [Header("Other")]
+    [SerializeField] private List<GameObject> powerUpDungeonObjects = new();
+    [SerializeField] private List<GameObject> shopObjects = new();
+    [SerializeField] private List<GameObject> chooseFloorObjects = new();
+
+    void Awake()
+    {
+        ServiceLocator.Global.Register(this);
+    }
+
     void OnEnable()
     {
         gameManager.OnStartNewGame += ShowDuringGame;
         gameManager.OnGameOver += ShowGameOver;
+        gameManager.OnEnterPowerUpDungeonPhase += ShowPowerUpDungeonObjects;
+        gameManager.OnEnterShopPhase += ShowShopObjects;
+        gameManager.OnEnterChooseFloorPhase += ShowChooseFloorObjects;
+        gameManager.OnGoToNextFloor += ShowNewFloorObjects;
     }
 
     void OnDisable()
     {
         gameManager.OnStartNewGame -= ShowDuringGame;
         gameManager.OnGameOver -= ShowGameOver;
+        gameManager.OnEnterPowerUpDungeonPhase -= ShowPowerUpDungeonObjects;
+        gameManager.OnEnterShopPhase -= ShowShopObjects;
+        gameManager.OnEnterChooseFloorPhase -= ShowChooseFloorObjects;
+        gameManager.OnGoToNextFloor -= ShowNewFloorObjects;
     }
 
     void Start()
     {
-        foreach(GameObject go in duringGameObjects.Union(gameOverObjects))
-        {
-            go.SetActive(false);
-        }
-        foreach (GameObject go in titleObjects)
-        {
-            go.SetActive(true);
-        }
+        gameOverObjects.ForEach(go => go.SetActive(false));
+        currentRunUI.ForEach(go => go.SetActive(false));
+        cardsUI.ForEach(go => go.SetActive(false));
+        powerUpDungeonObjects.ForEach(go => go.SetActive(false));
+        shopObjects.ForEach(go => go.SetActive(false));
+        chooseFloorObjects.ForEach(go => go.SetActive(false));
+
+        titleObjects.ForEach(go => go.SetActive(true));
     }
 
     private void ShowDuringGame()
     {
-        foreach(GameObject go in titleObjects.Union(gameOverObjects))
-        {
-            go.SetActive(false);
-        }
-        foreach (GameObject go in duringGameObjects)
-        {
-            go.SetActive(true);
-        }
+        titleObjects.ForEach(go => go.SetActive(false));
+        gameOverObjects.ForEach(go => go.SetActive(false));
+
+        currentRunUI.ForEach(go => go.SetActive(true));
+        cardsUI.ForEach(go => go.SetActive(true));
     }
+
     private void ShowGameOver()
     {
-        foreach(GameObject go in duringGameObjects.Union(titleObjects))
-        {
-            go.SetActive(false);
-        }
-        foreach (GameObject go in gameOverObjects)
-        {
-            go.SetActive(true);
-        }
+        currentRunUI.ForEach(go => go.SetActive(false));
+        cardsUI.ForEach(go => go.SetActive(false));
+
+        gameOverObjects.ForEach(go => go.SetActive(true));
 
         bool playerWon = gameManager.ScoreKeeper.HasPlayerWon();
         int finalScore = gameManager.ScoreKeeper.GetScore();
         gameOverCanvas.UpdateText(playerWon, finalScore);
+    }
+
+    private void ShowPowerUpDungeonObjects()
+    {
+        // currentRunUI.ForEach(go => go.SetActive(false));
+        cardsUI.ForEach(go => go.SetActive(false));
+
+        powerUpDungeonObjects.ForEach(go => go.SetActive(true));
+    }
+
+    private void ShowShopObjects()
+    {
+        powerUpDungeonObjects.ForEach(go => go.SetActive(false));
+        shopObjects.ForEach(go => go.SetActive(true));
+    }
+
+    private void ShowChooseFloorObjects()
+    {
+        shopObjects.ForEach(go => go.SetActive(false));
+        chooseFloorObjects.ForEach(go => go.SetActive(true));
+    }
+
+    private void ShowNewFloorObjects()
+    {
+        chooseFloorObjects.ForEach(go => go.SetActive(false));
+        cardsUI.ForEach(go => go.SetActive(true));
     }
 }

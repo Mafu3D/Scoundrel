@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2db5b1d10172aa4ab8d384ef1795043, type: 3}
+  m_Name: Exploding
+  m_EditorClassIdentifier: 
+  Name: Exploding
+  Sprite: {fileID: -2206059793440528321, guid: b909f92bb4716224b839067ebf06715c, type: 3}
+  Description: This card deals its damage to its neighbors when it dies. It destroys
+    any gold.
+  ValidCardTypes: 00000000
+  IsHidden: 0
+  ApplyOnDraw: 1
+  IsTemporary: 0
+  RemoveOnParentCleanup: 0
+  RemoveOnDeath: 1
+  registeredChildBuffs:
+  - {fileID: 11400000, guid: 18a651b7a0e78af498528516e5a00bd7, type: 2}

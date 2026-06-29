@@ -18,5 +18,15 @@ namespace Mafu.Extensions
             }
             return unchecked((int)hash);
         }
+
+        public static bool IsNullOrEmpty(this string str)
+        {
+            return str == null || str == "";
+        }
+
+        public static string ToFirstUppercase(this string str)
+        {
+            return char.ToUpper(str[0]) + str.Substring(1).ToLower();
+        }
     }
 }

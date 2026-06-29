@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mafu.DebugConsole;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +10,13 @@ public class DebugUI : MonoBehaviour
     [SerializeField] GameObject mainContainer;
     [SerializeField] TMP_Text bottomText;
     [SerializeField] bool startEnabled;
+
+    DebugCommandLine debugCommandLine;
+
+    void Awake()
+    {
+        debugCommandLine = GetComponent<DebugCommandLine>();
+    }
 
     void Start()
     {
@@ -20,11 +28,6 @@ public class DebugUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Period))
-        {
-            ToggleUI();
-        }
-
         if (!mainContainer.activeSelf)
         {
             return;
@@ -63,7 +66,7 @@ public class DebugUI : MonoBehaviour
         bottomText.text = message;
     }
 
-    private void ToggleUI()
+    public void OnToggleDebug()
     {
         if (mainContainer.activeSelf)
         {
