@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Regeneration
   m_EditorClassIdentifier: 
   Name: Regeneration
-  Sprite: {fileID: 0}
-  Description: 
+  Sprite: {fileID: 1427359898640848927, guid: a8649cb40ea96d7499e4346c14f5d91c, type: 3}
+  Description: Restore health every turn
   IsHidden: 0
   IsTemporary: 0
   RemoveOnParentCleanup: 0
