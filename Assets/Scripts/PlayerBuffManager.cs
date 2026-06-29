@@ -10,26 +10,25 @@ public class PlayerBuffManager : IDisposable
     List<PlayerBuff> orderedBuffs = new();
     Dictionary<PlayerBuffID, PlayerBuff> registeredBuffs = new();
 
-    RuntimeCardModel owner;
+    Player owner;
     GameManager gameManager;
-    Player player;
 
-    public PlayerBuffManager(RuntimeCardModel owner)
+    public PlayerBuffManager(Player owner)
     {
         this.owner = owner;
 
         ServiceLocator.Global.Get(out gameManager);
-        player = gameManager.Player;
 
-        player.OnAttackedPreDamage += HandleOnAttackedPreDamage;
-        player.OnAttackedPostDamage += HandleOnAttackedPostDamage;
-        player.OnWeaponAttackPreDamage += HandleOnWeaponAttackPreDamage;
-        player.OnWeaponAttackPostDamage += HandleOnWeaponAttackPostDamage;
+        owner.OnAttackedPreDamage += HandleOnAttackedPreDamage;
+        owner.OnAttackedPostDamage += HandleOnAttackedPostDamage;
+        owner.OnWeaponAttackPreDamage += HandleOnWeaponAttackPreDamage;
+        owner.OnWeaponAttackPostDamage += HandleOnWeaponAttackPostDamage;
 
         owner.OnDeath += HandleOnSelfDie;
         owner.OnOtherDie += HandleOnOtherDie;
 
         gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
+        gameManager.OnOpenNewRoom += HandleOnPlayerGoToNewRoom;
         gameManager.OnPlayerRun += HandleOnPlayerRun;
     }
 
@@ -51,15 +50,16 @@ public class PlayerBuffManager : IDisposable
 
     public void Dispose()
     {
-        player.OnAttackedPreDamage -= HandleOnAttackedPreDamage;
-        player.OnAttackedPostDamage -= HandleOnAttackedPostDamage;
-        player.OnWeaponAttackPreDamage -= HandleOnWeaponAttackPreDamage;
-        player.OnWeaponAttackPostDamage -= HandleOnWeaponAttackPostDamage;
+        owner.OnAttackedPreDamage -= HandleOnAttackedPreDamage;
+        owner.OnAttackedPostDamage -= HandleOnAttackedPostDamage;
+        owner.OnWeaponAttackPreDamage -= HandleOnWeaponAttackPreDamage;
+        owner.OnWeaponAttackPostDamage -= HandleOnWeaponAttackPostDamage;
 
         owner.OnDeath -= HandleOnSelfDie;
         owner.OnOtherDie -= HandleOnOtherDie;
 
         gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
+        gameManager.OnOpenNewRoom -= HandleOnPlayerGoToNewRoom;
         gameManager.OnPlayerRun -= HandleOnPlayerRun;
     }
 
@@ -179,6 +179,8 @@ public class PlayerBuffManager : IDisposable
     private void HandleOnAttackedPreDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPreDamage(weapon));
 
     private void HandleOnPlayerEnterRoom() => orderedBuffs.ForEach(n => n.OnEnterRoom());
+
+    private void HandleOnPlayerGoToNewRoom() => orderedBuffs.ForEach(n => n.OnGoToNewRoom());
 
     private void HandleOnPlayerRun() => orderedBuffs.ForEach(n => n.OnRun());
 

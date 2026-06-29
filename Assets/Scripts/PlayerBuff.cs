@@ -20,6 +20,17 @@ public class PlayerBuffID
     }
 }
 
+internal interface IPlayerBuffRegisterable
+{
+    public PlayerBuffManager BuffManager { get; }
+    public List<PlayerBuff> GetBuffs();
+    public PlayerBuff AddNewBuff(PlayerBuff buff);
+    public void RemoveBuff(PlayerBuff buff);
+    public void RemoveBuff(PlayerBuffID buffID);
+    public bool HasBuff(PlayerBuff buff);
+    public bool HasBuff(PlayerBuffID buffID);
+}
+
 /// <summary>
 /// Main class for buffs.
 ///
@@ -40,7 +51,7 @@ public abstract class PlayerBuff : ScriptableObject
     public List<PlayerBuff> ChildBuffInstances { get; private set; } = new();
 
     public PlayerBuffID ID  { get; private set; }
-    public RuntimeCardModel Owner { get; private set; }
+    public Player Owner { get; private set; }
 
     public GameManager gameManager { get; private set; }
 
@@ -70,7 +81,7 @@ public abstract class PlayerBuff : ScriptableObject
         throw new ArgumentException($"There is no instance of {name} registered to {this.name}", "name");
     }
 
-    public void Initialize(RuntimeCardModel owner)
+    public void Initialize(Player owner)
     {
         Owner = owner;
         ServiceLocator.Global.Get(out GameManager _gameManager);
@@ -133,6 +144,7 @@ public abstract class PlayerBuff : ScriptableObject
     /// </summary>
     public virtual void OnUpdate() { }
 
+    public virtual void OnGoToNewRoom() { }
     public virtual void OnEnterRoom() { }
     public virtual void OnRun() { }
     public virtual void OnSelfDie() { }

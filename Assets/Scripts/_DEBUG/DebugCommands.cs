@@ -211,6 +211,33 @@ namespace Project.DebugCommands
     }
 
     [DebugCommand]
+    public class AddBuffPlayer : IDebugCommand<string>
+    {
+        public string ID => "addBuffPlayer";
+
+        public string Description => "Adds the ability to the player";
+
+        public string Format => "addBuffPlayer <string>";
+
+        public bool HasDefaultValue => false;
+
+        public string DefaultParameter => "";
+
+        public void Invoke(string buffName)
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            PlayerBuff buff = gameManager.BuffRegistry.GetPlayerBuffFromName(buffName);
+            if (buff == null)
+            {
+                UnityEngine.Debug.Log($"{buffName} not found!");
+                return;
+            }
+
+            gameManager.Player.AddNewBuff(buff);
+        }
+    }
+
+    [DebugCommand]
     public class GoToNextFloor : IDebugCommand
     {
         public string ID => "nextFloor";

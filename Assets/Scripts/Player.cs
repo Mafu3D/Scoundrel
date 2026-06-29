@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Project.Decks;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IPlayerBuffRegisterable
 {
     [SerializeField] public int MaxHealth = 20;
     [SerializeField] public int RunCooldownTime = 1;
@@ -16,9 +17,14 @@ public class Player : MonoBehaviour
     public bool IsAtMaxHealth => CurrentHealth == MaxHealth;
     public int CurrentGold { get; private set; }
 
+    public PlayerBuffManager BuffManager => buffManager;
+
+    private PlayerBuffManager buffManager;
+
     public Action<int> OnHealthChanged;
     public Action<int> OnGoldChanged;
     public Action OnDeath;
+    public Action<MonsterCardModel> OnOtherDie;
     public Action OnWeaponChanged;
     public Action OnRunSuccess;
     public Action<WeaponCardModel> OnAttackedPreDamage;
@@ -33,6 +39,11 @@ public class Player : MonoBehaviour
     public void Update()
     {
         Weapon?.Update();
+
+        if (buffManager != null)
+        {
+            buffManager.Update();
+        }
     }
 
     public void StartNewGame()
@@ -41,6 +52,8 @@ public class Player : MonoBehaviour
         OnHealthChanged?.Invoke(CurrentHealth);
         OnWeaponChanged?.Invoke();
         OnGoldChanged?.Invoke(CurrentGold);
+
+        buffManager = new PlayerBuffManager(this);
     }
 
     public void RoundReset()
@@ -218,4 +231,16 @@ public class Player : MonoBehaviour
         Weapon = null;
         CurrentGold = 0;
     }
+
+    public List<PlayerBuff> GetBuffs() => buffManager.GetBuffs();
+
+    public PlayerBuff AddNewBuff(PlayerBuff buff) => buffManager.AddNewBuff(buff);
+
+    public void RemoveBuff(PlayerBuff buff) => buffManager.RemoveBuff(buff);
+
+    public void RemoveBuff(PlayerBuffID buffID) => buffManager.RemoveBuff(buffID);
+
+    public bool HasBuff(PlayerBuff buff) => buffManager.HasBuff(buff);
+
+    public bool HasBuff(PlayerBuffID buffID) => buffManager.HasBuff(buffID);
 }
