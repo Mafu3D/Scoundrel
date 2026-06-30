@@ -54,6 +54,8 @@ namespace Project.Decks
         public Action OnUpdate;
         public Action OnDeath;
         public Action OnDraw;
+        public Action<AttackReport> OnSelfAttackedPreDamage;
+        public Action<AttackReport> OnSelfAttackedPostDamage;
         public Action<MonsterCardModel> OnOtherDie;
 
 

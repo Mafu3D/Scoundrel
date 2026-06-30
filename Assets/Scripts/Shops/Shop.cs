@@ -78,14 +78,26 @@ public class Merchant : Shop
 
     protected override void PopulateShopActions()
     {
+        int AMOUNT = 4; // Magic number!!
         shopActions = new();
-        for (int i = 0; i < 4; i++) // Magic number!!!
+        for (int i = 0; i < AMOUNT; i++)
         {
-            ShopAction newAction = new("Test Merchant Action", "This is a test description for a new merchant action", 3,
-                (gameManager) =>
+            PlayerBuff buff = gameManager.BuffRegistry.GetRandomPlayerBuff();
+            if (buff == null)
+            {
+                Debug.LogWarning("No player buffs available to add to the shop.");
+                continue;
+            }
+
+            ShopAction newAction = new(
+                title: buff.Name,
+                description: buff.Description,
+                cost: 10,
+                OnPurchaseAction: (gameManager) =>
                 {
-                    Debug.Log("Successfully purchased the merchant action!");
+                    gameManager.Player.BuffManager.AddNewBuff(buff);
                 });
+
             shopActions.Add(newAction);
         }
     }

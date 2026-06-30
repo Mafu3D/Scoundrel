@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a052343418092dc4881c24c7c4ae6656, type: 3}
-  m_Name: Regeneration
+  m_Script: {fileID: 11500000, guid: 8b489f0d956549b49862744a442ddfe6, type: 3}
+  m_Name: Hearty
   m_EditorClassIdentifier: 
-  Name: Regeneration
-  Sprite: {fileID: 1427359898640848927, guid: a8649cb40ea96d7499e4346c14f5d91c, type: 3}
-  Description: Restore 2 health every turn
+  Name: Hearty
+  Sprite: {fileID: -7468765717597997205, guid: c74a59def5bdaf8479ec74ad8e347139, type: 3}
+  Description: +5 Max Health
   IsHidden: 0
   IsTemporary: 0
   RemoveOnParentCleanup: 0
   registeredChildBuffs: []
-  Amount: 2
+  Amount: 5

@@ -19,10 +19,10 @@ public class PlayerBuffManager : IDisposable
 
         ServiceLocator.Global.Get(out gameManager);
 
-        owner.OnAttackedPreDamage += HandleOnAttackedPreDamage;
-        owner.OnAttackedPostDamage += HandleOnAttackedPostDamage;
-        owner.OnWeaponAttackPreDamage += HandleOnWeaponAttackPreDamage;
-        owner.OnWeaponAttackPostDamage += HandleOnWeaponAttackPostDamage;
+        // owner.OnAttackedPreDamage += HandleOnAttackedPreDamage;
+        // owner.OnAttackedPostDamage += HandleOnAttackedPostDamage;
+        owner.OnAttackPreDamage += HandleOnPlayerAttackPreDamage;
+        owner.OnAttackPostDamage += HandleOnPlayerAttackPostDamage;
 
         owner.OnDeath += HandleOnSelfDie;
         owner.OnOtherDie += HandleOnOtherDie;
@@ -30,6 +30,7 @@ public class PlayerBuffManager : IDisposable
         gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
         gameManager.OnOpenNewRoom += HandleOnPlayerGoToNewRoom;
         gameManager.OnPlayerRun += HandleOnPlayerRun;
+        gameManager.OnGoToNextFloor += HandleOnPlayerGoToNewFloor;
     }
 
     public List<PlayerBuff> GetBuffs() => orderedBuffs;
@@ -50,10 +51,10 @@ public class PlayerBuffManager : IDisposable
 
     public void Dispose()
     {
-        owner.OnAttackedPreDamage -= HandleOnAttackedPreDamage;
-        owner.OnAttackedPostDamage -= HandleOnAttackedPostDamage;
-        owner.OnWeaponAttackPreDamage -= HandleOnWeaponAttackPreDamage;
-        owner.OnWeaponAttackPostDamage -= HandleOnWeaponAttackPostDamage;
+        // owner.OnAttackedPreDamage -= HandleOnAttackedPreDamage;
+        // owner.OnAttackedPostDamage -= HandleOnAttackedPostDamage;
+        owner.OnAttackPreDamage -= HandleOnPlayerAttackPreDamage;
+        owner.OnAttackPostDamage -= HandleOnPlayerAttackPostDamage;
 
         owner.OnDeath -= HandleOnSelfDie;
         owner.OnOtherDie -= HandleOnOtherDie;
@@ -61,6 +62,7 @@ public class PlayerBuffManager : IDisposable
         gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
         gameManager.OnOpenNewRoom -= HandleOnPlayerGoToNewRoom;
         gameManager.OnPlayerRun -= HandleOnPlayerRun;
+        gameManager.OnGoToNextFloor -= HandleOnPlayerGoToNewFloor;
     }
 
     public bool HasBuff(PlayerBuffID buffID) => registeredBuffs.Keys.Contains(buffID);
@@ -170,13 +172,13 @@ public class PlayerBuffManager : IDisposable
     }
 
 
-    private void HandleOnWeaponAttackPostDamage(MonsterCardModel defender) => orderedBuffs.ForEach(n => n.OnWeaponAttackPostDamage(defender));
+    private void HandleOnPlayerAttackPreDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPreDamage(attackReport));
 
-    private void HandleOnWeaponAttackPreDamage(MonsterCardModel defender) => orderedBuffs.ForEach(n => n.OnWeaponAttackPreDamage(defender));
+    private void HandleOnPlayerAttackPostDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPostDamage(attackReport));
 
-    private void HandleOnAttackedPostDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPostDamage(weapon));
+    // private void HandleOnAttackedPostDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPostDamage(weapon));
 
-    private void HandleOnAttackedPreDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPreDamage(weapon));
+    // private void HandleOnAttackedPreDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPreDamage(weapon));
 
     private void HandleOnPlayerEnterRoom() => orderedBuffs.ForEach(n => n.OnEnterRoom());
 
@@ -187,4 +189,6 @@ public class PlayerBuffManager : IDisposable
     private void HandleOnOtherDie(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDie(other));
 
     private void HandleOnSelfDie() => orderedBuffs.ForEach(n => n.OnSelfDie());
+
+    private void HandleOnPlayerGoToNewFloor() => orderedBuffs.ForEach(n => n.OnEnterNewFloor());
 }

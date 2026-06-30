@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Mafu.UnityServiceLocator;
-using Project.Decks;
 using UnityEngine;
 
 [CreateAssetMenu(fileName="Regeneration", menuName="Buffs/Player/Regeneration")]
 public class Regeneration : PlayerBuff
 {
+    // Restore health to the player when they enter a new room
+
     [SerializeField] public int Amount = 0;
 
     public override void OnGoToNewRoom()

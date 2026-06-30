@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Bomb", menuName="Buffs/Weapons/Bomb")]
 public class Bomb : Buff
 {
-    public override void OnWeaponAttackPostDamage(MonsterCardModel target)
+    public override void OnPlayerAttackPostDamage(AttackReport attackReport)
     {
         gameManager.Player.UnequipWeapon();
     }

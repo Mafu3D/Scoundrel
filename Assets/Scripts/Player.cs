@@ -23,14 +23,13 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
 
     public Action<int> OnHealthChanged;
     public Action<int> OnGoldChanged;
+    public Action<int> OnRunTokensChanged;
     public Action OnDeath;
     public Action<MonsterCardModel> OnOtherDie;
     public Action OnWeaponChanged;
     public Action OnRunSuccess;
-    public Action<WeaponCardModel> OnAttackedPreDamage;
-    public Action<WeaponCardModel> OnAttackedPostDamage;
-    public Action<MonsterCardModel> OnWeaponAttackPreDamage;
-    public Action<MonsterCardModel> OnWeaponAttackPostDamage;
+    public Action<AttackReport> OnAttackPreDamage;
+    public Action<AttackReport> OnAttackPostDamage;
 
     private bool runTokenOnCooldown = false;
 
@@ -110,6 +109,15 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
             HasRunToken = false;
             runTokenOnCooldown = true;
         }
+        else if (ExtraRunTokens > 0)
+        {
+            TryRemoveRunTokens(1);
+        }
+        else
+        {
+            Debug.LogError("Tried to run but no run tokens available");
+            return false;
+        }
 
         OnRunSuccess?.Invoke();
         return true;
@@ -131,10 +139,33 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
         OnHealthChanged?.Invoke(CurrentHealth);
     }
 
+    public void IncreaseMaxHealth(int amount)
+    {
+        MaxHealth += amount;
+        Heal(amount);
+    }
+
     public void AddGold(int amount)
     {
         CurrentGold = Math.Clamp(CurrentGold + Math.Abs(amount), 0, 9999999);
         OnGoldChanged?.Invoke(CurrentGold);
+    }
+
+    public void AddRunTokens(int amount)
+    {
+        ExtraRunTokens += amount;
+        OnRunTokensChanged?.Invoke(ExtraRunTokens);
+    }
+
+    public bool TryRemoveRunTokens(int amount)
+    {
+        if (ExtraRunTokens <= 0)
+        {
+            return false;
+        }
+        ExtraRunTokens = Math.Clamp(ExtraRunTokens - Math.Abs(amount), 0, 9999999);
+        OnRunTokensChanged?.Invoke(ExtraRunTokens);
+        return true;
     }
 
     public bool TryRemoveGold(int amount)
@@ -162,12 +193,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     #region Card Actions
     public bool TryFightUnarmed(RuntimeCardModel defender)
     {
-        OnAttackedPreDamage?.Invoke(null);
-
-        // Setting this up to return a bool so that conditions can be added later
-        TakeDamage(defender.Value);
-
-        OnAttackedPostDamage?.Invoke(null);
+        ProcessAttack(defender as MonsterCardModel, null);
         return true;
     }
 
@@ -175,31 +201,45 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     {
         if (Weapon == null || Weapon.GetCurrentStrength() <= defender.Value)
         {
+            // Attack was not successful, nothing happens
             return false;
         }
 
-        if (defender is MonsterCardModel)
-        {
-            OnWeaponAttackPreDamage?.Invoke(defender as MonsterCardModel);
-        }
-        OnAttackedPreDamage?.Invoke(Weapon);
-
-        int damage = Math.Clamp(defender.Value - Weapon.Value, 0, 999);
-        TakeDamage(damage);
-        Weapon.AddMonsterToSlain(defender);
-
-        if (defender is MonsterCardModel)
-        {
-            OnWeaponAttackPostDamage?.Invoke(defender as MonsterCardModel);
-        }
-        OnAttackedPostDamage?.Invoke(Weapon);
+        ProcessAttack(defender as MonsterCardModel, Weapon);
         return true;
+    }
+
+    private void ProcessAttack(MonsterCardModel defender, WeaponCardModel weapon)
+    {
+        // Calculate damage and create an attack report
+        AttackReport attackReport = new AttackReport(
+            attacker: this,
+            target: defender,
+            weapon: weapon,
+            damageReceived: weapon == null ? defender.Value : Math.Clamp(defender.Value - weapon.Value, 0, 999)
+        );
+
+        // Run any pre-damage events first
+        OnAttackPreDamage?.Invoke(attackReport);
+        defender.OnSelfAttackedPreDamage?.Invoke(attackReport);
+
+        // Apply damage and add the monster to the weapon's slain list
+        TakeDamage(attackReport.DamageReceived);
+        if (weapon != null)
+        {
+            weapon.AddMonsterToSlain(defender);
+        }
+
+        // Run any post-damage events
+        OnAttackPostDamage?.Invoke(attackReport);
+        defender.OnSelfAttackedPostDamage?.Invoke(attackReport);
     }
 
     public bool TryEquipWeapon(RuntimeCardModel card)
     {
         // Setting this up to return a bool so that conditions can be added later
         this.Weapon = new WeaponCardModel(card);
+        Debug.Log($"equipping weapon {this.Weapon.GetCardInfoString()}");
         OnWeaponChanged?.Invoke();
         return true;
     }

@@ -5,9 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Cleaving", menuName="Buffs/Weapons/Cleaving")]
 public class Cleaving : Buff
 {
-    public override void OnWeaponAttackPostDamage(MonsterCardModel target)
+    public override void OnPlayerAttackPostDamage(AttackReport attackReport)
     {
-        List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(target, new() {Suit.CLUBS, Suit.SPADES});
+        List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(attackReport.Target, new() {Suit.CLUBS, Suit.SPADES});
         foreach (RuntimeCardModel neighbor in neighbors)
         {
             if (neighbor != null && neighbor is MonsterCardModel)

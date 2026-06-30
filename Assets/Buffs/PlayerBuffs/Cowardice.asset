@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a052343418092dc4881c24c7c4ae6656, type: 3}
-  m_Name: Regeneration
+  m_Script: {fileID: 11500000, guid: 407c03bbdc08ff74dafa84678cc5bf4d, type: 3}
+  m_Name: Cowardice
   m_EditorClassIdentifier: 
-  Name: Regeneration
-  Sprite: {fileID: 1427359898640848927, guid: a8649cb40ea96d7499e4346c14f5d91c, type: 3}
-  Description: Restore 2 health every turn
+  Name: Cowardice
+  Sprite: {fileID: -1497097195630486599, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
+  Description: Gain 2 run tokens (do not refresh)
   IsHidden: 0
   IsTemporary: 0
   RemoveOnParentCleanup: 0

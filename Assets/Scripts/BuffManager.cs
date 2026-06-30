@@ -36,14 +36,14 @@ public class BuffManager : IDisposable
         ServiceLocator.Global.Get(out gameManager);
         player = gameManager.Player;
 
-        player.OnAttackedPreDamage += HandleOnAttackedPreDamage;
-        player.OnAttackedPostDamage += HandleOnAttackedPostDamage;
-        player.OnWeaponAttackPreDamage += HandleOnWeaponAttackPreDamage;
-        player.OnWeaponAttackPostDamage += HandleOnWeaponAttackPostDamage;
+        player.OnAttackPreDamage += HandleOnPlayerAttackPreDamage;
+        player.OnAttackPostDamage += HandleOnPlayerAttackPostDamage;
 
         owner.OnDeath += HandleOnSelfDie;
         owner.OnDraw += HandleOnDraw;
         owner.OnOtherDie += HandleOnOtherDie;
+        owner.OnSelfAttackedPreDamage += HandleOnSelfAttackedPreDamage;
+        owner.OnSelfAttackedPostDamage += HandleOnSelfAttackedPostDamage;
 
         gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
         gameManager.OnPlayerRun += HandleOnPlayerRun;
@@ -67,14 +67,15 @@ public class BuffManager : IDisposable
 
     public void Dispose()
     {
-        player.OnAttackedPreDamage -= HandleOnAttackedPreDamage;
-        player.OnAttackedPostDamage -= HandleOnAttackedPostDamage;
-        player.OnWeaponAttackPreDamage -= HandleOnWeaponAttackPreDamage;
-        player.OnWeaponAttackPostDamage -= HandleOnWeaponAttackPostDamage;
+        player.OnAttackPreDamage -= HandleOnPlayerAttackPreDamage;
+        player.OnAttackPostDamage -= HandleOnPlayerAttackPostDamage;
 
         owner.OnDeath -= HandleOnSelfDie;
         owner.OnDraw -= HandleOnDraw;
         owner.OnOtherDie -= HandleOnOtherDie;
+        owner.OnSelfAttackedPreDamage -= HandleOnSelfAttackedPreDamage;
+        owner.OnSelfAttackedPostDamage -= HandleOnSelfAttackedPostDamage;
+
 
         gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
         gameManager.OnPlayerRun -= HandleOnPlayerRun;
@@ -191,14 +192,13 @@ public class BuffManager : IDisposable
         buff.Cleanup();
     }
 
+    private void HandleOnPlayerAttackPreDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPreDamage(attackReport));
 
-    private void HandleOnWeaponAttackPostDamage(MonsterCardModel defender) => orderedBuffs.ForEach(n => n.OnWeaponAttackPostDamage(defender));
+    private void HandleOnPlayerAttackPostDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPostDamage(attackReport));
 
-    private void HandleOnWeaponAttackPreDamage(MonsterCardModel defender) => orderedBuffs.ForEach(n => n.OnWeaponAttackPreDamage(defender));
+    private void HandleOnSelfAttackedPreDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnSelfAttackedPreDamage(attackReport));
 
-    private void HandleOnAttackedPostDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPostDamage(weapon));
-
-    private void HandleOnAttackedPreDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPreDamage(weapon));
+    private void HandleOnSelfAttackedPostDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnSelfAttackedPostDamage(attackReport));
 
     private void HandleOnPlayerEnterRoom() => orderedBuffs.ForEach(n => n.OnEnterRoom());
 

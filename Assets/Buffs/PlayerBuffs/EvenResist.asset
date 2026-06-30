@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a052343418092dc4881c24c7c4ae6656, type: 3}
-  m_Name: Regeneration
+  m_Script: {fileID: 11500000, guid: a46031b9f7352d445a1538fa9debe19c, type: 3}
+  m_Name: EvenResist
   m_EditorClassIdentifier: 
-  Name: Regeneration
-  Sprite: {fileID: 1427359898640848927, guid: a8649cb40ea96d7499e4346c14f5d91c, type: 3}
-  Description: Restore 2 health every turn
+  Name: EvenTheOdds
+  Sprite: {fileID: -7171224923557551852, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
+  Description: Reduce damage taken by even numbered enemies by 1
   IsHidden: 0
   IsTemporary: 0
   RemoveOnParentCleanup: 0
   registeredChildBuffs: []
-  Amount: 2
+  Amount: 1
