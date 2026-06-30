@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb8dd435eb4c41547be71c27080b2441, type: 3}
+  m_Name: Reanimate
+  m_EditorClassIdentifier: 
+  Name: 
+  Sprite: {fileID: 0}
+  Description: 
+  ValidCardTypes: 
+  IsHidden: 0
+  ApplyOnDraw: 1
+  IsTemporary: 0
+  RemoveOnParentCleanup: 0
+  RemoveOnDeath: 1
+  registeredChildBuffs: []
+  strength: 1

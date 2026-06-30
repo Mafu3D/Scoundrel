@@ -8,11 +8,13 @@ using System.Linq;
 using TMPro;
 using Mafu.UnityServiceLocator;
 using Mafu.StateMachineSystem;
+using Project.Core;
 
 public class GameManager : MonoBehaviour
 {
     [Header("GameSettings")]
     [SerializeField] public GameSettings GameSettings;
+    [SerializeField] private bool debugLoop;
 
     [Header("Services")]
     [SerializeField] public DeckManager DeckManager;
@@ -25,6 +27,7 @@ public class GameManager : MonoBehaviour
     public int FloorNumber { get; private set; } = 0;
     public RoomModel CurrentRoom { get; private set; } = null;
     public AdvancedScoreKeeper ScoreKeeper { get; private set; } = null;
+    public GameProcessQueue<GameplayEffect> GameplayEffectQueue;
 
     public Action OnStartNewGame;
     public Action OnGameOver;
@@ -56,6 +59,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         ServiceLocator.Global.Register(this);
+        GameplayEffectQueue = new GameProcessQueue<GameplayEffect>();
     }
 
     void Start()
@@ -73,7 +77,19 @@ public class GameManager : MonoBehaviour
         {
             CurrentRoom.Update();
         }
+        ProcessGameplayEffectQueue(Time.deltaTime);
         Player.Update();
+    }
+
+    private Status ProcessGameplayEffectQueue(float deltaTime)
+    {
+        // GameplayEffectQueue.SuspendQueue(loopIsSuspended); // Temp
+        if (GameplayEffectQueue.QueueNeedsToBeResolved)
+        {
+            GameplayEffectQueue.ResolveQueue(deltaTime, debugLoop);
+            return Status.Running;
+        }
+        return Status.Complete;
     }
 
     public void RestartGame()

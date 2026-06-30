@@ -131,9 +131,14 @@ namespace Project.Decks
             }
         }
 
-        public void HandleDeath()
+        public void HandleDeathPreRemoval()
         {
             OnDeathPreRemoval?.Invoke();
+        }
+
+        public void HandleDeathPostRemoval()
+        {
+            OnDeathPostRemoval?.Invoke();
             BuffManager.CleanupRemoveOnDeathBuffs();
             BuffManager.Dispose();
             this.Dispose();
