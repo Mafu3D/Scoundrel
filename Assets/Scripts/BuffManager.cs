@@ -40,6 +40,7 @@ public class BuffManager : IDisposable
         player.OnAttackPostDamage += HandleOnPlayerAttackPostDamage;
 
         owner.OnDeathPreRemoval += HandleOnSelfDiePreRemoval;
+        owner.OnDeathPostRemoval += HandleOnSelfDiePostRemoval;
         owner.OnDraw += HandleOnDraw;
         owner.OnOtherDie += HandleOnOtherDie;
         owner.OnSelfAttackedPreDamage += HandleOnSelfAttackedPreDamage;
@@ -71,6 +72,7 @@ public class BuffManager : IDisposable
         player.OnAttackPostDamage -= HandleOnPlayerAttackPostDamage;
 
         owner.OnDeathPreRemoval -= HandleOnSelfDiePreRemoval;
+        owner.OnDeathPostRemoval -= HandleOnSelfDiePostRemoval;
         owner.OnDraw -= HandleOnDraw;
         owner.OnOtherDie -= HandleOnOtherDie;
         owner.OnSelfAttackedPreDamage -= HandleOnSelfAttackedPreDamage;

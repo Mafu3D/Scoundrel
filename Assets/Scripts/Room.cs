@@ -71,6 +71,17 @@ public class RoomModel
         return remaining;
     }
 
+    public int GetIndexOf(RuntimeCardModel card)
+    {
+        if (!Cards.Contains(card))
+        {
+            Debug.LogWarning("card is not in the current room!");
+            return -1;
+        }
+
+        return Array.IndexOf(Cards, card);
+    }
+
     public List<RuntimeCardModel> GetNeighbors(RuntimeCardModel card)
     {
         if (!Cards.Contains(card))
@@ -150,8 +161,9 @@ public class RoomModel
     private void RemoveCard(RuntimeCardModel card)
     {
         int index = Array.IndexOf(Cards, card);
-        card.HandleDeath();
+        card.HandleDeathPreRemoval();
         Cards[index] = null;
+        card.HandleDeathPostRemoval();
         OnCardsChanged?.Invoke();
     }
 
