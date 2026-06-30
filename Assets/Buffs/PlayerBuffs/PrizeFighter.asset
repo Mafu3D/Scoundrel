@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a052343418092dc4881c24c7c4ae6656, type: 3}
-  m_Name: Regeneration
+  m_Script: {fileID: 11500000, guid: 6d86bd503ff28244a8fb693fe77470bc, type: 3}
+  m_Name: PrizeFighter
   m_EditorClassIdentifier: 
-  Name: Regeneration
-  Sprite: {fileID: 1427359898640848927, guid: a8649cb40ea96d7499e4346c14f5d91c, type: 3}
-  Description: Restore 2 health every turn
+  Name: PrizeFighter
+  Sprite: {fileID: 7703157351043864636, guid: 0fd5a93fdbb7b9c4992528a4f2a5c282, type: 3}
+  Description: Gain +2 gold when defeating an enemy with your fists
   IsHidden: 0
   IsTemporary: 0
   RemoveOnParentCleanup: 0

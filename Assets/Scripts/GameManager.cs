@@ -40,7 +40,6 @@ public class GameManager : MonoBehaviour
     public Action OnExitChooseFloorPhase;
 
     public int CardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
-    private readonly int remainingToMove = 1;
     private StateMachine stateMachine;
 
     public bool CanGoToNextRoom => CurrentRoom != null &&
@@ -385,7 +384,7 @@ public class GameManager : MonoBehaviour
     {
         OnPlayerRun?.Invoke();
         DeckManager.Deck.AddToRemaining(CurrentRoom.Cards.ToList(), addToTop: false, shuffle: false);
-        CurrentRoom.ClearCards();
+        CurrentRoom.ClearCards(keepPersistentThroughRun: true);
         OpenNewRoom();
     }
 }

@@ -103,6 +103,26 @@ namespace Project.DebugCommands
     }
 
     [DebugCommand]
+    public class AddRunTokens : IDebugCommand<int>
+    {
+        public string ID => "addRunTokens";
+
+        public string Description => "Gain X run tokens";
+
+        public string Format => "addRunTokens <int>";
+
+        public bool HasDefaultValue => true;
+
+        public string DefaultParameter => "1";
+
+        public void Invoke(int amount)
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            gameManager.Player.AddRunTokens(amount);
+        }
+    }
+
+    [DebugCommand]
     public class AddBuffTo0 : IDebugCommand<string>
     {
         public string ID => "addBuff0";
