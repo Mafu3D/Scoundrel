@@ -13,4 +13,3 @@ public class Bloodthirsty : Buff
         Owner.RegisterValueModifier(amount);
     }
 }
-

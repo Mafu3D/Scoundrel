@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Exploding", menuName="Buffs/Monster/Exploding")]
 public class Exploding : Buff
 {
-    public override void OnSelfDie()
+    public override void OnSelfDiePreRemoval()
     {
         List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner, new() {Suit.CLUBS, Suit.SPADES, Suit.HEARTS, Suit.DIAMONDS});
         foreach (RuntimeCardModel neighbor in neighbors)

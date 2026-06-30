@@ -155,14 +155,19 @@ public class RoomModel
         OnCardsChanged?.Invoke();
     }
 
-    public void ClearCards()
+    public void ClearCards(bool keepPersistentThroughRun = false)
     {
         for (int i = 0; i < Cards.Length; i++)
         {
+            if (Cards[i] != null && (keepPersistentThroughRun && Cards[i].PersistsThroughRun))
+            {
+                continue;
+            }
             Cards[i] = null;
         }
         OnCardsChanged?.Invoke();
     }
+
 
     public void DEBUG_REMOVECARD(RuntimeCardModel card)
     {

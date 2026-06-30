@@ -52,12 +52,14 @@ namespace Project.Decks
         public string ID => uuid.ToString();
 
         public Action OnUpdate;
-        public Action OnDeath;
+        public Action OnDeathPreRemoval;
+        public Action OnDeathPostRemoval;
         public Action OnDraw;
         public Action<AttackReport> OnSelfAttackedPreDamage;
         public Action<AttackReport> OnSelfAttackedPostDamage;
         public Action<MonsterCardModel> OnOtherDie;
 
+        public bool PersistsThroughRun = false;
 
         public BuffManager BuffManager { get; private set; }
         public List<int> ValueModifiers = new();
@@ -131,9 +133,8 @@ namespace Project.Decks
 
         public void HandleDeath()
         {
-            OnDeath?.Invoke();
+            OnDeathPreRemoval?.Invoke();
             BuffManager.CleanupRemoveOnDeathBuffs();
-
             BuffManager.Dispose();
             this.Dispose();
         }

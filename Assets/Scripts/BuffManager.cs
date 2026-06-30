@@ -39,7 +39,7 @@ public class BuffManager : IDisposable
         player.OnAttackPreDamage += HandleOnPlayerAttackPreDamage;
         player.OnAttackPostDamage += HandleOnPlayerAttackPostDamage;
 
-        owner.OnDeath += HandleOnSelfDie;
+        owner.OnDeathPreRemoval += HandleOnSelfDiePreRemoval;
         owner.OnDraw += HandleOnDraw;
         owner.OnOtherDie += HandleOnOtherDie;
         owner.OnSelfAttackedPreDamage += HandleOnSelfAttackedPreDamage;
@@ -70,7 +70,7 @@ public class BuffManager : IDisposable
         player.OnAttackPreDamage -= HandleOnPlayerAttackPreDamage;
         player.OnAttackPostDamage -= HandleOnPlayerAttackPostDamage;
 
-        owner.OnDeath -= HandleOnSelfDie;
+        owner.OnDeathPreRemoval -= HandleOnSelfDiePreRemoval;
         owner.OnDraw -= HandleOnDraw;
         owner.OnOtherDie -= HandleOnOtherDie;
         owner.OnSelfAttackedPreDamage -= HandleOnSelfAttackedPreDamage;
@@ -208,5 +208,7 @@ public class BuffManager : IDisposable
 
     private void HandleOnDraw() => orderedBuffs.ForEach(n => n.OnDraw());
 
-    private void HandleOnSelfDie() => orderedBuffs.ForEach(n => n.OnSelfDie());
+    private void HandleOnSelfDiePreRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePreRemoval());
+
+    private void HandleOnSelfDiePostRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePostRemoval());
 }

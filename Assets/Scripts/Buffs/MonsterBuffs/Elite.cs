@@ -23,7 +23,7 @@ public class Elite : Buff
         Owner.RegisterValueModifier(2);
     }
 
-    public override void OnSelfDie()
+    public override void OnSelfDiePreRemoval()
     {
         gameManager.Player.AddGold(1);
     }

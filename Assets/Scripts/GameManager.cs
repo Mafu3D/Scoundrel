@@ -384,7 +384,7 @@ public class GameManager : MonoBehaviour
     {
         OnPlayerRun?.Invoke();
         DeckManager.Deck.AddToRemaining(CurrentRoom.Cards.ToList(), addToTop: false, shuffle: false);
-        CurrentRoom.ClearCards();
+        CurrentRoom.ClearCards(keepPersistentThroughRun: true);
         OpenNewRoom();
     }
 }
