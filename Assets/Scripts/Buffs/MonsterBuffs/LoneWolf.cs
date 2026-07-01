@@ -6,13 +6,6 @@ using UnityEngine;
 public class LoneWolf : Buff
 {
     private bool buffApplied = false;
-    public override void OnBuffApplied()
-    {
-        if (gameManager.CurrentRoom.Cards.Contains(Owner))
-        {
-            DoBuffEffect();
-        }
-    }
 
     public override void OnDraw()
     {

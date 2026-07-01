@@ -7,13 +7,6 @@ public class PackTactics : Buff
 {
     private bool buffApplied;
 
-    public override void OnBuffApplied()
-    {
-        if (gameManager.CurrentRoom.Cards.Contains(Owner))
-        {
-            DoBuffEffect();
-        }
-    }
 
     public override void OnDraw()
     {
