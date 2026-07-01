@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     public Action OnExitShopPhase;
     public Action OnEnterChooseFloorPhase;
     public Action OnExitChooseFloorPhase;
+    public Action OnCardsChanged;
 
     public int CardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
     private StateMachine stateMachine;
@@ -122,7 +123,7 @@ public class GameManager : MonoBehaviour
     {
         string outputString = "Random monster buffs:\n";
         // TEMP: add random monster buffs
-        List<string> buffs = new() { "Inspiring", "Elite", "Bloodthirsty", "Exploding" };
+        List<string> buffs = new() { "Inspiring", "Elite", "Bloodthirsty", "Exploding", "Hungry", "LoneWolf", "PackTactics", "Pursuer", "Reanimate" };
         int amount = UnityEngine.Random.Range(min, max);
         List<RuntimeCardModel> cardsToBuff = new();
         List<RuntimeCardModel> monsterCards = new();
@@ -253,6 +254,7 @@ public class GameManager : MonoBehaviour
         RoomModel room = new(CardsPerRoom, drawnCards);
         CurrentRoom = room;
         CurrentRoom.OnCardsChanged += CheckForGameResolution;
+        CurrentRoom.OnCardsChanged += BroadcastOnCardsChanged;
         CurrentRoom.InitializeRoom();
 
         RoomNumber++;
@@ -265,6 +267,7 @@ public class GameManager : MonoBehaviour
         if (CurrentRoom != null)
         {
             CurrentRoom.OnCardsChanged -= CheckForGameResolution;
+            CurrentRoom.OnCardsChanged -= BroadcastOnCardsChanged;
         }
 
         // Shuffle in any doors
@@ -306,6 +309,12 @@ public class GameManager : MonoBehaviour
         {
             EndGame();
         }
+    }
+
+    private void BroadcastOnCardsChanged()
+    {
+        // This is just temp, this should be refactored
+        OnCardsChanged?.Invoke();
     }
 
     public void OnCardClicked(RuntimeCardModel card, CardClickContext context)
