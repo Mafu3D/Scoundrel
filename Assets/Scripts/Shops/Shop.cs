@@ -116,7 +116,7 @@ public class Blacksmith : Shop
 
         // Get cards
         RuntimeCardModel[] cardsToBuff = new RuntimeCardModel[AMOUNT];
-        List<RuntimeCardModel> weaponCards = gameManager.DeckManager.GetRemainingOfSuit(new() {Suit.DIAMONDS});
+        List<RuntimeCardModel> weaponCards = gameManager.DeckController.GetRemainingOfSuit(new() {Suit.DIAMONDS});
         for (int i = 0; i < AMOUNT; i++)
         {
             int randIndex = UnityEngine.Random.Range(0, weaponCards.Count);

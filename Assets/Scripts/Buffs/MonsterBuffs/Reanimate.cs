@@ -12,7 +12,7 @@ public class Reanimate : Buff
     public override void OnSelfDiePreRemoval()
     {
         newMonster = new (Owner.Suit, strength);
-        index = gameManager.CurrentRoom.GetIndexOf(Owner);
+        index = gameManager.DungeonController.CurrentRoom.GetIndexOf(Owner);
 
         // gameManager.GameplayEffectQueue.Add(new RuntimeGameplayEffect(
         //     onProcessMethod: (deltaTime) =>
@@ -32,6 +32,6 @@ public class Reanimate : Buff
     public override void OnSelfDiePostRemoval()
     {
         Debug.Log("Reanimate effect ended");
-        gameManager.CurrentRoom.Cards[index] = newMonster;
+        gameManager.DungeonController.CurrentRoom.GetCards()[index] = newMonster;
     }
 }

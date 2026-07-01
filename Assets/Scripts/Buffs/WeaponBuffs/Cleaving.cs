@@ -7,7 +7,7 @@ public class Cleaving : Buff
 {
     public override void OnPlayerAttackPostDamage(AttackReport attackReport)
     {
-        List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(attackReport.Target, new() {Suit.CLUBS, Suit.SPADES});
+        List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetNeighbors(attackReport.Target, new() {Suit.CLUBS, Suit.SPADES});
         foreach (RuntimeCardModel neighbor in neighbors)
         {
             if (neighbor != null && neighbor is MonsterCardModel)

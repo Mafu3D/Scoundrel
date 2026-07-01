@@ -60,6 +60,14 @@ namespace Project.Decks
             RemainingItems.Insert(randomIndex, item);
         }
 
+        public void ShuffleIn(List<T> items)
+        {
+            foreach (T item in items)
+            {
+                ShuffleIn(item);
+            }
+        }
+
         public void Shuffle()
         {
             RemainingItems.Shuffle();

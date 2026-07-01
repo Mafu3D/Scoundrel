@@ -3,6 +3,7 @@ namespace Project.Core.StateMachineSystem
     public abstract class State : IState
     {
         protected StateMachine StateMachine;
+        protected GameManager GameManager => StateMachine.GameManager;
         public float TimeInState { get; private set; } = 0f;
 
         public State(StateMachine stateMachine)

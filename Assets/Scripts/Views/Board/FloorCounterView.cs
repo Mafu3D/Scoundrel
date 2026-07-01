@@ -3,22 +3,22 @@ using UnityEngine;
 
 public class FloorCounterView : MonoBehaviour
 {
-    [SerializeField] GameManager GameManager;
+    [SerializeField] GameManager gameManager;
     [SerializeField] TMP_Text floorCounter_TMPText;
 
     void OnEnable()
     {
-        GameManager.OnGoToNextFloor += OnGoToNextFloor;
+        gameManager.DungeonController.OnGoToNextFloor += OnGoToNextFloor;
     }
 
     void OnDisable()
     {
-        GameManager.OnGoToNextFloor -= OnGoToNextFloor;
+        gameManager.DungeonController.OnGoToNextFloor -= OnGoToNextFloor;
     }
 
     private void OnGoToNextFloor()
     {
-        floorCounter_TMPText.text = "Floor: " + GameManager.FloorNumber.ToString();
+        floorCounter_TMPText.text = "Floor: " + gameManager.DungeonController.GetFloorNumber().ToString();
     }
 
 }

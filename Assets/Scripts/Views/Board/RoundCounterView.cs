@@ -18,7 +18,7 @@ public class RoundCounterView : MonoBehaviour
 
     private void OnOpenNewRoom()
     {
-        roundCounter_TMPText.text = "Room: " + GameManager.RoomNumber.ToString();
+        roundCounter_TMPText.text = "Room: " + GameManager.DungeonController.GetRoomNumber().ToString();
     }
 
 }

@@ -58,7 +58,7 @@ namespace Project.DebugCommands
         public void Invoke(int index)
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
-            gameManager.CurrentRoom.DEBUG_REMOVECARD(gameManager.CurrentRoom.Cards[index]);
+            gameManager.DungeonController.CurrentRoom.TryRemoveCard(gameManager.DungeonController.CurrentRoom.GetCards()[index]);
         }
     }
 
@@ -145,7 +145,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            gameManager.CurrentRoom.Cards[0].AddNewBuff(buff);
+            gameManager.DungeonController.CurrentRoom.GetCards()[0].AddNewBuff(buff);
         }
     }
 
@@ -172,7 +172,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            gameManager.CurrentRoom.Cards[1].AddNewBuff(buff);
+            gameManager.DungeonController.CurrentRoom.GetCards()[1].AddNewBuff(buff);
         }
     }
 
@@ -199,7 +199,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            gameManager.CurrentRoom.Cards[2].AddNewBuff(buff);
+            gameManager.DungeonController.CurrentRoom.GetCards()[2].AddNewBuff(buff);
         }
     }
 
@@ -226,7 +226,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            gameManager.CurrentRoom.Cards[3].AddNewBuff(buff);
+            gameManager.DungeonController.CurrentRoom.GetCards()[3].AddNewBuff(buff);
         }
     }
 

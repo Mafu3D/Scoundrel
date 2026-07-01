@@ -21,12 +21,12 @@ public class Hungry : Buff
 
     private void DoBuffEffect()
     {
-        List<RuntimeCardModel> neighbors = gameManager.CurrentRoom.GetNeighbors(Owner, new() {Suit.CLUBS, Suit.SPADES});
+        List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetNeighbors(Owner, new() {Suit.CLUBS, Suit.SPADES});
         int totalPower = 0;
         foreach (RuntimeCardModel neighbor in neighbors)
         {
             totalPower += neighbor.Value;
-            gameManager.CurrentRoom.TryRemoveCard(neighbor);
+            gameManager.DungeonController.CurrentRoom.TryRemoveCard(neighbor);
         }
         Owner.RegisterValueModifier(totalPower);
     }

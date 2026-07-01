@@ -45,7 +45,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
         }
     }
 
-    public void StartNewGame()
+    public void StartNewRun()
     {
         ResetPlayer();
         OnHealthChanged?.Invoke(CurrentHealth);

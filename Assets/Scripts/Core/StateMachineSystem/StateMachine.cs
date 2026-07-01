@@ -8,13 +8,15 @@ namespace Project.Core.StateMachineSystem
     /// </summary>
     public class StateMachine
     {
-        public StateMachine() { }
-
         public State CurrentState;
-
         public State PreviousState;
+        public event Action OnStateChanged;
+        public GameManager GameManager { get; private set;}
 
-        public event Action OnSwitchStateEvent;
+        public StateMachine(GameManager gameManager)
+        {
+            this.GameManager = gameManager;
+        }
 
         public void Update()
         {
@@ -40,7 +42,7 @@ namespace Project.Core.StateMachineSystem
             CurrentState?.OnEnter();
 
             // Callback
-            OnSwitchStateEvent?.Invoke();
+            OnStateChanged?.Invoke();
         }
 
         public void SetInitialState(State newState) {

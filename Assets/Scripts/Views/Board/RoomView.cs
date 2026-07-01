@@ -5,7 +5,7 @@ public class RoomView : MonoBehaviour
 {
     [SerializeField] public List<CardView> CardViews;
 
-    private RoomModel room;
+    private RoomController room;
 
     void Start()
     {
@@ -17,10 +17,10 @@ public class RoomView : MonoBehaviour
         RefreshView();
     }
 
-    public void RegisterRoom(RoomModel newRoom)
+    public void RegisterRoom(RoomController newRoom)
     {
-        room = newRoom;
         room.OnCardsChanged += OnCardsChanged;
+        room = newRoom;
         RefreshView();
     }
 
@@ -57,9 +57,9 @@ public class RoomView : MonoBehaviour
         // Otherwise, register the card model to each card view
         for (int i = 0; i < CardViews.Count; i++)
         {
-            if (room.Cards[i] != null)
+            if (room.GetCards()[i] != null)
             {
-                CardViews[i].RegisterCard(room.Cards[i]);
+                CardViews[i].RegisterCard(room.GetCards()[i]);
                 CardViews[i].gameObject.SetActive(true);
             }
             else

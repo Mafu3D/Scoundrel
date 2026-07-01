@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DeckView : MonoBehaviour
 {
-    [SerializeField] DeckManager DeckManager;
+    [SerializeField] DeckController DeckManager;
     [SerializeField] TMP_Text remainingCards_TMPText;
 
     void OnEnable()

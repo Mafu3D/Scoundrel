@@ -6,7 +6,8 @@ using Project.Decks;
 using TMPro;
 using System;
 
-public class DeckManager : MonoBehaviour
+// TODO: split this into controller, model, and view
+public class DeckController : MonoBehaviour
 {
     public Deck<RuntimeCardModel> Deck { get; private set; }
 

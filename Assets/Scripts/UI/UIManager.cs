@@ -9,25 +9,19 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameManager gameManager;
 
     [Header("Title")]
-    [SerializeField] private List<GameObject> titleObjects = new();
+    [SerializeField] private TitleScreenCanvas titleScreenCanvas;
 
     [Header("During Game")]
-    [SerializeField] private List<GameObject> currentRunUI = new();
+    [SerializeField] private GameObject currentRunCanvas;
     [SerializeField] private List<GameObject> cardsUI = new();
 
     [Header("Game Over")]
-    [SerializeField] private List<GameObject> gameOverObjects = new();
     [SerializeField] private GameOverCanvas gameOverCanvas;
 
     [Header("Other")]
     [SerializeField] private List<GameObject> powerUpDungeonObjects = new();
     [SerializeField] private List<GameObject> shopObjects = new();
     [SerializeField] private List<GameObject> chooseFloorObjects = new();
-
-    void Awake()
-    {
-        ServiceLocator.Global.Register(this);
-    }
 
     void OnEnable()
     {
@@ -36,7 +30,7 @@ public class UIManager : MonoBehaviour
         gameManager.OnEnterPowerUpDungeonPhase += ShowPowerUpDungeonObjects;
         gameManager.OnEnterShopPhase += ShowShopObjects;
         gameManager.OnEnterChooseFloorPhase += ShowChooseFloorObjects;
-        gameManager.OnGoToNextFloor += ShowNewFloorObjects;
+        gameManager.DungeonController.OnGoToNextFloor += ShowNewFloorObjects;
     }
 
     void OnDisable()
@@ -46,36 +40,36 @@ public class UIManager : MonoBehaviour
         gameManager.OnEnterPowerUpDungeonPhase -= ShowPowerUpDungeonObjects;
         gameManager.OnEnterShopPhase -= ShowShopObjects;
         gameManager.OnEnterChooseFloorPhase -= ShowChooseFloorObjects;
-        gameManager.OnGoToNextFloor -= ShowNewFloorObjects;
+        gameManager.DungeonController.OnGoToNextFloor -= ShowNewFloorObjects;
     }
 
     void Start()
     {
-        gameOverObjects.ForEach(go => go.SetActive(false));
-        currentRunUI.ForEach(go => go.SetActive(false));
+        gameOverCanvas.gameObject.SetActive(false);
+        currentRunCanvas.SetActive(false);
         cardsUI.ForEach(go => go.SetActive(false));
         powerUpDungeonObjects.ForEach(go => go.SetActive(false));
         shopObjects.ForEach(go => go.SetActive(false));
         chooseFloorObjects.ForEach(go => go.SetActive(false));
 
-        titleObjects.ForEach(go => go.SetActive(true));
+        titleScreenCanvas.gameObject.SetActive(true);
     }
 
     private void ShowDuringGame()
     {
-        titleObjects.ForEach(go => go.SetActive(false));
-        gameOverObjects.ForEach(go => go.SetActive(false));
+        titleScreenCanvas.gameObject.SetActive(false);
+        gameOverCanvas.gameObject.SetActive(false);
 
-        currentRunUI.ForEach(go => go.SetActive(true));
+        currentRunCanvas.SetActive(true);
         cardsUI.ForEach(go => go.SetActive(true));
     }
 
     private void ShowGameOver()
     {
-        currentRunUI.ForEach(go => go.SetActive(false));
+        currentRunCanvas.SetActive(false);
         cardsUI.ForEach(go => go.SetActive(false));
 
-        gameOverObjects.ForEach(go => go.SetActive(true));
+        gameOverCanvas.gameObject.SetActive(true);
 
         bool playerWon = gameManager.ScoreKeeper.HasPlayerWon();
         int finalScore = gameManager.ScoreKeeper.GetScore();

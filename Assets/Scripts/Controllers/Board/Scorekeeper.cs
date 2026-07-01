@@ -27,7 +27,7 @@ public class AdvancedScoreKeeper : IScoreKeeper
             return;
         }
 
-        float floorMultiplier = 1 + ((gameManager.FloorNumber - 1) * 0.2f);
+        float floorMultiplier = 1 + ((gameManager.DungeonController.GetFloorNumber() - 1) * 0.2f);
 
         float cardScore = card.Value * 100;
         cardScore *= roomMultipler;
@@ -71,21 +71,21 @@ public class ClassicScoreKeeper : IScoreKeeper
     public bool HasPlayerWon()
     {
         int monsterScore = 0;
-        foreach (RuntimeCardModel card in gameManager.DeckManager.Deck.RemainingItems)
+        foreach (RuntimeCardModel card in gameManager.DeckController.Deck.RemainingItems)
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
                 monsterScore += card.BaseValue;
             }
         }
-        foreach (RuntimeCardModel card in gameManager.CurrentRoom.Cards)
+        foreach (RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetCards())
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
                 monsterScore += card.BaseValue;
             }
         }
-        if (gameManager.DeckManager.Deck.CurrentCount == 0 && monsterScore == 0)
+        if (gameManager.DeckController.Deck.CurrentCount == 0 && monsterScore == 0)
         {
             return true;
         }
@@ -96,14 +96,14 @@ public class ClassicScoreKeeper : IScoreKeeper
     {
         int monsterScore = 0;
         bool monstersInRoom = false;
-        foreach (RuntimeCardModel card in gameManager.DeckManager.Deck.RemainingItems)
+        foreach (RuntimeCardModel card in gameManager.DeckController.Deck.RemainingItems)
         {
             if (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS)
             {
                 monsterScore += card.BaseValue;
             }
         }
-        foreach (RuntimeCardModel card in gameManager.CurrentRoom.Cards)
+        foreach (RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetCards())
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
@@ -112,12 +112,12 @@ public class ClassicScoreKeeper : IScoreKeeper
             }
         }
 
-        if (gameManager.DeckManager.Deck.CurrentCount == 0 && !monstersInRoom)
+        if (gameManager.DeckController.Deck.CurrentCount == 0 && !monstersInRoom)
         {
             if (gameManager.Player.CurrentHealth == gameManager.Player.MaxHealth)
             {
                 int potionScore = 0;
-                foreach (RuntimeCardModel card in gameManager.CurrentRoom.Cards)
+                foreach (RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetCards())
                 {
                     if (card.Suit == Suit.HEARTS)
                     {

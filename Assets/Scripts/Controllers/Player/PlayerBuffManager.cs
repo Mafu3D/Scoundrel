@@ -30,7 +30,7 @@ public class PlayerBuffManager : IDisposable
         gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
         gameManager.OnOpenNewRoom += HandleOnPlayerGoToNewRoom;
         gameManager.OnPlayerRun += HandleOnPlayerRun;
-        gameManager.OnGoToNextFloor += HandleOnPlayerGoToNewFloor;
+        gameManager.DungeonController.OnGoToNextFloor += HandleOnPlayerGoToNewFloor;
     }
 
     public List<PlayerBuff> GetBuffs() => orderedBuffs;
@@ -62,7 +62,7 @@ public class PlayerBuffManager : IDisposable
         gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
         gameManager.OnOpenNewRoom -= HandleOnPlayerGoToNewRoom;
         gameManager.OnPlayerRun -= HandleOnPlayerRun;
-        gameManager.OnGoToNextFloor -= HandleOnPlayerGoToNewFloor;
+        gameManager.DungeonController.OnGoToNextFloor -= HandleOnPlayerGoToNewFloor;
     }
 
     public bool HasBuff(PlayerBuffID buffID) => registeredBuffs.Keys.Contains(buffID);
