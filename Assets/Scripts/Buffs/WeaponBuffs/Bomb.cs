@@ -10,6 +10,7 @@ public class Bomb : Buff
     public override void OnPlayerAttackPostDamage(AttackReport attackReport)
     {
         gameManager.Player.UnequipWeapon();
+        Debug.Log("Bomb detonated, unequipping weapon");
     }
 
     public override void OnBuffApplied()
