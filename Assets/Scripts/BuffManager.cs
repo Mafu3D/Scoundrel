@@ -48,6 +48,7 @@ public class BuffManager : IDisposable
 
         gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
         gameManager.OnPlayerRun += HandleOnPlayerRun;
+        gameManager.OnCardsChanged += HandleOnCardsChanged;
     }
 
     public List<Buff> GetBuffs() => orderedBuffs;
@@ -81,6 +82,7 @@ public class BuffManager : IDisposable
 
         gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
         gameManager.OnPlayerRun -= HandleOnPlayerRun;
+        gameManager.OnCardsChanged -= HandleOnCardsChanged;
     }
 
     public bool HasBuff(BuffID buffID) => registeredBuffs.Keys.Contains(buffID);
@@ -88,7 +90,8 @@ public class BuffManager : IDisposable
 
     public void Update()
     {
-        orderedBuffs.ForEach(n => n.OnUpdate());
+        List<Buff> orderedBuffsCopy = new(orderedBuffs);
+        orderedBuffsCopy.ForEach(n => n.OnUpdate());
     }
 
     public void CleanupTemporaryBuffs()
@@ -213,4 +216,6 @@ public class BuffManager : IDisposable
     private void HandleOnSelfDiePreRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePreRemoval());
 
     private void HandleOnSelfDiePostRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePostRemoval());
+
+    private void HandleOnCardsChanged() => orderedBuffs.ForEach(n => n.OnCardsChanged());
 }

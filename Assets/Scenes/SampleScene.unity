@@ -8592,6 +8592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameSettings: {fileID: 0}
+  debugLoop: 0
   DeckManager: {fileID: 995225364}
   ShopManager: {fileID: 1180323120}
   BuffRegistry: {fileID: 995225365}
@@ -8659,6 +8660,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: df04353ec4fc6c04582709ace922b1fc, type: 2}
   - {fileID: 11400000, guid: f83504522933e3f45b0676b4d4cecc5b, type: 2}
   - {fileID: 11400000, guid: dc3135628611bdd439121c5c247c8850, type: 2}
+  - {fileID: 11400000, guid: a6a82b92f15bf694d8a5a6ca0ee99cf9, type: 2}
+  - {fileID: 11400000, guid: 6f32258e909b9104e8c042dc62317042, type: 2}
+  - {fileID: 11400000, guid: cf0c4f47f1fe14542bb787bcba96cfd4, type: 2}
+  - {fileID: 11400000, guid: 75274b8aac257a44596074df74a0bacc, type: 2}
   GlobalPlayerBuffs:
   - {fileID: 11400000, guid: 9a38ba94febaa7d4cbce44650fc1ad9b, type: 2}
   - {fileID: 11400000, guid: c095c7ac68ef81649b75515d9a57c0c5, type: 2}

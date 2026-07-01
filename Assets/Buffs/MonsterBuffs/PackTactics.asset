@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb8dd435eb4c41547be71c27080b2441, type: 3}
-  m_Name: Reanimate
+  m_Script: {fileID: 11500000, guid: ee9180decb053304eaede5e7ad6bc286, type: 3}
+  m_Name: PackTactics
   m_EditorClassIdentifier: 
-  Name: Reanimate
-  Sprite: {fileID: -7170473627477248649, guid: 1b3a780d2c57ad2468937f79e7caf100, type: 3}
-  Description: When this card is killed, ressurect it as a 2 power monster
+  Name: PackTactics
+  Sprite: {fileID: 188849315, guid: 4cc4292a11395fd409f7132df8c55df2, type: 3}
+  Description: +2 power if there are other monsters in the room
   ValidCardTypes: 00000000
   IsHidden: 0
   ApplyOnDraw: 1
@@ -22,4 +22,3 @@ MonoBehaviour:
   RemoveOnParentCleanup: 0
   RemoveOnDeath: 1
   registeredChildBuffs: []
-  strength: 2

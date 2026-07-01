@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb8dd435eb4c41547be71c27080b2441, type: 3}
-  m_Name: Reanimate
+  m_Script: {fileID: 11500000, guid: c4c9b06383cd01648ac40a1c8568a176, type: 3}
+  m_Name: Hungry
   m_EditorClassIdentifier: 
-  Name: Reanimate
-  Sprite: {fileID: -7170473627477248649, guid: 1b3a780d2c57ad2468937f79e7caf100, type: 3}
-  Description: When this card is killed, ressurect it as a 2 power monster
+  Name: Hungry
+  Sprite: {fileID: -6937499602746883264, guid: 4c49442fb79d31449ac19cd8eb75d26b, type: 3}
+  Description: This monster eats its neighbors and gains their power
   ValidCardTypes: 00000000
   IsHidden: 0
   ApplyOnDraw: 1
@@ -22,4 +22,3 @@ MonoBehaviour:
   RemoveOnParentCleanup: 0
   RemoveOnDeath: 1
   registeredChildBuffs: []
-  strength: 2
