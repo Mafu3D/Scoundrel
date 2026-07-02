@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using Project.Decks;
 using Sirenix.Utilities;
+using UnityEngine;
 
 public class DungeonController
 {
     public RoomController CurrentRoom { get; private set; }
+
+    public bool CanGoToNextRoom => CurrentRoom != null &&
+                                   CurrentRoom.CanGoToNextRoom();
 
     public Action OnGoToNextFloor;
     public Action OnNewRoomOpened;
@@ -79,6 +83,14 @@ public class DungeonController
 
         IncrementRoomNumber();
         OnNewRoomOpened?.Invoke();
+    }
+
+    public void RunFromRoom()
+    {
+        Debug.Log("DungeonController: running from room");
+        List<RuntimeCardModel> nonpersistantCards = CurrentRoom.PopNonPersistantCards();
+        Debug.Log($"popped {string.Join(", ", nonpersistantCards)}");
+        deckController.Deck.AddToRemaining(nonpersistantCards, addToTop: false, shuffle: false);
     }
     #endregion
 

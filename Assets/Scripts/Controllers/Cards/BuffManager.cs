@@ -47,7 +47,6 @@ public class BuffManager : IDisposable
         owner.OnSelfAttackedPostDamage += HandleOnSelfAttackedPostDamage;
 
         gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
-        gameManager.OnPlayerRun += HandleOnPlayerRun;
         gameManager.OnCardsChanged += HandleOnCardsChanged;
     }
 
@@ -81,7 +80,6 @@ public class BuffManager : IDisposable
 
 
         gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
-        gameManager.OnPlayerRun -= HandleOnPlayerRun;
         gameManager.OnCardsChanged -= HandleOnCardsChanged;
     }
 
@@ -216,6 +214,8 @@ public class BuffManager : IDisposable
     private void HandleOnSelfDiePreRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePreRemoval());
 
     private void HandleOnSelfDiePostRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePostRemoval());
+
+    public void HandleOnSelfDie() => orderedBuffs.ForEach(n => n.OnSelfDie());
 
     private void HandleOnCardsChanged() => orderedBuffs.ForEach(n => n.OnCardsChanged());
 }

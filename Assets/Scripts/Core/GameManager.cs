@@ -14,6 +14,7 @@ using Project.GameStates;
 public class GameManager : MonoBehaviour
 {
     [Header("GameSettings")]
+
     [SerializeField] public GameSettings GameSettings;
     [SerializeField] private bool debugLoop;
 
@@ -32,7 +33,6 @@ public class GameManager : MonoBehaviour
     public Action OnOpenNewRoom;
     public Action OnExitCurrentFloor;
     public Action OnPlayerEnterRoom;
-    public Action OnPlayerRun;
     public Action OnEnterPowerUpDungeonPhase;
     public Action OnEnterShopPhase;
     public Action OnExitShopPhase;
@@ -40,12 +40,7 @@ public class GameManager : MonoBehaviour
     public Action OnExitChooseFloorPhase;
     public Action OnCardsChanged;
 
-    public int CardsPerRoom => GameSettings != null ? GameSettings.CardsPerRoom : 4;
     private StateMachine stateMachine;
-
-    // public bool CanGoToNextRoom => CurrentRoom != null &&
-    //                                CurrentRoom.CanGoToNextRoom();
-    public bool CanGoToNextRoom => true; // TEMP: remove this when the CanGoToNextRoom logic is implemented in the RoomController
 
     void OnEnable()
     {
@@ -75,24 +70,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         stateMachine.Update();
-
-        // TOOD: This should be run in the update of the states, not the game manager
-        DungeonController.Update();
-        Player.Update();
-    }
-
-    private Status ProcessGameplayEffectQueue(float deltaTime)
-    {
-        // GameplayEffectQueue.SuspendQueue(loopIsSuspended); // Temp
-        if (GameplayEffectQueue.QueueNeedsToBeResolved)
-        {
-            GameplayEffectQueue.ResolveQueue(deltaTime, debugLoop);
-            return Status.Running;
-        }
-        return Status.Complete;
     }
 
     #region Game Loop
+    // TODO: Eventually I think I should move all of the game loop stuff into its own class
+    //          Maybe like a state machine controller class?
 
     public void RestartGame()
     {
@@ -108,6 +90,7 @@ public class GameManager : MonoBehaviour
     public void StartNewRun()
     {
         stateMachine.SwitchState(new StartNewRunState(stateMachine: stateMachine,
+                                                      gameplayEffectQueue: GameplayEffectQueue,
                                                       player: Player,
                                                       dungeonController: DungeonController,
                                                       scoreKeeper: ScoreKeeper,
@@ -115,10 +98,46 @@ public class GameManager : MonoBehaviour
         OnStartNewGame?.Invoke(); // TODO: this should be called from within the StartNewRunState, but for now it is here to avoid breaking the UIManager
     }
 
+    public void GoToNextRoom()
+    {
+        if (!DungeonController.CanGoToNextRoom)
+        {
+            Debug.LogWarning("Tried to go to the next room but can't!");
+            return;
+        }
+
+        stateMachine.SwitchState(new OpenNewRoomState(stateMachine,
+                                                      GameplayEffectQueue,
+                                                      Player,
+                                                      DungeonController,
+                                                      ScoreKeeper));
+    }
+
+    public void HandlePlayerRun(bool force = false)
+    {
+        if (!Player.TrySpendRun())
+        {
+            Debug.LogWarning("Tried to run but can't!");
+            if (!force)
+            {
+                return;
+            }
+        }
+
+        stateMachine.SwitchState(new RunFromRoomState(stateMachine,
+                                                      GameplayEffectQueue,
+                                                      Player,
+                                                      DungeonController,
+                                                      ScoreKeeper));
+    }
+
+
     #endregion
 
     public void TEMP_AddRandomMonsterBuffs(int min, int max)
     {
+        return;
+
         string outputString = "Random monster buffs:\n";
         // TEMP: add random monster buffs
         List<string> buffs = new() { "Inspiring", "Elite", "Bloodthirsty", "Exploding", "Hungry", "LoneWolf", "PackTactics", "Pursuer", "Reanimate" };
@@ -168,8 +187,7 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-        Player.OnRunSuccess -= HandlePlayerRun;
-        Player.OnDeath -= GameOver;
+        // Player.OnDeath -= GameOver;
     }
 
     private void GameOver()
@@ -247,11 +265,6 @@ public class GameManager : MonoBehaviour
         // OpenFirstRoom();
     }
 
-    public void DEBUG_RUN()
-    {
-        HandlePlayerRun();
-    }
-
     private void CheckForGameResolution()
     {
         if (ScoreKeeper.HasPlayerWon())
@@ -268,6 +281,11 @@ public class GameManager : MonoBehaviour
 
     public void OnCardClicked(RuntimeCardModel card, CardClickContext context)
     {
+        if (Player.InteractionState != PlayerInteractionState.Full)
+        {
+            return;
+        }
+
         if (!DungeonController.CurrentRoom.GetCards().Contains(card))
         {
             return;
@@ -297,6 +315,8 @@ public class GameManager : MonoBehaviour
             if (card is MonsterCardModel)
             {
                 Player.AddGold(1);
+
+                card.BuffManager.HandleOnSelfDie();
 
                 // also broadcast to other cards that this died
                 foreach (RuntimeCardModel other in DungeonController.CurrentRoom.GetOthers(card))
@@ -340,11 +360,6 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    public void GoToNextRoom()
-    {
-        if (!CanGoToNextRoom) return;
-        // OpenNewRoom();
-    }
 
     private bool HandlePotion(RuntimeCardModel card)
     {
@@ -353,14 +368,6 @@ public class GameManager : MonoBehaviour
     }
 
     private bool HandleEnemy(RuntimeCardModel card, CardClickContext context) => context == CardClickContext.TOP ? Player.TryFightWeapon(card) : Player.TryFightUnarmed(card);
-
-    private void HandlePlayerRun()
-    {
-        // OnPlayerRun?.Invoke();
-        // DeckController.Deck.AddToRemaining(CurrentRoom.Cards.ToList(), addToTop: false, shuffle: false);
-        // CurrentRoom.ClearCards(keepPersistentThroughRun: true);
-        // OpenNewRoom();
-    }
 
     #region DEBUG_FUNCTIONS
 

@@ -9,7 +9,7 @@ namespace Project.GameStates
         }
 
         public override void OnEnter() { }
-        public override void Update(float time) { }
+        public override void Update(float deltaTime) { }
         public override void OnExit() { }
     }
 }

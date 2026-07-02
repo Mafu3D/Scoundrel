@@ -1,3 +1,4 @@
+using Project.Core;
 using Project.Core.StateMachineSystem;
 
 namespace Project.GameStates
@@ -12,8 +13,10 @@ namespace Project.GameStates
         private readonly Player player;
         private readonly DungeonController dungeonController;
         private readonly AdvancedScoreKeeper scoreKeeper;
+        private readonly GameProcessQueue<GameplayEffect> gameplayEffectQueue;
 
         public EnterNewFloorState(StateMachine stateMachine,
+                                  GameProcessQueue<GameplayEffect> gameplayEffectQueue,
                                   Player player,
                                   DungeonController dungeonController,
                                   AdvancedScoreKeeper scoreKeeper) : base(stateMachine)
@@ -21,20 +24,30 @@ namespace Project.GameStates
             this.dungeonController = dungeonController;
             this.player = player;
             this.scoreKeeper = scoreKeeper;
+            this.gameplayEffectQueue = gameplayEffectQueue;
         }
 
         public override void OnEnter()
         {
             dungeonController.GoToNextFloor();
+            player.SetInteractionState(PlayerInteractionState.UIOnly);
         }
 
-        public override void Update(float time)
+        public override void Update(float deltaTime)
         {
-            // Resolve the queue
+            if (gameplayEffectQueue.QueueNeedsToBeResolved)
+            {
+                gameplayEffectQueue.ResolveQueue(deltaTime);
+                return;
+            }
 
             // Should this open a new room immediately? Or should it wait for player input to open a new room?
             // For now, let's open a new room immediately.
-            StateMachine.SwitchState(new OpenNewRoomState(StateMachine, player, dungeonController, scoreKeeper));
+            StateMachine.SwitchState(new OpenNewRoomState(StateMachine,
+                                                          gameplayEffectQueue,
+                                                          player,
+                                                          dungeonController,
+                                                          scoreKeeper));
         }
 
         public override void OnExit() { }

@@ -160,6 +160,7 @@ public abstract class Buff : ScriptableObject
 
     public virtual void OnEnterRoom() { }
     public virtual void OnRun() { }
+    public virtual void OnSelfDie() { }
     public virtual void OnSelfDiePreRemoval() { }
     public virtual void OnSelfDiePostRemoval() { }
     public virtual void OnOtherDie(MonsterCardModel other) { }

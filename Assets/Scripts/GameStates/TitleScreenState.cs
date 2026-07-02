@@ -13,7 +13,7 @@ namespace Project.GameStates
             // Show the title screen UI
         }
 
-        public override void Update(float time) { }
+        public override void Update(float deltaTime) { }
         public override void OnExit() { }
     }
 }

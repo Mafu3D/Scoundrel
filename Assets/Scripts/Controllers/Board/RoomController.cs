@@ -151,14 +151,10 @@ public class RoomController
         OnCardsChanged?.Invoke();
     }
 
-    public void ClearCards(bool keepPersistentThroughRun = false)
+    public void ClearCards()
     {
         for (int i = 0; i < roomModel.Cards.Length; i++)
         {
-            if (roomModel.Cards[i] != null && (keepPersistentThroughRun && roomModel.Cards[i].PersistsThroughRun))
-            {
-                continue;
-            }
             roomModel.Cards[i] = null;
         }
         OnCardsChanged?.Invoke();
@@ -168,16 +164,32 @@ public class RoomController
     {
         // TODO: Refactor this to not just be used on doors, but also on any other cards that need to be reshuffled into the deck
         // Should this take the deckcontroller as an argument?
-        List<RuntimeCardModel> cardsToReshuffle = new();
+        return PopCardsFromPredicate((card) => { return card is DoorCardModel; });
+    }
+
+    public List<RuntimeCardModel> PopNonPersistantCards()
+    {
+        return PopCardsFromPredicate((card) => { return !card.PersistsThroughRun; });
+    }
+
+    /// <summary>
+    /// Iterate through all of the remaining cards and check against a predicate.
+    /// Pop all cards from the list if the predicate returns true, and return the popped cards.
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <returns></returns>
+    private List<RuntimeCardModel> PopCardsFromPredicate(Func<RuntimeCardModel, bool> predicate)
+    {
+        List<RuntimeCardModel> poppedCards = new();
         foreach(RuntimeCardModel card in RemainingCards())
         {
-            if (card is DoorCardModel)
+            if (card != null && predicate(card))
             {
                 TryRemoveCard(card);
-                cardsToReshuffle.Add(card);
+                poppedCards.Add(card);
             }
         }
-        return cardsToReshuffle;
+        return poppedCards;
     }
 
     public int RemainingCount => RemainingCards().Count;

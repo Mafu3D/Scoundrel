@@ -1,23 +1,25 @@
 using UnityEngine;
 
-public class GameViewManager : MonoBehaviour
+public class DungeonView : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
     [SerializeField] private RoomView roomView;
     [SerializeField] private WeaponView weaponView;
 
+    private DungeonController dungeonController => gameManager.DungeonController;
+
     void OnEnable()
     {
-        // gameManager.OnStartNewGame += OnStartNewGame;
-        gameManager.OnOpenNewRoom += OnOpenNewRoom;
+        gameManager.OnStartNewGame += OnStartNewGame;
+        dungeonController.OnNewRoomOpened += OnOpenNewRoom;
         gameManager.OnGameOver += OnGameOver;
         gameManager.Player.OnWeaponChanged += OnWeaponChanged;
     }
 
     void OnDisable()
     {
-        // gameManager.OnStartNewGame -= OnStartNewGame;
-        gameManager.OnOpenNewRoom -= OnOpenNewRoom;
+        gameManager.OnStartNewGame -= OnStartNewGame;
+        dungeonController.OnNewRoomOpened -= OnOpenNewRoom;
         gameManager.OnGameOver -= OnGameOver;
         gameManager.Player.OnWeaponChanged -= OnWeaponChanged;
     }

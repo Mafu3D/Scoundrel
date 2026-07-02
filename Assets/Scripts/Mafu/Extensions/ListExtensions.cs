@@ -37,6 +37,20 @@ namespace Mafu.Extensions
             return list;
         }
 
+        public static IList<T> PopFromPredicate<T>(this IList<T> list, Func<T, bool> predicate, out List<T> poppedItems)
+        {
+            poppedItems = new();
+            foreach(T item in list)
+            {
+                if (item !=null && predicate(item))
+                {
+                    list.Remove(item);
+                    poppedItems.Add(item);
+                }
+            }
+            return list;
+        }
+
         /// <summary>
         /// Remove item from list
         /// </summary>

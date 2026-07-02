@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Mafu.DebugConsole;
 using Mafu.UnityServiceLocator;
+using Project.Core;
 using UnityEngine;
 
 namespace Project.DebugCommands
@@ -38,7 +39,7 @@ namespace Project.DebugCommands
         public void Invoke()
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
-            gameManager.DEBUG_RUN();
+            gameManager.HandlePlayerRun(force: true);
         }
     }
 
@@ -270,6 +271,22 @@ namespace Project.DebugCommands
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
             gameManager.DEBUG_GOTONEXTFLOOR();
+        }
+    }
+
+    [DebugCommand]
+    public class DummyGameplayEffect : IDebugCommand
+    {
+        public string ID => "dummyEffect";
+
+        public string Description => "Fire off a dummy gameplay effect to wait 4 seconds";
+
+        public string Format => "dummyEffect";
+
+        public void Invoke()
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            gameManager.GameplayEffectQueue.Add(new TestGameplayEffectWaitForSeconds(4f));
         }
     }
 }

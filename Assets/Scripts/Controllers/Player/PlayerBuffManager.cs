@@ -29,7 +29,6 @@ public class PlayerBuffManager : IDisposable
 
         gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
         gameManager.OnOpenNewRoom += HandleOnPlayerGoToNewRoom;
-        gameManager.OnPlayerRun += HandleOnPlayerRun;
         gameManager.DungeonController.OnGoToNextFloor += HandleOnPlayerGoToNewFloor;
     }
 
@@ -61,7 +60,7 @@ public class PlayerBuffManager : IDisposable
 
         gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
         gameManager.OnOpenNewRoom -= HandleOnPlayerGoToNewRoom;
-        gameManager.OnPlayerRun -= HandleOnPlayerRun;
+
         gameManager.DungeonController.OnGoToNextFloor -= HandleOnPlayerGoToNewFloor;
     }
 

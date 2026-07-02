@@ -19,8 +19,13 @@ public class RoomView : MonoBehaviour
 
     public void RegisterRoom(RoomController newRoom)
     {
-        room.OnCardsChanged += OnCardsChanged;
+        if (room != null)
+        {
+            Debug.LogWarning("RoomView is already registered to a room. Deregistering the current room.");
+            DeregisterRoom();
+        }
         room = newRoom;
+        room.OnCardsChanged += OnCardsChanged;
         RefreshView();
     }
 

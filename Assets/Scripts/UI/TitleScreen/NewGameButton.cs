@@ -8,6 +8,11 @@ public class NewGameButton : MonoBehaviour
 
     public void NewGame()
     {
+        if (gameManager.Player.InteractionState != PlayerInteractionState.Full)
+        {
+            Debug.LogWarning("Player cannot use this button while not in full interaction state.");
+            return;
+        }
         gameManager.RestartGame();
     }
 }

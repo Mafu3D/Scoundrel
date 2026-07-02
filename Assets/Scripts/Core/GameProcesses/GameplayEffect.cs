@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 namespace Project.Core
 {
@@ -47,29 +46,5 @@ namespace Project.Core
         public override void Reset() => resetHandler();
         public override string StartMessage() => startMessageHandler();
         public override string EndMessage() => endMessageHandler();
-    }
-
-    public class TestGameplayEffectWaitForSeconds : GameplayEffect
-    {
-        private readonly float waitTime;
-        private float elapsedTime;
-
-        public TestGameplayEffectWaitForSeconds(float waitTime)
-        {
-            this.waitTime = waitTime;
-            this.elapsedTime = 0f;
-        }
-
-        public override Status OnResolve(float deltaTime)
-        {
-            elapsedTime += deltaTime;
-            Debug.Log($"Waiting... {elapsedTime}/{waitTime}");
-            if (elapsedTime >= waitTime)
-            {
-                elapsedTime = 0f; // Reset elapsed time for potential reuse
-                return Status.Complete;
-            }
-            return Status.Running;
-        }
     }
 }

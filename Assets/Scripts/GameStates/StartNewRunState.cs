@@ -1,3 +1,4 @@
+using Project.Core;
 using Project.Core.StateMachineSystem;
 
 namespace Project.GameStates
@@ -8,8 +9,10 @@ namespace Project.GameStates
         DungeonController dungeonController;
         AdvancedScoreKeeper scoreKeeper;
         DeckController deckController;
+        GameProcessQueue<GameplayEffect> gameplayEffectQueue;
 
         public StartNewRunState(StateMachine stateMachine,
+                                GameProcessQueue<GameplayEffect> gameplayEffectQueue,
                                 Player player,
                                 DungeonController dungeonController,
                                 AdvancedScoreKeeper scoreKeeper,
@@ -20,10 +23,13 @@ namespace Project.GameStates
             this.dungeonController = dungeonController;
             this.scoreKeeper = scoreKeeper;
             this.deckController = deckController;
+            this.gameplayEffectQueue = gameplayEffectQueue;
         }
 
         public override void OnEnter()
         {
+            player.SetInteractionState(PlayerInteractionState.None);
+
             scoreKeeper.Reset();
             dungeonController.RegisterDeckController(deckController);
             dungeonController.StartNewDungeon();
@@ -37,10 +43,10 @@ namespace Project.GameStates
             player.StartNewRun();
 
             // Go to the next floor
-            StateMachine.SwitchState(new EnterNewFloorState(StateMachine, player, dungeonController, scoreKeeper));
+            StateMachine.SwitchState(new EnterNewFloorState(StateMachine, gameplayEffectQueue, player, dungeonController, scoreKeeper));
         }
 
-        public override void Update(float time) { }
+        public override void Update(float deltaTime) { }
         public override void OnExit() { }
     }
 }

@@ -25,6 +25,15 @@ namespace Project.Core
 
         public void Remove(TGameProcess gameEvent) { if (Queue.Contains(gameEvent)) Queue.Remove(gameEvent); }
 
+        public TGameProcess GetCurrentItem()
+        {
+            if (Queue.Count > 0)
+            {
+                return Queue[currentIndex];
+            }
+            return default;
+        }
+
         private void ClearQueue()
         {
             Queue = new();

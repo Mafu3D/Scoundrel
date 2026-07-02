@@ -2,11 +2,24 @@ using System;
 using System.Collections.Generic;
 using Project.Decks;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
+public enum PlayerInteractionState
+{
+    None,
+    UIOnly,
+    Full
+}
 
 public class Player : MonoBehaviour, IPlayerBuffRegisterable
 {
+    [SerializeField] public InputActionAsset inputAsset;
+
     [SerializeField] public int MaxHealth = 20;
     [SerializeField] public int RunCooldownTime = 1;
+
+    public bool IsAtMaxHealth => CurrentHealth == MaxHealth;
+    public bool RunTokenOnCooldown => RunCooldownCounter > 0;
 
     public int CurrentHealth { get; private set; }
     public WeaponCardModel Weapon { get; private set; }
@@ -14,8 +27,9 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     public bool HasEnteredTheRoom { get; private set; } = false;
     public int ExtraRunTokens { get; private set; } = 0;
     public bool HasDrankPotionThisRoom { get; private set; } = false;
-    public bool IsAtMaxHealth => CurrentHealth == MaxHealth;
     public int CurrentGold { get; private set; }
+    public PlayerInteractionState InteractionState { get; set; } = PlayerInteractionState.Full;
+    public int RunCooldownCounter { get; private set; } = 0;
 
     public PlayerBuffManager BuffManager => buffManager;
 
@@ -31,18 +45,32 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     public Action<AttackReport> OnAttackPreDamage;
     public Action<AttackReport> OnAttackPostDamage;
 
-    private bool runTokenOnCooldown = false;
+    private InputActionMap uiActions;
 
-    private int runCooldownCounter = 0;
+
+    private void Awake() {
+        uiActions = inputAsset.FindActionMap("UI");
+    }
 
     public void Update()
     {
         Weapon?.Update();
+        buffManager?.Update();
+    }
 
-        if (buffManager != null)
-        {
-            buffManager.Update();
-        }
+    // public void EnableActionMap()
+    // {
+    //     uiActions?.Enable();
+    // }
+
+    // public void DisableActionMap()
+    // {
+    //     uiActions?.Disable();
+    // }
+
+    public void SetInteractionState(PlayerInteractionState state)
+    {
+        InteractionState = state;
     }
 
     public void StartNewRun()
@@ -58,18 +86,13 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     public void RoundReset()
     {
         // Reset the run token
-        if (runTokenOnCooldown)
+        if (RunTokenOnCooldown)
         {
-            runCooldownCounter += 1;
-            if (runCooldownCounter > RunCooldownTime)
-            {
-                runCooldownCounter = 0;
-                runTokenOnCooldown = false;
-                if (!HasRunToken)
-                {
-                    HasRunToken = true;
-                }
-            }
+            RunCooldownCounter -= 1;
+        }
+        else
+        {
+            HasRunToken = true;
         }
 
         // Reset other things
@@ -81,8 +104,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     {
         UnequipWeapon();
         // CurrentHealth = MaxHealth;
-        runCooldownCounter = 0;
-        runTokenOnCooldown = false;
+        RunCooldownCounter = 0;
         HasEnteredTheRoom = false;
         HasRunToken = true;
         OnHealthChanged?.Invoke(CurrentHealth);
@@ -94,20 +116,19 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
         HasEnteredTheRoom = true;
     }
 
-    public bool CanRun() => (HasRunToken || ExtraRunTokens > 0) && !HasEnteredTheRoom;
+    public bool CanRun => (HasRunToken || ExtraRunTokens > 0) && !HasEnteredTheRoom;
 
-    public bool TryRun()
+    public bool TrySpendRun()
     {
-        if (!CanRun())
+        if (!CanRun)
         {
-            Debug.Log("tried to run but can't");
             return false;
         }
 
         if (HasRunToken)
         {
             HasRunToken = false;
-            runTokenOnCooldown = true;
+            RunCooldownCounter = RunCooldownTime;
         }
         else if (ExtraRunTokens > 0)
         {
@@ -115,7 +136,6 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
         }
         else
         {
-            Debug.LogError("Tried to run but no run tokens available");
             return false;
         }
 
@@ -265,8 +285,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     private void ResetPlayer()
     {
         CurrentHealth = MaxHealth;
-        runCooldownCounter = 0;
-        runTokenOnCooldown = false;
+        RunCooldownCounter = 0;
         HasRunToken = true;
         Weapon = null;
         CurrentGold = 0;
