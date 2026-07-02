@@ -3,13 +3,13 @@ using Project.Core.StateMachineSystem;
 
 namespace Project.GameStates
 {
-    public class RoomActiveState : State
+    public class ResolvingActionsState : State
     {
         private readonly Player player;
         private readonly DungeonController dungeonController;
         private readonly GameProcessQueue<GameplayEffect> gameplayEffectQueue;
 
-        public RoomActiveState(StateMachine stateMachine,
+        public ResolvingActionsState(StateMachine stateMachine,
                                 GameProcessQueue<GameplayEffect> gameplayEffectQueue,
                                 Player player,
                                 DungeonController dungeonController) : base(stateMachine)
@@ -21,23 +21,21 @@ namespace Project.GameStates
 
         public override void OnEnter()
         {
-            player.SetInteractionState(PlayerInteractionState.Full);
+            player.SetInteractionState(PlayerInteractionState.UIOnly);
         }
 
         public override void Update(float deltaTime)
         {
-            dungeonController.Update();
-            player.Update();
-
-            // If the queue needs to be resolved, disable player interaction and resolve the queue
-            if (gameplayEffectQueue.QueueNeedsToBeResolved)
+            if (!gameplayEffectQueue.QueueNeedsToBeResolved)
             {
-                StateMachine.SwitchState(new ResolvingActionsState(StateMachine,
-                                                                   gameplayEffectQueue,
-                                                                   player,
-                                                                   dungeonController));
+                StateMachine.SwitchState(new RoomActiveState(StateMachine,
+                                                             gameplayEffectQueue,
+                                                             player,
+                                                             dungeonController));
                 return;
             }
+
+            gameplayEffectQueue.ResolveQueue(deltaTime);
         }
 
         public override void OnExit() { }
