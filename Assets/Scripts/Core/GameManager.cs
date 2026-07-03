@@ -81,21 +81,20 @@ public class GameManager : MonoBehaviour
 
     private void StartGame()
     {
-        Player.OnDeath += GameOver;
-
         stateMachine.SwitchState(new TitleScreenState(stateMachine));
     }
 
     public void StartNewRun()
     {
+        Player.OnDeath += GameOver; // Keeping this here to not break things for now, move later
+        OnStartNewGame?.Invoke(); // TODO: this should be called from within the StartNewRunState, but for now it is here to avoid breaking the UIManager
+        OnEnterNewFloor?.Invoke(); // Here not to break UI manager
         stateMachine.SwitchState(new StartNewRunState(stateMachine: stateMachine,
                                                       gameplayEffectQueue: GameplayEffectQueue,
                                                       player: Player,
                                                       dungeonController: DungeonController,
                                                       scoreKeeper: ScoreKeeper,
                                                       deckController: DeckController));
-        OnStartNewGame?.Invoke(); // TODO: this should be called from within the StartNewRunState, but for now it is here to avoid breaking the UIManager
-        OnEnterNewFloor?.Invoke(); // Here not to break UI manager
     }
 
     public void GoToNextRoom()
@@ -249,14 +248,6 @@ public class GameManager : MonoBehaviour
     public int GetScoreToGoToNextFloor()
     {
         return DungeonController.GetFloorNumber() * 10000; // Magic number!!
-    }
-
-    private void CheckForGameResolution()
-    {
-        if (ScoreKeeper.HasPlayerWon())
-        {
-            EndGame();
-        }
     }
 
     #region Card Handling - Move!!

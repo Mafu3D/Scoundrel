@@ -28,7 +28,9 @@ namespace Project.GameStates
 
         public override void OnEnter()
         {
-            player.SetInteractionState(PlayerInteractionState.UIOnly);
+            dungeonController.CurrentRoom?.ClearCards();
+
+            player.SetInteractionState(PlayerInteractionState.Full);
         }
 
         public override void Update(float deltaTime) { }

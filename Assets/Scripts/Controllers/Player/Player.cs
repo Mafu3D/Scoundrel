@@ -15,13 +15,14 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
 {
     [SerializeField] public InputActionAsset inputAsset;
 
-    [SerializeField] public int MaxHealth = 20;
+    [SerializeField] public int StartingMaxHealth = 20;
     [SerializeField] public int RunCooldownTime = 1;
 
     public bool IsAtMaxHealth => CurrentHealth == MaxHealth;
     public bool RunTokenOnCooldown => RunCooldownCounter > 0;
 
     public int CurrentHealth { get; private set; }
+    public int MaxHealth;
     public WeaponCardModel Weapon { get; private set; }
     public bool HasRunToken { get; private set; } = true;
     public bool HasEnteredTheRoom { get; private set; } = false;
@@ -47,6 +48,8 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
 
     private void Awake() {
         uiActions = inputAsset.FindActionMap("UI");
+
+        MaxHealth = StartingMaxHealth;
     }
 
     public void Update()
@@ -73,11 +76,6 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     public void StartNewRun()
     {
         ResetPlayer();
-        OnHealthChanged?.Invoke(CurrentHealth);
-        OnWeaponChanged?.Invoke();
-        OnGoldChanged?.Invoke(CurrentGold);
-
-        buffManager = new PlayerBuffManager(this);
     }
 
     public void RoundReset()
@@ -240,11 +238,20 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
 
     private void ResetPlayer()
     {
+        MaxHealth = StartingMaxHealth;
         CurrentHealth = MaxHealth;
         RunCooldownCounter = 0;
         HasRunToken = true;
         Weapon = null;
         CurrentGold = 0;
+        buffManager = new PlayerBuffManager(this);
+
+        Debug.Log("resetting player");
+
+        OnHealthChanged?.Invoke(CurrentHealth);
+        OnWeaponChanged?.Invoke();
+        OnGoldChanged?.Invoke(CurrentGold);
+        OnRunTokensChanged?.Invoke(ExtraRunTokens);
     }
 
     public List<PlayerBuff> GetBuffs() => buffManager.GetBuffs();

@@ -43,6 +43,7 @@ public class DungeonController
 
     public void StartNewDungeon()
     {
+        CurrentRoom?.ClearCards();
         ResetRoomNumber();
         ResetFloorNumber();
         deckController.TEMP_CreateNewDeck();
