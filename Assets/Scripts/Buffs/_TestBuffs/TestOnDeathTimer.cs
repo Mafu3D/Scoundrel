@@ -6,8 +6,28 @@ public class TestOnDeathTimer : Buff
 {
     [SerializeField] private int timer = 4;
 
-    public override void OnSelfDie()
+    public override void OnSelfAttackedPreDamage(CombatReport combatReport)
     {
-        gameManager.GameplayEffectQueue.Add(new TestGameplayEffectWaitForSeconds2(timer));
+        Debug.Log("OnSelfAttackedPreDamage");
+        gameManager.GameplayEffectQueue.Add(new TestGameplayEffectWaitForSecondsButOutputRoomFirst(timer));
+    }
+
+    public override void OnSelfAttackedPostDamage(CombatReport combatReport)
+    {
+        Debug.Log("OnSelfAttackedPostDamage");
+        gameManager.GameplayEffectQueue.Add(new TestGameplayEffectWaitForSecondsButOutputRoomFirst(timer));
+    }
+
+
+    public override void OnSelfDiePreRemoval()
+    {
+        Debug.Log("OnSelfDiePreRemoval");
+        gameManager.GameplayEffectQueue.Add(new TestGameplayEffectWaitForSecondsButOutputRoomFirst(timer));
+    }
+
+    public override void OnSelfDiePostRemoval()
+    {
+        Debug.Log("OnSelfDiePostRemoval");
+        gameManager.GameplayEffectQueue.Add(new TestGameplayEffectWaitForSecondsButOutputRoomFirst(timer));
     }
 }

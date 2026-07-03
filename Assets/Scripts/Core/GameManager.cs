@@ -26,13 +26,12 @@ public class GameManager : MonoBehaviour
 
     public DungeonController DungeonController { get; private set; } = new();
     public AdvancedScoreKeeper ScoreKeeper { get; private set; } = null;
-    public GameProcessQueue<GameplayEffect> GameplayEffectQueue;
+    public GameProcessQueue<GameplayEffect> GameplayEffectQueue { get; private set; }
 
     public Action OnStartNewGame;
     public Action OnGameOver;
     public Action OnOpenNewRoom;
     public Action OnExitCurrentFloor;
-    public Action OnPlayerEnterRoom;
     public Action OnEnterPowerUpDungeonPhase;
     public Action OnEnterShopPhase;
     public Action OnExitShopPhase;
@@ -41,6 +40,7 @@ public class GameManager : MonoBehaviour
     public Action OnCardsChanged;
 
     private StateMachine stateMachine;
+    private CombatController combatController;
 
     void OnEnable()
     {
@@ -61,8 +61,8 @@ public class GameManager : MonoBehaviour
     {
         // Temp - remove
         ShopManager.gameObject.SetActive(false);
-
         ScoreKeeper = new(this);
+        combatController = new(Player, stateMachine, GameplayEffectQueue, DungeonController, ScoreKeeper);
         StartGame();
     }
 
@@ -84,6 +84,8 @@ public class GameManager : MonoBehaviour
 
     private void StartGame()
     {
+        Player.OnDeath += GameOver;
+
         stateMachine.SwitchState(new TitleScreenState(stateMachine));
     }
 
@@ -185,15 +187,27 @@ public class GameManager : MonoBehaviour
         Debug.Log(outputString);
     }
 
+    /// <summary>
+    /// Runs any time the game needs to end
+    /// </summary>
     private void EndGame()
     {
-        // Player.OnDeath -= GameOver;
+        Player.OnDeath -= GameOver;
     }
 
+    /// <summary>
+    /// Only runs if the player loses and goes to the game over (loss) screen
+    /// </summary>
     private void GameOver()
     {
         EndGame();
         OnGameOver?.Invoke();
+        stateMachine.SwitchState(new GameOverState(stateMachine,
+                                                    GameplayEffectQueue,
+                                                    Player,
+                                                    DungeonController,
+                                                    ScoreKeeper,
+                                                    DeckController));
     }
 
     public void DEBUG_GOTONEXTFLOOR()
@@ -279,13 +293,14 @@ public class GameManager : MonoBehaviour
         OnCardsChanged?.Invoke();
     }
 
+    #region Card Handling - Move!!
+
     public void OnCardClicked(RuntimeCardModel card, CardClickContext context)
     {
         if (Player.InteractionState != PlayerInteractionState.Full)
         {
             return;
         }
-
         if (!DungeonController.CurrentRoom.GetCards().Contains(card))
         {
             return;
@@ -295,68 +310,29 @@ public class GameManager : MonoBehaviour
         bool success = card.Suit switch
         {
             Suit.HEARTS => HandlePotion(card),
-            Suit.DIAMONDS => Player.TryEquipWeapon(card),
+            Suit.DIAMONDS => HandleWeapon(card),
             Suit.SPADES or Suit.CLUBS => HandleEnemy(card, context),
-            Suit.DOORS => HandleDoor(),
-            Suit.TREASURES => HandleTreasure(),
+            Suit.DOORS => HandleDoor(card),
+            Suit.TREASURES => HandleTreasure(card),
             _ => false
         };
-
-        if (success)
-        {
-            if (!Player.HasEnteredTheRoom)
-            {
-                // Player enter room
-                Player.EnterNewRoom();
-                OnPlayerEnterRoom?.Invoke();
-            }
-
-            // Add gold for defeating a monster
-            if (card is MonsterCardModel)
-            {
-                Player.AddGold(1);
-
-                card.BuffManager.HandleOnSelfDie();
-
-                // also broadcast to other cards that this died
-                foreach (RuntimeCardModel other in DungeonController.CurrentRoom.GetOthers(card))
-                {
-                    other?.HandleOnOtherDie(card as MonsterCardModel);
-                }
-
-
-            }
-
-            DungeonController.CurrentRoom.TryRemoveCard(card);
-
-            // Add gold if its the last card in the room
-            if (DungeonController.CurrentRoom.IsEmpty)
-            {
-                Player.AddGold(2);
-            }
-
-            if (card.Suit == Suit.CLUBS || card.Suit == Suit.SPADES)
-            {
-                ScoreKeeper.AddToScore(card);
-                // TEMP: Inc score keeper multiplier here
-                ScoreKeeper.IncRoomMultiplier();
-            }
-        }
     }
 
-    private bool HandleDoor()
+    private bool HandleDoor(RuntimeCardModel card)
     {
         if (ScoreKeeper.GetScore() >= GetScoreToGoToNextFloor())
         {
+            stateMachine.SwitchState(new ResolveCardState(card, stateMachine, GameplayEffectQueue, Player, DungeonController, ScoreKeeper));
             ExitCurrentFloor();
             return true;
         }
         return false;
     }
 
-    private bool HandleTreasure()
+    private bool HandleTreasure(RuntimeCardModel card)
     {
         Player.AddGold(3);
+        stateMachine.SwitchState(new ResolveCardState(card, stateMachine, GameplayEffectQueue, Player, DungeonController, ScoreKeeper));
         return true;
     }
 
@@ -364,10 +340,27 @@ public class GameManager : MonoBehaviour
     private bool HandlePotion(RuntimeCardModel card)
     {
         Player.TryDrinkPotion(card);
+        stateMachine.SwitchState(new ResolveCardState(card, stateMachine, GameplayEffectQueue, Player, DungeonController, ScoreKeeper));
         return true;
     }
 
-    private bool HandleEnemy(RuntimeCardModel card, CardClickContext context) => context == CardClickContext.TOP ? Player.TryFightWeapon(card) : Player.TryFightUnarmed(card);
+    private bool HandleEnemy(RuntimeCardModel card, CardClickContext context)
+    {
+        return context == CardClickContext.TOP ? combatController.TryFightWeapon(card) : combatController.TryFightUnarmed(card);
+    }
+
+    private bool HandleWeapon(RuntimeCardModel card)
+    {
+        bool success = Player.TryEquipWeapon(card);
+        if (success)
+        {
+            stateMachine.SwitchState(new ResolveCardState(card, stateMachine, GameplayEffectQueue, Player, DungeonController, ScoreKeeper));
+        }
+        return success;
+    }
+
+
+    #endregion
 
     #region DEBUG_FUNCTIONS
 

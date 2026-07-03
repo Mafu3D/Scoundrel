@@ -153,6 +153,6 @@ public abstract class PlayerBuff : ScriptableObject
     public virtual void OnEquipWeapon() { }
     public virtual void OnDrinkPotion() { }
     public virtual void OnDiscardPotion() { }
-    public virtual void OnPlayerAttackPreDamage(AttackReport attackReport) { }
-    public virtual void OnPlayerAttackPostDamage(AttackReport attackReport) { }
+    public virtual void OnPlayerAttackPreDamage(CombatReport attackReport) { }
+    public virtual void OnPlayerAttackPostDamage(CombatReport attackReport) { }
 }

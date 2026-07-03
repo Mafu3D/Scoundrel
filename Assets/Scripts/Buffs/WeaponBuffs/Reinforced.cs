@@ -6,11 +6,11 @@ using UnityEngine;
 public class Reinforced : Buff
 {
     private bool hasSlainFirstMonster = false;
-    public override void OnPlayerAttackPostDamage(AttackReport attackReport)
+    public override void OnPlayerAttackPostDamage(CombatReport attackReport)
     {
         if (!hasSlainFirstMonster)
         {
-            (Owner as WeaponCardModel).RemoveMonsterFromSlain(attackReport.Target);
+            (Owner as WeaponCardModel).RemoveMonsterFromSlain(attackReport.Defender);
             hasSlainFirstMonster = true;
         }
     }

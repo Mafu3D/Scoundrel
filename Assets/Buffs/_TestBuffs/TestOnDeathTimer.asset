@@ -22,4 +22,4 @@ MonoBehaviour:
   RemoveOnParentCleanup: 0
   RemoveOnDeath: 1
   registeredChildBuffs: []
-  timer: 4
+  timer: 2

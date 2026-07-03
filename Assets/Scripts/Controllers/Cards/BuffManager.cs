@@ -36,17 +36,8 @@ public class BuffManager : IDisposable
         ServiceLocator.Global.Get(out gameManager);
         player = gameManager.Player;
 
-        player.OnAttackPreDamage += HandleOnPlayerAttackPreDamage;
-        player.OnAttackPostDamage += HandleOnPlayerAttackPostDamage;
-
-        owner.OnDeathPreRemoval += HandleOnSelfDiePreRemoval;
-        owner.OnDeathPostRemoval += HandleOnSelfDiePostRemoval;
         owner.OnDraw += HandleOnDraw;
-        owner.OnOtherDie += HandleOnOtherDie;
-        owner.OnSelfAttackedPreDamage += HandleOnSelfAttackedPreDamage;
-        owner.OnSelfAttackedPostDamage += HandleOnSelfAttackedPostDamage;
 
-        gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
         gameManager.OnCardsChanged += HandleOnCardsChanged;
     }
 
@@ -68,18 +59,8 @@ public class BuffManager : IDisposable
 
     public void Dispose()
     {
-        player.OnAttackPreDamage -= HandleOnPlayerAttackPreDamage;
-        player.OnAttackPostDamage -= HandleOnPlayerAttackPostDamage;
-
-        owner.OnDeathPreRemoval -= HandleOnSelfDiePreRemoval;
-        owner.OnDeathPostRemoval -= HandleOnSelfDiePostRemoval;
         owner.OnDraw -= HandleOnDraw;
-        owner.OnOtherDie -= HandleOnOtherDie;
-        owner.OnSelfAttackedPreDamage -= HandleOnSelfAttackedPreDamage;
-        owner.OnSelfAttackedPostDamage -= HandleOnSelfAttackedPostDamage;
 
-
-        gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
         gameManager.OnCardsChanged -= HandleOnCardsChanged;
     }
 
@@ -195,13 +176,13 @@ public class BuffManager : IDisposable
         buff.Cleanup();
     }
 
-    private void HandleOnPlayerAttackPreDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPreDamage(attackReport));
+    public void HandleOnPlayerAttackPreDamage(CombatReport attackReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPreDamage(attackReport));
 
-    private void HandleOnPlayerAttackPostDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPostDamage(attackReport));
+    public void HandleOnPlayerAttackPostDamage(CombatReport attackReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPostDamage(attackReport));
 
-    private void HandleOnSelfAttackedPreDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnSelfAttackedPreDamage(attackReport));
+    public void HandleOnSelfAttackedPreDamage(CombatReport combatReport) => orderedBuffs.ForEach(n => n.OnSelfAttackedPreDamage(combatReport));
 
-    private void HandleOnSelfAttackedPostDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnSelfAttackedPostDamage(attackReport));
+    public void HandleOnSelfAttackedPostDamage(CombatReport combatReport) => orderedBuffs.ForEach(n => n.OnSelfAttackedPostDamage(combatReport));
 
     private void HandleOnPlayerEnterRoom() => orderedBuffs.ForEach(n => n.OnEnterRoom());
 
@@ -211,11 +192,9 @@ public class BuffManager : IDisposable
 
     private void HandleOnDraw() => orderedBuffs.ForEach(n => n.OnDraw());
 
-    private void HandleOnSelfDiePreRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePreRemoval());
+    public void HandleOnSelfDiePreRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePreRemoval());
 
-    private void HandleOnSelfDiePostRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePostRemoval());
-
-    public void HandleOnSelfDie() => orderedBuffs.ForEach(n => n.OnSelfDie());
+    public void HandleOnSelfDiePostRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePostRemoval());
 
     private void HandleOnCardsChanged() => orderedBuffs.ForEach(n => n.OnCardsChanged());
 }

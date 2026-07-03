@@ -160,7 +160,6 @@ public abstract class Buff : ScriptableObject
 
     public virtual void OnEnterRoom() { }
     public virtual void OnRun() { }
-    public virtual void OnSelfDie() { }
     public virtual void OnSelfDiePreRemoval() { }
     public virtual void OnSelfDiePostRemoval() { }
     public virtual void OnOtherDie(MonsterCardModel other) { }
@@ -168,8 +167,8 @@ public abstract class Buff : ScriptableObject
     public virtual void OnEquipWeapon() { }
     public virtual void OnDrinkPotion() { }
     public virtual void OnDiscardPotion() { }
-    public virtual void OnPlayerAttackPreDamage(AttackReport attackReport) { }
-    public virtual void OnPlayerAttackPostDamage(AttackReport attackReport) { }
-    public virtual void OnSelfAttackedPreDamage(AttackReport attackReport) { }
-    public virtual void OnSelfAttackedPostDamage(AttackReport attackReport) { }
+    public virtual void OnPlayerAttackPreDamage(CombatReport attackReport) { }
+    public virtual void OnPlayerAttackPostDamage(CombatReport attackReport) { }
+    public virtual void OnSelfAttackedPreDamage(CombatReport attackReport) { }
+    public virtual void OnSelfAttackedPostDamage(CombatReport attackReport) { }
 }

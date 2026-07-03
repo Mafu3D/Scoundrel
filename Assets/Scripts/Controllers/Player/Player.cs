@@ -42,8 +42,8 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     public Action<MonsterCardModel> OnOtherDie;
     public Action OnWeaponChanged;
     public Action OnRunSuccess;
-    public Action<AttackReport> OnAttackPreDamage;
-    public Action<AttackReport> OnAttackPostDamage;
+    public Action<CombatReport> OnAttackPreDamage;
+    public Action<CombatReport> OnAttackPostDamage;
 
     private InputActionMap uiActions;
 
@@ -211,49 +211,6 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     }
 
     #region Card Actions
-    public bool TryFightUnarmed(RuntimeCardModel defender)
-    {
-        ProcessAttack(defender as MonsterCardModel, null);
-        return true;
-    }
-
-    public bool TryFightWeapon(RuntimeCardModel defender)
-    {
-        if (Weapon == null || Weapon.GetCurrentStrength() <= defender.Value)
-        {
-            // Attack was not successful, nothing happens
-            return false;
-        }
-
-        ProcessAttack(defender as MonsterCardModel, Weapon);
-        return true;
-    }
-
-    private void ProcessAttack(MonsterCardModel defender, WeaponCardModel weapon)
-    {
-        // Calculate damage and create an attack report
-        AttackReport attackReport = new AttackReport(
-            attacker: this,
-            target: defender,
-            weapon: weapon,
-            damageReceived: weapon == null ? defender.Value : Math.Clamp(defender.Value - weapon.Value, 0, 999)
-        );
-
-        // Run any pre-damage events first
-        OnAttackPreDamage?.Invoke(attackReport);
-        defender.OnSelfAttackedPreDamage?.Invoke(attackReport);
-
-        // Apply damage and add the monster to the weapon's slain list
-        TakeDamage(attackReport.DamageReceived);
-        if (weapon != null)
-        {
-            weapon.AddMonsterToSlain(defender);
-        }
-
-        // Run any post-damage events
-        OnAttackPostDamage?.Invoke(attackReport);
-        defender.OnSelfAttackedPostDamage?.Invoke(attackReport);
-    }
 
     public bool TryEquipWeapon(RuntimeCardModel card)
     {

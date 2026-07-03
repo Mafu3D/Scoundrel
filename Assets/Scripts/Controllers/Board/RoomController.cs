@@ -113,12 +113,6 @@ public class RoomController
 
     public List<RuntimeCardModel> GetOthers(RuntimeCardModel card)
     {
-        if (!roomModel.Cards.Contains(card))
-        {
-            Debug.LogWarning("card is not in the current room!");
-            return default;
-        }
-
         List<RuntimeCardModel> others = new();
         foreach (RuntimeCardModel other in roomModel.Cards)
         {
@@ -145,9 +139,7 @@ public class RoomController
     private void RemoveCard(RuntimeCardModel card)
     {
         int index = Array.IndexOf(roomModel.Cards, card);
-        card.HandleDeathPreRemoval();
         roomModel.Cards[index] = null;
-        card.HandleDeathPostRemoval();
         OnCardsChanged?.Invoke();
     }
 

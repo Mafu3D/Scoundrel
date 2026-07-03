@@ -19,15 +19,9 @@ public class PlayerBuffManager : IDisposable
 
         ServiceLocator.Global.Get(out gameManager);
 
-        // owner.OnAttackedPreDamage += HandleOnAttackedPreDamage;
-        // owner.OnAttackedPostDamage += HandleOnAttackedPostDamage;
-        owner.OnAttackPreDamage += HandleOnPlayerAttackPreDamage;
-        owner.OnAttackPostDamage += HandleOnPlayerAttackPostDamage;
-
         owner.OnDeath += HandleOnSelfDie;
         owner.OnOtherDie += HandleOnOtherDie;
 
-        gameManager.OnPlayerEnterRoom += HandleOnPlayerEnterRoom;
         gameManager.OnOpenNewRoom += HandleOnPlayerGoToNewRoom;
         gameManager.DungeonController.OnGoToNextFloor += HandleOnPlayerGoToNewFloor;
     }
@@ -50,15 +44,9 @@ public class PlayerBuffManager : IDisposable
 
     public void Dispose()
     {
-        // owner.OnAttackedPreDamage -= HandleOnAttackedPreDamage;
-        // owner.OnAttackedPostDamage -= HandleOnAttackedPostDamage;
-        owner.OnAttackPreDamage -= HandleOnPlayerAttackPreDamage;
-        owner.OnAttackPostDamage -= HandleOnPlayerAttackPostDamage;
-
         owner.OnDeath -= HandleOnSelfDie;
         owner.OnOtherDie -= HandleOnOtherDie;
 
-        gameManager.OnPlayerEnterRoom -= HandleOnPlayerEnterRoom;
         gameManager.OnOpenNewRoom -= HandleOnPlayerGoToNewRoom;
 
         gameManager.DungeonController.OnGoToNextFloor -= HandleOnPlayerGoToNewFloor;
@@ -171,13 +159,9 @@ public class PlayerBuffManager : IDisposable
     }
 
 
-    private void HandleOnPlayerAttackPreDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPreDamage(attackReport));
+    public void HandleOnPlayerAttackPreDamage(CombatReport combatReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPreDamage(combatReport));
 
-    private void HandleOnPlayerAttackPostDamage(AttackReport attackReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPostDamage(attackReport));
-
-    // private void HandleOnAttackedPostDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPostDamage(weapon));
-
-    // private void HandleOnAttackedPreDamage(WeaponCardModel weapon) => orderedBuffs.ForEach(n => n.OnAttackedPreDamage(weapon));
+    public void HandleOnPlayerAttackPostDamage(CombatReport combatReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPostDamage(combatReport));
 
     private void HandleOnPlayerEnterRoom() => orderedBuffs.ForEach(n => n.OnEnterRoom());
 

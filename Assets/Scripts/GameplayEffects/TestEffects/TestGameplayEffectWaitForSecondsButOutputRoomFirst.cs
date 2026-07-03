@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Project.Core
 {
-    public class TestGameplayEffectWaitForSeconds2 : GameplayEffect
+    public class TestGameplayEffectWaitForSecondsButOutputRoomFirst : GameplayEffect
     {
         private readonly float waitTime;
         private float elapsedTime;
         private readonly float readoutTime = 0.5f;
         private float timeSinceLastReadout = 0f;
 
-        public TestGameplayEffectWaitForSeconds2(float waitTime)
+        public TestGameplayEffectWaitForSecondsButOutputRoomFirst(float waitTime)
         {
             this.waitTime = waitTime;
             this.elapsedTime = 0f;
@@ -64,6 +64,7 @@ namespace Project.Core
 
             if (elapsedTime >= waitTime)
             {
+                Debug.Log($"Waiting... {elapsedTime}/{waitTime}");
                 elapsedTime = 0f; // Reset elapsed time for potential reuse
                 return Status.Complete;
             }

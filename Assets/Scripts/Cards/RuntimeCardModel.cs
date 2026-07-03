@@ -52,11 +52,9 @@ namespace Project.Decks
         public string ID => uuid.ToString();
 
         public Action OnUpdate;
-        public Action OnDeathPreRemoval;
-        public Action OnDeathPostRemoval;
         public Action OnDraw;
-        public Action<AttackReport> OnSelfAttackedPreDamage;
-        public Action<AttackReport> OnSelfAttackedPostDamage;
+        public Action<CombatReport> OnSelfAttackedPreDamage;
+        public Action<CombatReport> OnSelfAttackedPostDamage;
         public Action<MonsterCardModel> OnOtherDie;
 
         public bool PersistsThroughRun = false;
@@ -131,14 +129,8 @@ namespace Project.Decks
             }
         }
 
-        public void HandleDeathPreRemoval()
+        public void Kill()
         {
-            OnDeathPreRemoval?.Invoke();
-        }
-
-        public void HandleDeathPostRemoval()
-        {
-            OnDeathPostRemoval?.Invoke();
             BuffManager.CleanupRemoveOnDeathBuffs();
             BuffManager.Dispose();
             this.Dispose();

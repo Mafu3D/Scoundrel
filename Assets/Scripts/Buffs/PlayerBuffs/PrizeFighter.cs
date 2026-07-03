@@ -6,7 +6,7 @@ public class PrizeFighter : PlayerBuff
     // When the player attacks unarmed, they gain gold equal to the Amount specified in the buff.
     [SerializeField] public int Amount = 2;
 
-    public override void OnPlayerAttackPostDamage(AttackReport attackReport)
+    public override void OnPlayerAttackPostDamage(CombatReport attackReport)
     {
         if (attackReport.IsUnarmed)
         {
