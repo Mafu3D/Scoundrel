@@ -70,6 +70,7 @@ public class BuffManager : IDisposable
     {
         foreach(Buff buff in GetTemporaryBuffs())
         {
+            Debug.Log($"Cleaning up {buff.Name}");
             DeregisterBuff(buff);
         }
     }

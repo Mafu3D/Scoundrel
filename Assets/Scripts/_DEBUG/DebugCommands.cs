@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using Mafu.DebugConsole;
 using Mafu.UnityServiceLocator;
 using Project.Core;
+using Project.Decks;
 using UnityEngine;
 
 namespace Project.DebugCommands
@@ -146,7 +148,8 @@ namespace Project.DebugCommands
                 return;
             }
 
-            gameManager.DungeonController.CurrentRoom.GetCards()[0].AddNewBuff(buff);
+            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetCards()[0].AddNewBuff(buff);
+            newInstance.OnDraw();
         }
     }
 
@@ -173,7 +176,8 @@ namespace Project.DebugCommands
                 return;
             }
 
-            gameManager.DungeonController.CurrentRoom.GetCards()[1].AddNewBuff(buff);
+            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetCards()[1].AddNewBuff(buff);
+            newInstance.OnDraw();
         }
     }
 
@@ -200,7 +204,8 @@ namespace Project.DebugCommands
                 return;
             }
 
-            gameManager.DungeonController.CurrentRoom.GetCards()[2].AddNewBuff(buff);
+            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetCards()[2].AddNewBuff(buff);
+            newInstance.OnDraw();
         }
     }
 
@@ -227,7 +232,8 @@ namespace Project.DebugCommands
                 return;
             }
 
-            gameManager.DungeonController.CurrentRoom.GetCards()[3].AddNewBuff(buff);
+            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetCards()[3].AddNewBuff(buff);
+            newInstance.OnDraw();
         }
     }
 
@@ -287,6 +293,57 @@ namespace Project.DebugCommands
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
             gameManager.GameplayEffectQueue.Add(new TestGameplayEffectWaitForSeconds(4f));
+        }
+    }
+
+    [DebugCommand]
+    public class LogDeck : IDebugCommand
+    {
+        public string ID => "logDeck";
+
+        public string Description => "Log the current contents of the deck as a text file";
+
+        public string Format => "logDeck";
+
+        public void Invoke()
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            Deck<RuntimeCardModel> deck = gameManager.DeckController.Deck;
+
+            List<string> contents = new();
+            foreach(RuntimeCardModel card in deck.AllItems)
+            {
+                string status = "";
+                if (gameManager.DungeonController.CurrentRoom.GetCards().Contains(card))
+                {
+                    status = " (In Room)";
+                }
+                else if (!deck.RemainingItems.Contains(card))
+                {
+                    status = " (Discarded)";
+                }
+                contents.Add($"{card.ToString()}{status}");
+                foreach (Buff buff in card.BuffManager.GetBuffs())
+                {
+                    contents.Add($"    {buff.Name}");
+                }
+            }
+
+            string rootDir;
+            if (Application.isEditor)
+            {
+                rootDir = System.IO.Directory.GetCurrentDirectory();
+            }
+            else
+            {
+                rootDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                rootDir += "/Scoundrel";
+            }
+            string fileName = $"DeckContents_{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}";
+            string filePath = $"{rootDir}/DebugLogs/{fileName}.txt";
+            Directory.CreateDirectory($"{rootDir}/DebugLogs");
+            File.WriteAllLines(filePath, contents);
+            Debug.Log($"Logged deck contents to {filePath}");
         }
     }
 }

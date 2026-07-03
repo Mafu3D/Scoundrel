@@ -11,12 +11,8 @@ public class Inspiring : Buff
 
     public override void OnDraw()
     {
-        DoBuffEffect(); // Replace with apply when drawn parameter
-    }
-
-    private void DoBuffEffect()
-    {
         Buff buffToApply = GetRegisteredChildBuffByName("Inspired");
+        Debug.Log(Owner);
         List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetNeighbors(Owner, new() {Suit.CLUBS, Suit.SPADES});
         foreach (RuntimeCardModel neighbor in neighbors)
         {

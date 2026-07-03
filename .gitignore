@@ -77,7 +77,8 @@ crashlytics-build.properties
 *.exr
 *.exr.meta
 
-
-
 # Large Art Files
 *.ma
+
+# Project Specific
+/DebugLogs/*

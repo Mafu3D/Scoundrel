@@ -69,6 +69,13 @@ public class DungeonController
 
         if (CurrentRoom != null)
         {
+            // Something that could be done here is to have a CloseCurrentRoom() function that handles
+            //  all of this + cleaning up buffs and things. Then stores newCards in a list here in the
+            //  dungeon controller, called like lingeringCards or something. Then when a new room is
+            //  opened, it adds lingering cards.
+
+
+
             // Shuffle in any doors that still remain
             List<RuntimeCardModel> doorCards = CurrentRoom.PopDoorCards();
             deckController.Deck.ShuffleIn(doorCards);
@@ -97,6 +104,11 @@ public class DungeonController
 
     public void RunFromRoom()
     {
+        foreach(RuntimeCardModel card in CurrentRoom.GetCards())
+        {
+            card?.BuffManager.CleanupTemporaryBuffs();
+        }
+
         List<RuntimeCardModel> nonpersistantCards = CurrentRoom.PopNonPersistantCards();
         deckController.Deck.AddToRemaining(nonpersistantCards, addToTop: false, shuffle: false);
     }

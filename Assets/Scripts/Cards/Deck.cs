@@ -15,6 +15,7 @@ namespace Project.Decks
     {
         private List<T> allItems = new();
         public List<T> RemainingItems { get; private set; } = new();
+        public List<T> AllItems => allItems;
         private Dictionary<int, T> hashedItems = new();
         public int CurrentCount => RemainingItems.Count;
         public int TotalCount => allItems.Count;
