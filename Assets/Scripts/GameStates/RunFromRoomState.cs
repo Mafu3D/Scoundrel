@@ -29,6 +29,7 @@ namespace Project.GameStates
             player.SetInteractionState(PlayerInteractionState.UIOnly);
 
             player.BuffManager.HandleOnPlayerRun();
+            player.Weapon?.BuffManager.HandleOnPlayerRun();
             foreach(RuntimeCardModel card in dungeonController.CurrentRoom.RemainingCards())
             {
                 card.BuffManager.HandleOnPlayerRun();

@@ -270,7 +270,7 @@ namespace Project.DebugCommands
         public void Invoke()
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
-            gameManager.DEBUG_GOTONEXTFLOOR();
+            gameManager.GoToExitFloorState();
         }
     }
 

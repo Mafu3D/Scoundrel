@@ -34,6 +34,7 @@ namespace Project.GameStates
             {
                 // Player enter room
                 player.EnterNewRoom();
+                player.Weapon.BuffManager.HandleOnPlayerEnterRoom();
                 foreach(RuntimeCardModel card in dungeonController.CurrentRoom.RemainingCards())
                 {
                     card.BuffManager.HandleOnPlayerEnterRoom();

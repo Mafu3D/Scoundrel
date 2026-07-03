@@ -26,20 +26,20 @@ public class UIManager : MonoBehaviour
 
     void OnEnable()
     {
-        gameManager.OnStartNewGame += ShowDuringGame;
+        gameManager.OnEnterNewFloor += ShowDuringGame;
         gameManager.OnGameOver += ShowGameOver;
-        gameManager.OnEnterPowerUpDungeonPhase += ShowPowerUpDungeonObjects;
-        gameManager.OnEnterShopPhase += ShowShopObjects;
+        gameManager.OnExitCurrentFloor += ShowPowerUpDungeonObjects;
+        gameManager.OnEnterShop += ShowShopObjects;
         gameManager.OnEnterChooseFloorPhase += ShowChooseFloorObjects;
         gameManager.DungeonController.OnGoToNextFloor += ShowNewFloorObjects;
     }
 
     void OnDisable()
     {
-        gameManager.OnStartNewGame -= ShowDuringGame;
+        gameManager.OnEnterNewFloor -= ShowDuringGame;
         gameManager.OnGameOver -= ShowGameOver;
-        gameManager.OnEnterPowerUpDungeonPhase -= ShowPowerUpDungeonObjects;
-        gameManager.OnEnterShopPhase -= ShowShopObjects;
+        gameManager.OnExitCurrentFloor -= ShowPowerUpDungeonObjects;
+        gameManager.OnEnterShop -= ShowShopObjects;
         gameManager.OnEnterChooseFloorPhase -= ShowChooseFloorObjects;
         gameManager.DungeonController.OnGoToNextFloor -= ShowNewFloorObjects;
     }

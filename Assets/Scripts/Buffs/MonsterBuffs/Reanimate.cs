@@ -32,6 +32,6 @@ public class Reanimate : Buff
     public override void OnSelfDiePostRemoval()
     {
         Debug.Log("Reanimate effect ended");
-        gameManager.DungeonController.CurrentRoom.GetCards()[index] = newMonster;
+        gameManager.DungeonController.CurrentRoom.TryAddCard(newMonster, index);
     }
 }

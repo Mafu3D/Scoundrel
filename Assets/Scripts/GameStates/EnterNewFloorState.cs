@@ -29,8 +29,9 @@ namespace Project.GameStates
 
         public override void OnEnter()
         {
-            dungeonController.GoToNextFloor();
             player.SetInteractionState(PlayerInteractionState.UIOnly);
+            dungeonController.EnterNewFloor();
+            player.BuffManager.HandleOnPlayerGoToNewFloor();
         }
 
         public override void Update(float deltaTime)

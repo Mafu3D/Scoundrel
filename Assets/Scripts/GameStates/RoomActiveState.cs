@@ -10,9 +10,9 @@ namespace Project.GameStates
         private readonly GameProcessQueue<GameplayEffect> gameplayEffectQueue;
 
         public RoomActiveState(StateMachine stateMachine,
-                                GameProcessQueue<GameplayEffect> gameplayEffectQueue,
-                                Player player,
-                                DungeonController dungeonController) : base(stateMachine)
+                               GameProcessQueue<GameplayEffect> gameplayEffectQueue,
+                               Player player,
+                               DungeonController dungeonController) : base(stateMachine)
         {
             this.player = player;
             this.dungeonController = dungeonController;
@@ -29,7 +29,7 @@ namespace Project.GameStates
             dungeonController.Update();
             player.Update();
 
-            // If the queue needs to be resolved, disable player interaction and resolve the queue
+            // If the queue needs to be resolved, move to the resolving actions state
             if (gameplayEffectQueue.QueueNeedsToBeResolved)
             {
                 StateMachine.SwitchState(new ResolvingActionsState(StateMachine,

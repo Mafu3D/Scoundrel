@@ -124,6 +124,19 @@ public class RoomController
         return others;
     }
 
+    public bool TryAddCard(RuntimeCardModel card, int index)
+    {
+        if (roomModel.Cards[index] != null)
+        {
+            Debug.LogWarning($"Tried to add card: {card} to slot {index}, but the index already has a card!");
+            return false;
+        }
+
+        roomModel.Cards[index] = card;
+        OnCardsChanged?.Invoke();
+        return true;
+    }
+
     public bool TryRemoveCard(RuntimeCardModel card)
     {
         if (!roomModel.Cards.Contains(card))

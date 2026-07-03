@@ -29,14 +29,12 @@ public class GameManager : MonoBehaviour
     public GameProcessQueue<GameplayEffect> GameplayEffectQueue { get; private set; }
 
     public Action OnStartNewGame;
+    public Action OnEnterNewFloor;
     public Action OnGameOver;
     public Action OnOpenNewRoom;
     public Action OnExitCurrentFloor;
-    public Action OnEnterPowerUpDungeonPhase;
-    public Action OnEnterShopPhase;
-    public Action OnExitShopPhase;
+    public Action OnEnterShop;
     public Action OnEnterChooseFloorPhase;
-    public Action OnExitChooseFloorPhase;
 
     private StateMachine stateMachine;
     private CombatController combatController;
@@ -97,6 +95,7 @@ public class GameManager : MonoBehaviour
                                                       scoreKeeper: ScoreKeeper,
                                                       deckController: DeckController));
         OnStartNewGame?.Invoke(); // TODO: this should be called from within the StartNewRunState, but for now it is here to avoid breaking the UIManager
+        OnEnterNewFloor?.Invoke(); // Here not to break UI manager
     }
 
     public void GoToNextRoom()
@@ -132,13 +131,74 @@ public class GameManager : MonoBehaviour
                                                       ScoreKeeper));
     }
 
+    public void GoToExitFloorState()
+    {
+        stateMachine.SwitchState(new ExitFloorState(stateMachine,
+                                                      GameplayEffectQueue,
+                                                      Player,
+                                                      DungeonController));
+        OnExitCurrentFloor?.Invoke(); // Here not to break UI manager
+        // This proceeds almost immediately into the upgrade dungeon state
+    }
+
+    public void GoToShopState()
+    {
+        stateMachine.SwitchState(new ShopState(stateMachine,
+                                               ShopManager,
+                                               GameplayEffectQueue,
+                                               Player,
+                                               DungeonController));
+        OnEnterShop?.Invoke(); // Here not to break UI manager
+    }
+
+    public void GoToChooseNextFloorState()
+    {
+        stateMachine.SwitchState(new ChooseNextFloorState(stateMachine,
+                                                          GameplayEffectQueue,
+                                                          Player,
+                                                          DungeonController));
+        OnEnterChooseFloorPhase?.Invoke(); // Here not to break UI Manager
+    }
+
+    public void GoToNextFloor()
+    {
+        // Go to the next floor
+        stateMachine.SwitchState(new EnterNewFloorState(stateMachine,
+                                                        GameplayEffectQueue,
+                                                        Player,
+                                                        DungeonController,
+                                                        ScoreKeeper));
+        OnEnterNewFloor?.Invoke(); // Here not to break UI manager
+    }
+
+    /// <summary>
+    /// Runs any time the game needs to end
+    /// </summary>
+    private void EndGame()
+    {
+        Player.OnDeath -= GameOver;
+    }
+
+    /// <summary>
+    /// Only runs if the player loses and goes to the game over (loss) screen
+    /// </summary>
+    private void GameOver()
+    {
+        EndGame();
+        OnGameOver?.Invoke();
+        stateMachine.SwitchState(new GameOverState(stateMachine,
+                                                    GameplayEffectQueue,
+                                                    Player,
+                                                    DungeonController,
+                                                    ScoreKeeper,
+                                                    DeckController));
+    }
 
     #endregion
 
+    // TODO: This should be its own class? Dungeon Upgrader?
     public void TEMP_AddRandomMonsterBuffs(int min, int max)
     {
-        return;
-
         string outputString = "Random monster buffs:\n";
         // TEMP: add random monster buffs
         List<string> buffs = new() { "Inspiring", "Elite", "Bloodthirsty", "Exploding", "Hungry", "LoneWolf", "PackTactics", "Pursuer", "Reanimate" };
@@ -186,89 +246,9 @@ public class GameManager : MonoBehaviour
         Debug.Log(outputString);
     }
 
-    /// <summary>
-    /// Runs any time the game needs to end
-    /// </summary>
-    private void EndGame()
-    {
-        Player.OnDeath -= GameOver;
-    }
-
-    /// <summary>
-    /// Only runs if the player loses and goes to the game over (loss) screen
-    /// </summary>
-    private void GameOver()
-    {
-        EndGame();
-        OnGameOver?.Invoke();
-        stateMachine.SwitchState(new GameOverState(stateMachine,
-                                                    GameplayEffectQueue,
-                                                    Player,
-                                                    DungeonController,
-                                                    ScoreKeeper,
-                                                    DeckController));
-    }
-
-    public void DEBUG_GOTONEXTFLOOR()
-    {
-        ExitCurrentFloor();
-    }
-
-    private void ExitCurrentFloor()
-    {
-        // CurrentRoom.ClearCards();
-        Player.FloorReset();
-        // FloorCounter.IncrementFloorNumber();
-        // RoomCounter.ResetRoomNumber();
-        DeckController.ResetDeck();
-
-        OnExitCurrentFloor?.Invoke();
-
-        GoToPowerUpDungeonPhase();
-    }
-
     public int GetScoreToGoToNextFloor()
     {
-        // return FloorCounter.FloorNumber * 10000; // Magic number!!
-        return 10000; // Magic number!!
-    }
-
-    private void GoToPowerUpDungeonPhase()
-    {
-        OnEnterPowerUpDungeonPhase?.Invoke();
-        TEMP_AddRandomMonsterBuffs(4, 6);
-    }
-
-    public void GoToShopPhase()
-    {
-        ShopManager.StartNewShopPhase();
-        ShopManager.gameObject.SetActive(true);
-        OnEnterShopPhase?.Invoke();
-    }
-
-    public void ExitShopPhase()
-    {
-        ShopManager.gameObject.SetActive(false);
-        ShopManager.ExitShopPhase();
-        OnExitShopPhase?.Invoke();
-        GoToChooseFloorPhase();
-    }
-
-    private void GoToChooseFloorPhase()
-    {
-        OnEnterChooseFloorPhase?.Invoke();
-    }
-
-    public void ExitGoToFloorPhase()
-    {
-        OnExitChooseFloorPhase?.Invoke();
-        GoToNextFloor();
-    }
-
-    private void GoToNextFloor()
-    {
-        // OnGoToNextFloor?.Invoke();
-        // OpenFirstRoom();
+        return DungeonController.GetFloorNumber() * 10000; // Magic number!!
     }
 
     private void CheckForGameResolution()
@@ -280,6 +260,8 @@ public class GameManager : MonoBehaviour
     }
 
     #region Card Handling - Move!!
+    // TODO: Eventually this should all be in its own class
+    //      Like a card handler class?
 
     public void OnCardClicked(RuntimeCardModel card, CardClickContext context)
     {
@@ -309,7 +291,7 @@ public class GameManager : MonoBehaviour
         if (ScoreKeeper.GetScore() >= GetScoreToGoToNextFloor())
         {
             stateMachine.SwitchState(new ResolveCardState(card, stateMachine, GameplayEffectQueue, Player, DungeonController, ScoreKeeper));
-            ExitCurrentFloor();
+            GoToExitFloorState();
             return true;
         }
         return false;

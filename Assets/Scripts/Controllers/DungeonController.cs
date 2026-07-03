@@ -13,6 +13,7 @@ public class DungeonController
 
     public Action OnGoToNextFloor;
     public Action OnNewRoomOpened;
+    public Action OnExitCurrentFloor;
 
     private readonly DungeonModel dungeonModel;
     private DeckController deckController;
@@ -34,7 +35,6 @@ public class DungeonController
     }
     #endregion
 
-
     #region Game Loop
     public void Update()
     {
@@ -48,11 +48,18 @@ public class DungeonController
         deckController.TEMP_CreateNewDeck();
     }
 
-    public void GoToNextFloor()
+    public void EnterNewFloor()
     {
         IncrementFloorNumber();
         ResetRoomNumber();
         OnGoToNextFloor?.Invoke();
+    }
+
+    public void ExitCurrentFloor()
+    {
+        CurrentRoom.ClearCards();
+        deckController.ResetDeck();
+        OnExitCurrentFloor?.Invoke();
     }
 
     public void OpenNewRoom()
@@ -69,7 +76,7 @@ public class DungeonController
             // Add the remaining cards from the current room to the new room
             newCards.AddRange(CurrentRoom.RemainingCards());
 
-            CurrentRoom.OnCardsChanged -= OnCardsChanged;
+            CurrentRoom.OnCardsChanged -= OnCurrentRoomCardsChanged;
         }
 
         // Create the new room contents by taking the remaining cards from the current room and drawing new cards from the deck
@@ -79,7 +86,7 @@ public class DungeonController
 
         // Create the new room controller with the new room contents
         CurrentRoom = new RoomController(new RoomModel(roomSize, newCards));
-        CurrentRoom.OnCardsChanged += OnCardsChanged;
+        CurrentRoom.OnCardsChanged += OnCurrentRoomCardsChanged;
 
         // Run all of the on drawn events for the cards in the room
         CurrentRoom.GetCards().ForEach(card => card?.HandleOnDraw());
@@ -88,7 +95,6 @@ public class DungeonController
         OnNewRoomOpened?.Invoke();
     }
 
-
     public void RunFromRoom()
     {
         List<RuntimeCardModel> nonpersistantCards = CurrentRoom.PopNonPersistantCards();
@@ -96,7 +102,7 @@ public class DungeonController
     }
     #endregion
 
-    private void OnCardsChanged()
+    private void OnCurrentRoomCardsChanged()
     {
         foreach(RuntimeCardModel card in CurrentRoom.RemainingCards())
         {

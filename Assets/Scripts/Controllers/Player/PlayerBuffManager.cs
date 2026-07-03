@@ -163,5 +163,5 @@ public class PlayerBuffManager : IDisposable
 
     public void HandleOnSelfDie() => orderedBuffs.ForEach(n => n.OnSelfDie());
 
-    private void HandleOnPlayerGoToNewFloor() => orderedBuffs.ForEach(n => n.OnEnterNewFloor());
+    public void HandleOnPlayerGoToNewFloor() => orderedBuffs.ForEach(n => n.OnEnterNewFloor());
 }
