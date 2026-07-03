@@ -69,19 +69,18 @@ public class Combat
 
     public void TriggerOnDeathPreRemovalEvents()
     {
-        // Handle on self die events before the card is removed from the room
+        attacker.BuffManager.HandleOnOtherDiePreRemoval(defender);
         defender.BuffManager.HandleOnSelfDiePreRemoval();
     }
 
     public void TriggerOnDeathPostRemovalEvents()
     {
-        // Handle on self die events before the card is removed from the room
+        attacker.BuffManager.HandleOnOtherDiePostRemoval(defender);
         defender.BuffManager.HandleOnSelfDiePostRemoval();
 
-        // Also handle on other die for all other cards in the room
         foreach (RuntimeCardModel other in dungeonController.CurrentRoom.GetOthers(defender))
         {
-            other?.HandleOnOtherDie(defender);
+            other?.BuffManager.HandleOnOtherDie(defender);
         }
     }
 

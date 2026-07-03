@@ -35,10 +35,6 @@ public class BuffManager : IDisposable
 
         ServiceLocator.Global.Get(out gameManager);
         player = gameManager.Player;
-
-        owner.OnDraw += HandleOnDraw;
-
-        gameManager.OnCardsChanged += HandleOnCardsChanged;
     }
 
     public List<Buff> GetBuffs() => orderedBuffs;
@@ -59,9 +55,6 @@ public class BuffManager : IDisposable
 
     public void Dispose()
     {
-        owner.OnDraw -= HandleOnDraw;
-
-        gameManager.OnCardsChanged -= HandleOnCardsChanged;
     }
 
     public bool HasBuff(BuffID buffID) => registeredBuffs.Keys.Contains(buffID);
@@ -184,17 +177,17 @@ public class BuffManager : IDisposable
 
     public void HandleOnSelfAttackedPostDamage(CombatReport combatReport) => orderedBuffs.ForEach(n => n.OnSelfAttackedPostDamage(combatReport));
 
-    private void HandleOnPlayerEnterRoom() => orderedBuffs.ForEach(n => n.OnEnterRoom());
+    public void HandleOnPlayerEnterRoom() => orderedBuffs.ForEach(n => n.OnEnterRoom());
 
-    private void HandleOnPlayerRun() => orderedBuffs.ForEach(n => n.OnRun());
+    public void HandleOnPlayerRun() => orderedBuffs.ForEach(n => n.OnRun());
 
-    private void HandleOnOtherDie(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDie(other));
+    public void HandleOnOtherDie(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDie(other));
 
-    private void HandleOnDraw() => orderedBuffs.ForEach(n => n.OnDraw());
+    public void HandleOnDraw() => orderedBuffs.ForEach(n => n.OnDraw());
 
     public void HandleOnSelfDiePreRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePreRemoval());
 
     public void HandleOnSelfDiePostRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePostRemoval());
 
-    private void HandleOnCardsChanged() => orderedBuffs.ForEach(n => n.OnCardsChanged());
+    public void HandleOnCardsChanged() => orderedBuffs.ForEach(n => n.OnCardsChanged());
 }

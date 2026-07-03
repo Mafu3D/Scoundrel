@@ -34,7 +34,10 @@ namespace Project.GameStates
             {
                 // Player enter room
                 player.EnterNewRoom();
-                // TODO: add all player enter room triggers here
+                foreach(RuntimeCardModel card in dungeonController.CurrentRoom.RemainingCards())
+                {
+                    card.BuffManager.HandleOnPlayerEnterRoom();
+                }
             }
 
             dungeonController.CurrentRoom.TryRemoveCard(card);
@@ -46,7 +49,6 @@ namespace Project.GameStates
             }
 
             scoreKeeper.AddToScore(card);
-            // TEMP: Inc score keeper multiplier here
             scoreKeeper.IncRoomMultiplier();
 
             card.Kill();

@@ -18,12 +18,6 @@ public class PlayerBuffManager : IDisposable
         this.owner = owner;
 
         ServiceLocator.Global.Get(out gameManager);
-
-        owner.OnDeath += HandleOnSelfDie;
-        owner.OnOtherDie += HandleOnOtherDie;
-
-        gameManager.OnOpenNewRoom += HandleOnPlayerGoToNewRoom;
-        gameManager.DungeonController.OnGoToNextFloor += HandleOnPlayerGoToNewFloor;
     }
 
     public List<PlayerBuff> GetBuffs() => orderedBuffs;
@@ -44,12 +38,6 @@ public class PlayerBuffManager : IDisposable
 
     public void Dispose()
     {
-        owner.OnDeath -= HandleOnSelfDie;
-        owner.OnOtherDie -= HandleOnOtherDie;
-
-        gameManager.OnOpenNewRoom -= HandleOnPlayerGoToNewRoom;
-
-        gameManager.DungeonController.OnGoToNextFloor -= HandleOnPlayerGoToNewFloor;
     }
 
     public bool HasBuff(PlayerBuffID buffID) => registeredBuffs.Keys.Contains(buffID);
@@ -163,15 +151,17 @@ public class PlayerBuffManager : IDisposable
 
     public void HandleOnPlayerAttackPostDamage(CombatReport combatReport) => orderedBuffs.ForEach(n => n.OnPlayerAttackPostDamage(combatReport));
 
-    private void HandleOnPlayerEnterRoom() => orderedBuffs.ForEach(n => n.OnEnterRoom());
+    public void HandleOnPlayerEnterRoom() => orderedBuffs.ForEach(n => n.OnEnterRoom());
 
-    private void HandleOnPlayerGoToNewRoom() => orderedBuffs.ForEach(n => n.OnGoToNewRoom());
+    public void HandleOnPlayerGoToNewRoom() => orderedBuffs.ForEach(n => n.OnGoToNewRoom());
 
-    private void HandleOnPlayerRun() => orderedBuffs.ForEach(n => n.OnRun());
+    public void HandleOnPlayerRun() => orderedBuffs.ForEach(n => n.OnRun());
 
-    private void HandleOnOtherDie(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDie(other));
+    public void HandleOnOtherDiePreRemoval(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDiePreRemoval(other));
 
-    private void HandleOnSelfDie() => orderedBuffs.ForEach(n => n.OnSelfDie());
+    public void HandleOnOtherDiePostRemoval(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDiePostRemoval(other));
+
+    public void HandleOnSelfDie() => orderedBuffs.ForEach(n => n.OnSelfDie());
 
     private void HandleOnPlayerGoToNewFloor() => orderedBuffs.ForEach(n => n.OnEnterNewFloor());
 }

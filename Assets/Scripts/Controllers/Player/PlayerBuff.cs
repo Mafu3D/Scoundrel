@@ -149,7 +149,8 @@ public abstract class PlayerBuff : ScriptableObject
     public virtual void OnEnterNewFloor() { }
     public virtual void OnRun() { }
     public virtual void OnSelfDie() { }
-    public virtual void OnOtherDie(MonsterCardModel other) { }
+    public virtual void OnOtherDiePreRemoval(MonsterCardModel other) { }
+    public virtual void OnOtherDiePostRemoval(MonsterCardModel other) { }
     public virtual void OnEquipWeapon() { }
     public virtual void OnDrinkPotion() { }
     public virtual void OnDiscardPotion() { }

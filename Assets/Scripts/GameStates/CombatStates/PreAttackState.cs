@@ -1,5 +1,6 @@
 using Project.Core;
 using Project.Core.StateMachineSystem;
+using Project.Decks;
 
 namespace Project.GameStates
 {
@@ -28,6 +29,17 @@ namespace Project.GameStates
         public override void OnEnter()
         {
             player.SetInteractionState(PlayerInteractionState.UIOnly);
+
+            if (!player.HasEnteredTheRoom)
+            {
+                // Player enter room
+                player.EnterNewRoom();
+                foreach(RuntimeCardModel card in dungeonController.CurrentRoom.RemainingCards())
+                {
+                    card.BuffManager.HandleOnPlayerEnterRoom();
+                }
+            }
+
             combat.TriggerPreAttackEvents();
         }
 

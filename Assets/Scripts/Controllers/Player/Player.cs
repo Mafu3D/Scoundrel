@@ -39,11 +39,8 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     public Action<int> OnGoldChanged;
     public Action<int> OnRunTokensChanged;
     public Action OnDeath;
-    public Action<MonsterCardModel> OnOtherDie;
     public Action OnWeaponChanged;
     public Action OnRunSuccess;
-    public Action<CombatReport> OnAttackPreDamage;
-    public Action<CombatReport> OnAttackPostDamage;
 
     private InputActionMap uiActions;
 
@@ -114,6 +111,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     public void EnterNewRoom()
     {
         HasEnteredTheRoom = true;
+        BuffManager.HandleOnPlayerEnterRoom();
     }
 
     public bool CanRun => (HasRunToken || ExtraRunTokens > 0) && !HasEnteredTheRoom;
@@ -235,6 +233,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
 
     private void HandleDeath()
     {
+        BuffManager.HandleOnSelfDie();
         OnDeath?.Invoke();
         Debug.Log("YOU DIED");
     }

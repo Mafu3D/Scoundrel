@@ -11750,6 +11750,7 @@ MonoBehaviour:
   - {fileID: 1073925661}
   - {fileID: 1834382872}
   - {fileID: 1891542651}
+  - {fileID: 934997383}
   gameOverCanvas: {fileID: 747082762}
   powerUpDungeonObjects:
   - {fileID: 1504966277}

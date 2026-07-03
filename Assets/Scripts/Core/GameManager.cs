@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
     public Action OnExitShopPhase;
     public Action OnEnterChooseFloorPhase;
     public Action OnExitChooseFloorPhase;
-    public Action OnCardsChanged;
 
     private StateMachine stateMachine;
     private CombatController combatController;
@@ -238,14 +237,7 @@ public class GameManager : MonoBehaviour
     {
         OnEnterPowerUpDungeonPhase?.Invoke();
         TEMP_AddRandomMonsterBuffs(4, 6);
-        // StartCoroutine(PowerUpDungeonPhaseRoutine());
     }
-
-    // private IEnumerator PowerUpDungeonPhaseRoutine()
-    // {
-    //     yield return new WaitForSecondsRealtime(4);
-    //     GoToShopPhase();
-    // }
 
     public void GoToShopPhase()
     {
@@ -285,12 +277,6 @@ public class GameManager : MonoBehaviour
         {
             EndGame();
         }
-    }
-
-    private void BroadcastOnCardsChanged()
-    {
-        // This is just temp, this should be refactored
-        OnCardsChanged?.Invoke();
     }
 
     #region Card Handling - Move!!

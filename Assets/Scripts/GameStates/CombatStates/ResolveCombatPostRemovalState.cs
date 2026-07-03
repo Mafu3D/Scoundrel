@@ -1,5 +1,6 @@
 using Project.Core;
 using Project.Core.StateMachineSystem;
+using Project.Decks;
 using UnityEngine;
 
 namespace Project.GameStates
@@ -30,13 +31,6 @@ namespace Project.GameStates
         {
             player.SetInteractionState(PlayerInteractionState.UIOnly);
 
-            if (!player.HasEnteredTheRoom)
-            {
-                // Player enter room
-                player.EnterNewRoom();
-                // TODO: add all player enter room triggers here
-            }
-
             player.AddGold(1);
 
             // For now, all monsters die in combat
@@ -50,7 +44,6 @@ namespace Project.GameStates
             }
 
             scoreKeeper.AddToScore(defender);
-            // TEMP: Inc score keeper multiplier here
             scoreKeeper.IncRoomMultiplier();
 
             combat.TriggerOnDeathPostRemovalEvents();

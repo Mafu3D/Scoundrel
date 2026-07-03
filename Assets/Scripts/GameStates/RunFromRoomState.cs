@@ -1,16 +1,17 @@
 using Project.Core;
 using Project.Core.StateMachineSystem;
+using Project.Decks;
 
 namespace Project.GameStates
 {
-    public class OpenNewRoomState : State
+    public class RunFromRoomState : State
     {
         private readonly Player player;
         private readonly DungeonController dungeonController;
         private readonly AdvancedScoreKeeper scoreKeeper;
         private readonly GameProcessQueue<GameplayEffect> gameplayEffectQueue;
 
-        public OpenNewRoomState(StateMachine stateMachine,
+        public RunFromRoomState(StateMachine stateMachine,
                                 GameProcessQueue<GameplayEffect> gameplayEffectQueue,
                                 Player player,
                                 DungeonController dungeonController,
@@ -27,11 +28,11 @@ namespace Project.GameStates
             // Run any logic that needs to be run when a new room is opened for the first time
             player.SetInteractionState(PlayerInteractionState.UIOnly);
 
-            player.RoundReset();
-            scoreKeeper.ResetRoomMultiplier();
-            dungeonController.OpenNewRoom();
-
-            player.BuffManager.HandleOnPlayerGoToNewRoom();
+            player.BuffManager.HandleOnPlayerRun();
+            foreach(RuntimeCardModel card in dungeonController.CurrentRoom.RemainingCards())
+            {
+                card.BuffManager.HandleOnPlayerRun();
+            }
         }
 
         public override void Update(float deltaTime)
@@ -42,7 +43,8 @@ namespace Project.GameStates
                 return;
             }
 
-            StateMachine.SwitchState(new RoomActiveState(StateMachine, gameplayEffectQueue, player, dungeonController));
+            dungeonController.RunFromRoom();
+            StateMachine.SwitchState(new OpenNewRoomState(StateMachine, gameplayEffectQueue, player, dungeonController, scoreKeeper));
         }
 
         public override void OnExit() { }

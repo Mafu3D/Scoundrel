@@ -68,6 +68,8 @@ public class DungeonController
 
             // Add the remaining cards from the current room to the new room
             newCards.AddRange(CurrentRoom.RemainingCards());
+
+            CurrentRoom.OnCardsChanged -= OnCardsChanged;
         }
 
         // Create the new room contents by taking the remaining cards from the current room and drawing new cards from the deck
@@ -77,6 +79,7 @@ public class DungeonController
 
         // Create the new room controller with the new room contents
         CurrentRoom = new RoomController(new RoomModel(roomSize, newCards));
+        CurrentRoom.OnCardsChanged += OnCardsChanged;
 
         // Run all of the on drawn events for the cards in the room
         CurrentRoom.GetCards().ForEach(card => card?.HandleOnDraw());
@@ -85,14 +88,21 @@ public class DungeonController
         OnNewRoomOpened?.Invoke();
     }
 
+
     public void RunFromRoom()
     {
-        Debug.Log("DungeonController: running from room");
         List<RuntimeCardModel> nonpersistantCards = CurrentRoom.PopNonPersistantCards();
-        Debug.Log($"popped {string.Join(", ", nonpersistantCards)}");
         deckController.Deck.AddToRemaining(nonpersistantCards, addToTop: false, shuffle: false);
     }
     #endregion
+
+    private void OnCardsChanged()
+    {
+        foreach(RuntimeCardModel card in CurrentRoom.RemainingCards())
+        {
+            card.BuffManager.HandleOnCardsChanged();
+        }
+    }
 
     private void IncrementRoomNumber() => dungeonModel.RoomNumber++;
     private void ResetRoomNumber() => dungeonModel.RoomNumber = 0;

@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [Header("During Game")]
     [SerializeField] private GameObject currentRunCanvas;
     [SerializeField] private List<GameObject> cardsUI = new();
+    [SerializeField] private List<GameObject> worldSpaceUI = new();
 
     [Header("Game Over")]
     [SerializeField] private GameOverCanvas gameOverCanvas;
@@ -48,6 +49,7 @@ public class UIManager : MonoBehaviour
         gameOverCanvas.gameObject.SetActive(false);
         currentRunCanvas.SetActive(false);
         cardsUI.ForEach(go => go.SetActive(false));
+        worldSpaceUI.ForEach(go => go.SetActive(false));
         powerUpDungeonObjects.ForEach(go => go.SetActive(false));
         shopObjects.ForEach(go => go.SetActive(false));
         chooseFloorObjects.ForEach(go => go.SetActive(false));
@@ -62,12 +64,14 @@ public class UIManager : MonoBehaviour
 
         currentRunCanvas.SetActive(true);
         cardsUI.ForEach(go => go.SetActive(true));
+        worldSpaceUI.ForEach(go => go.SetActive(true));
     }
 
     private void ShowGameOver()
     {
         currentRunCanvas.SetActive(false);
         cardsUI.ForEach(go => go.SetActive(false));
+        worldSpaceUI.ForEach(go => go.SetActive(false));
 
         gameOverCanvas.gameObject.SetActive(true);
 

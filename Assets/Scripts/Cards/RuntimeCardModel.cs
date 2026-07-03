@@ -52,10 +52,6 @@ namespace Project.Decks
         public string ID => uuid.ToString();
 
         public Action OnUpdate;
-        public Action OnDraw;
-        public Action<CombatReport> OnSelfAttackedPreDamage;
-        public Action<CombatReport> OnSelfAttackedPostDamage;
-        public Action<MonsterCardModel> OnOtherDie;
 
         public bool PersistsThroughRun = false;
 
@@ -138,12 +134,7 @@ namespace Project.Decks
 
         public void HandleOnDraw()
         {
-            OnDraw?.Invoke();
-        }
-
-        public void HandleOnOtherDie(MonsterCardModel other)
-        {
-            OnOtherDie?.Invoke(other);
+            BuffManager.HandleOnDraw();
         }
 
         public List<Buff> GetBuffs() => BuffManager.GetBuffs();
