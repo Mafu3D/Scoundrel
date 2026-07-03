@@ -241,6 +241,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
         MaxHealth = StartingMaxHealth;
         CurrentHealth = MaxHealth;
         RunCooldownCounter = 0;
+        ExtraRunTokens = 0;
         HasRunToken = true;
         Weapon = null;
         CurrentGold = 0;

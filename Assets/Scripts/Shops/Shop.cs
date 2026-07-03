@@ -131,8 +131,18 @@ public class Blacksmith : Shop
             Buff buff = gameManager.BuffRegistry.GetBuffFromName(buffs[randBuff]);
 
             // Create the action
-            string title = $"{card.GetName()} - {buff.Name}";
-            string description = $"{buff.Description}";
+            string title = $"{card.GetName()}\n + {buff.Name}";
+            string description = "";
+            if (card.BuffManager.GetBuffs().Count > 0)
+            {
+                description += "EXISTING: ";
+                foreach (Buff existingBuff in card.BuffManager.GetBuffs())
+                {
+                    description += $"{existingBuff.Name}, ";
+                }
+                description += "\n\n";
+            }
+            description += $"NEW:\n{buff.Description}";
             // string description = $"{buff.Description}\n\nAdd to {card.GetName()}";
             // foreach(Buff existingBuff in card.GetBuffs())
             // {

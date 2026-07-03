@@ -342,8 +342,18 @@ namespace Project.DebugCommands
             string fileName = $"DeckContents_{DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss")}";
             string filePath = $"{rootDir}/DebugLogs/{fileName}.txt";
             Directory.CreateDirectory($"{rootDir}/DebugLogs");
-            File.WriteAllLines(filePath, contents);
-            Debug.Log($"Logged deck contents to {filePath}");
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+            {
+                foreach(string line in contents)
+                {
+                    Debug.Log(line);
+                }
+            }
+            else
+            {
+                File.WriteAllLines(filePath, contents);
+                Debug.Log($"Logged deck contents to {filePath}");
+            }
         }
     }
 }
