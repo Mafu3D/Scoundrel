@@ -74,8 +74,6 @@ public class DungeonController
             //  dungeon controller, called like lingeringCards or something. Then when a new room is
             //  opened, it adds lingering cards.
 
-
-
             // Shuffle in any doors that still remain
             List<RuntimeCardModel> doorCards = CurrentRoom.PopDoorCards();
             deckController.Deck.ShuffleIn(doorCards);

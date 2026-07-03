@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pursuer
   m_EditorClassIdentifier: 
   Name: Pursuer
-  Sprite: {fileID: -1240480555, guid: 4cc4292a11395fd409f7132df8c55df2, type: 3}
+  Sprite: {fileID: -5161173795680686134, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
   Description: This card persists through running away
   ValidCardTypes: 00000000
   IsHidden: 0

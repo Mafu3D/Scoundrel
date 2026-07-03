@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Honed
   m_EditorClassIdentifier: 
   Name: Honed
+  Sprite: {fileID: 2988017124198861245, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
   Description: Increase this weapon's value by 2
   ValidCardTypes: 01000000
+  IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0
   RemoveOnParentCleanup: 0
