@@ -36,19 +36,7 @@ public class GlobalBuffRegistry : MonoBehaviour
 
     public Buff GetRandomBuff(CardType cardType)
     {
-        List<Buff> validBuffs = new();
-        foreach (Buff buff in GlobalBuffs)
-        {
-            if (buff.ValidCardTypes.Contains(cardType))
-            {
-                validBuffs.Add(buff);
-            }
-        }
-
-        if (validBuffs.Count == 0)
-        {
-            return null;
-        }
+        List<Buff> validBuffs = GetAllBuffsOfType(cardType);
 
         int randomIndex = Random.Range(0, validBuffs.Count);
         return validBuffs[randomIndex];
@@ -64,5 +52,19 @@ public class GlobalBuffRegistry : MonoBehaviour
 
         int randomIndex = Random.Range(0, GlobalPlayerBuffs.Count);
         return GlobalPlayerBuffs[randomIndex];
+    }
+
+    public List<Buff> GetAllBuffsOfType(CardType cardType)
+    {
+        List<Buff> validBuffs = new();
+        foreach (Buff buff in GlobalBuffs)
+        {
+            if (buff.ValidCardTypes.Contains(cardType))
+            {
+                validBuffs.Add(buff);
+            }
+        }
+
+        return validBuffs;
     }
 }

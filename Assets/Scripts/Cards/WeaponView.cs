@@ -5,15 +5,15 @@ using System.Linq;
 using Project.Decks;
 using UnityEngine;
 
-public class WeaponView : MonoBehaviour
+public class WeaponCardView : MonoBehaviour
 {
     [SerializeField] Player Player;
+    [SerializeField] CardView cardView;
     [SerializeField] GameObject CardViewPrefab;
-    [SerializeField] CardView weaponCard;
     [SerializeField] List<CardView> defeatedCardsPool;
     [SerializeField] float cardOffset = -0.755f;
 
-    WeaponCardModel weapon;
+    private WeaponCardModel registeredWeapon;
 
     void Start()
     {
@@ -25,32 +25,36 @@ public class WeaponView : MonoBehaviour
         RefreshView();
     }
 
-    public void RegisterWeapon(WeaponCardModel weapon)
+    public void RegisterWeapon(WeaponCardModel newWeapon)
     {
-        this.weapon = weapon;
-        weaponCard.RegisterCard(weapon);
-        weapon.OnWeaponUpdate += OnWeaponUpdate;
-        weaponCard.gameObject.SetActive(true);
-
+        this.registeredWeapon = newWeapon;
+        cardView.RegisterCard(newWeapon);
+        newWeapon.OnWeaponUpdate += OnWeaponUpdate;
         RefreshView();
+        this.gameObject.SetActive(true);
     }
 
     public void DeregisterWeapon()
     {
-        if (weapon != null)
+        this.gameObject.SetActive(false);
+        if (registeredWeapon != null)
         {
-            weapon.OnWeaponUpdate -= OnWeaponUpdate;
+            registeredWeapon.OnWeaponUpdate -= OnWeaponUpdate;
         }
-        this.weapon = null;
+        this.registeredWeapon = null;
+        cardView.DeregisterCard();
+        RefreshView();
+    }
 
+    private void OnWeaponUpdate()
+    {
         RefreshView();
     }
 
     private void RefreshView()
     {
-        if (weapon == null)
+        if (registeredWeapon == null)
         {
-            weaponCard.gameObject.SetActive(false);
             foreach (CardView card in defeatedCardsPool)
             {
                 if (card.Card != null)
@@ -59,11 +63,12 @@ public class WeaponView : MonoBehaviour
                 }
                 card.gameObject.SetActive(false);
             }
+            this.gameObject.SetActive(false);
             return;
         }
 
         // If a CardView has not already been created in the object pool, create a new one
-        int difference = weapon.SlainCards.Count - defeatedCardsPool.Count;
+        int difference = registeredWeapon.SlainCards.Count - defeatedCardsPool.Count;
         if (difference > 0)
         {
             for (int i = 0; i < difference; i++)
@@ -82,27 +87,28 @@ public class WeaponView : MonoBehaviour
         for (int i = 0; i < defeatedCardsPool.Count; i++)
         {
             CardView card = defeatedCardsPool[i];
-            if (i < weapon.SlainCards.Count)
+            if (card.Card != null)
             {
-                card.RegisterCard(weapon.SlainCards[i]);
+                card.DeregisterCard();
+            }
+
+            if (i < registeredWeapon.SlainCards.Count)
+            {
+                card.RegisterCard(registeredWeapon.SlainCards[i]);
                 card.gameObject.SetActive(true);
                 card.transform.localPosition = new Vector3(cardOffset*(i+1), 0, 0);
             }
             else
             {
-                if (card.Card != null)
-                {
-                    card.DeregisterCard();
-                }
                 card.gameObject.SetActive(false);
             }
         }
 
         // Offset the cards
-        for (int i = 0; i < weapon.SlainCards.Count + 1; i++)
+        for (int i = 0; i < registeredWeapon.SlainCards.Count + 1; i++)
         {
-            CardView card = i == 0 ? weaponCard : defeatedCardsPool[i-1];
-            float midPoint = (weapon.SlainCards.Count + 1) / 2;
+            CardView card = i == 0 ? cardView : defeatedCardsPool[i-1];
+            float midPoint = (registeredWeapon.SlainCards.Count + 1) / 2;
             if (i < midPoint)
             {
                 // Positive
@@ -118,8 +124,4 @@ public class WeaponView : MonoBehaviour
         }
     }
 
-    private void OnWeaponUpdate()
-    {
-        RefreshView();
-    }
 }

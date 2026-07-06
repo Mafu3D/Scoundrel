@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-
 using Mafu.UnityServiceLocator;
-using Project.Decks;
+using Sirenix.Utilities;
 using UnityEngine;
 
 public abstract class Shop
@@ -101,65 +100,4 @@ public class Merchant : Shop
             shopActions.Add(newAction);
         }
     }
-}
-
-public class Blacksmith : Shop
-{
-    readonly List<string> buffs = new() { "Bomb", "Cleaving", "Honed", "Reinforced" };
-
-    public Blacksmith(GameManager gameManager) : base(gameManager) { }
-
-    protected override void PopulateShopActions()
-    {
-        int AMOUNT = 4; // Magic number!!
-        shopActions = new();
-
-        // Get cards
-        RuntimeCardModel[] cardsToBuff = new RuntimeCardModel[AMOUNT];
-        List<RuntimeCardModel> weaponCards = gameManager.DeckController.GetRemainingOfSuit(new() {Suit.DIAMONDS});
-        for (int i = 0; i < AMOUNT; i++)
-        {
-            int randIndex = UnityEngine.Random.Range(0, weaponCards.Count);
-            cardsToBuff[i] = weaponCards[randIndex];
-        }
-
-        // Create the shop actions
-        foreach (RuntimeCardModel card in cardsToBuff)
-        {
-            // Get the random buff
-            int randBuff = UnityEngine.Random.Range(0, buffs.Count);
-            Buff buff = gameManager.BuffRegistry.GetBuffFromName(buffs[randBuff]);
-
-            // Create the action
-            string title = $"{card.GetName()}\n + {buff.Name}";
-            string description = "";
-            if (card.BuffManager.GetBuffs().Count > 0)
-            {
-                description += "EXISTING: ";
-                foreach (Buff existingBuff in card.BuffManager.GetBuffs())
-                {
-                    description += $"{existingBuff.Name}, ";
-                }
-                description += "\n\n";
-            }
-            description += $"NEW:\n{buff.Description}";
-            // string description = $"{buff.Description}\n\nAdd to {card.GetName()}";
-            // foreach(Buff existingBuff in card.GetBuffs())
-            // {
-            //     description += $"\n   -{existingBuff.Name}";
-            // }
-
-            ShopAction newAction = new(
-                title,
-                description,
-                5,
-                (gameManager) =>
-                {
-                    card.AddNewBuff(buff);
-                });
-            shopActions.Add(newAction);
-        }
-    }
-
-
 }

@@ -6,7 +6,6 @@ using Mafu.Extensions;
 
 namespace Project.Decks
 {
-    // TODO: Turn suit into a map that connects a suit with a card type?
     public enum Suit {
         SPADES,
         HEARTS,
@@ -52,6 +51,7 @@ namespace Project.Decks
         public string ID => uuid.ToString();
 
         public Action OnUpdate;
+        public Action OnCardActivated;
 
         public bool PersistsThroughRun = false;
 
@@ -111,6 +111,18 @@ namespace Project.Decks
             return output;
         }
 
+        public string GetCardValueStringSymbol()
+        {
+            return Value switch
+            {
+                11 => "J",
+                12 => "Q",
+                13 => "K",
+                14 => "A",
+                _ => Value.ToString(),
+            };
+        }
+
         public void RegisterValueModifier(int value)
         {
             ValueModifiers.Add(value);
@@ -121,7 +133,6 @@ namespace Project.Decks
             if (ValueModifiers.Contains(value))
             {
                 ValueModifiers.Remove(value);
-                return;
             }
         }
 

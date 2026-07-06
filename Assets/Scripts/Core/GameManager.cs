@@ -254,7 +254,7 @@ public class GameManager : MonoBehaviour
     // TODO: Eventually this should all be in its own class
     //      Like a card handler class?
 
-    public void OnCardClicked(RuntimeCardModel card, CardClickContext context)
+    public void OnCardClicked(RuntimeCardModel card, MousePositionContext context)
     {
         if (Player.InteractionState != PlayerInteractionState.Full)
         {
@@ -303,9 +303,9 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    private bool HandleEnemy(RuntimeCardModel card, CardClickContext context)
+    private bool HandleEnemy(RuntimeCardModel card, MousePositionContext context)
     {
-        return context == CardClickContext.TOP ? combatController.TryFightWeapon(card) : combatController.TryFightUnarmed(card);
+        return context == MousePositionContext.TOP ? combatController.TryFightWeapon(card) : combatController.TryFightUnarmed(card);
     }
 
     private bool HandleWeapon(RuntimeCardModel card)
@@ -326,4 +326,9 @@ public class GameManager : MonoBehaviour
     public string DEBUG_GetCurrentGameStateString() => stateMachine.CurrentState.GetType().Name;
 
     #endregion
+}
+
+public class CardHandler : MonoBehaviour
+{
+    [SerializeField] private GameManager gameManager;
 }

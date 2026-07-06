@@ -52,8 +52,9 @@ public class RoomView : MonoBehaviour
         {
             for (int i = 0; i < CardViews.Count; i++)
             {
-                CardViews[i].gameObject.SetActive(false);
-                CardViews[i].DeregisterCard();
+                CardView cardView = CardViews[i];
+                cardView.gameObject.SetActive(false);
+                cardView.DeregisterCard();
             }
 
             return;
@@ -62,15 +63,20 @@ public class RoomView : MonoBehaviour
         // Otherwise, register the card model to each card view
         for (int i = 0; i < CardViews.Count; i++)
         {
+            CardView cardView = CardViews[i];
+            if (cardView.Card != null)
+            {
+                cardView.DeregisterCard();
+            }
+
             if (room.GetCards()[i] != null)
             {
-                CardViews[i].RegisterCard(room.GetCards()[i]);
-                CardViews[i].gameObject.SetActive(true);
+                cardView.RegisterCard(room.GetCards()[i]);
+                cardView.gameObject.SetActive(true);
             }
             else
             {
-                CardViews[i].gameObject.SetActive(false);
-                CardViews[i].DeregisterCard();
+                cardView.gameObject.SetActive(false);
             }
         }
     }

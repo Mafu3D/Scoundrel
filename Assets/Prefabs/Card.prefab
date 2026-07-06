@@ -719,8 +719,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 105b246ad1100c34c9496e00f338f273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgSprite: {fileID: 4359097991861520961}
-  TMP_Text: {fileID: 3727620428992501416}
+  backgroundSprite: {fileID: 4359097991861520961}
+  text: {fileID: 3727620428992501416}
 --- !u!1 &1830027271911540923
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,8 +901,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 105b246ad1100c34c9496e00f338f273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgSprite: {fileID: 6027220449852285583}
-  TMP_Text: {fileID: 1340062928761198070}
+  backgroundSprite: {fileID: 6027220449852285583}
+  text: {fileID: 1340062928761198070}
 --- !u!1 &2983930758097186374
 GameObject:
   m_ObjectHideFlags: 0
@@ -916,6 +916,7 @@ GameObject:
   - component: {fileID: 964506102154751877}
   - component: {fileID: 5246920160656252357}
   - component: {fileID: 3711235653694261329}
+  - component: {fileID: 4010655865666647196}
   m_Layer: 0
   m_Name: Card
   m_TagString: Untagged
@@ -959,34 +960,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e1637a8600504a428f969139cef1ac6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Clickable: 1
+  GlobalCardData: {fileID: 11400000, guid: 4f2384d7c3018b3479da293727c89702, type: 2}
   valueTMPTexts:
   - {fileID: 6223452083415739313}
   - {fileID: 8012252538548482541}
-  suitSprite: {fileID: 8478282949906091295}
-  buffIconsParent: {fileID: 3407666735241765040}
-  red: {r: 0.5754717, g: 0, b: 0, a: 1}
-  black: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
-  valueIncreasedColor: {r: 0.019607844, g: 0.7490196, b: 0, a: 1}
-  valueDecreasedColor: {r: 1, g: 0, b: 0.22352941, a: 1}
-  diamondsSprite: {fileID: -820856043912040040, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
-  heartsSprite: {fileID: -6334201207039719469, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
-  clubsSprite: {fileID: -7023996695818602368, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
-  spadesSprite: {fileID: -3337833091399901211, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
-  doorsSprite: {fileID: -2223897727537074547, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
-  treasuresSprite: {fileID: 2771461146944217657, guid: 4f5a00e7c1013b340860c9a9ca88310a, type: 3}
-  topHoverContext: {fileID: 3668722419022172137}
-  botHoverContext: {fileID: 2443363397008048952}
-  fullHoverContext: {fileID: 8308200117013749687}
-  attackWeaponColor: {r: 0.5764706, g: 0, b: 0, a: 0.6}
-  attackUnarmedColor: {r: 0.16470589, g: 0.2, b: 0.5372549, a: 0.6}
-  equipColor: {r: 0.16470589, g: 0.2, b: 0.5372549, a: 0.6}
-  drinkColor: {r: 0.5764706, g: 0, b: 0, a: 0.6}
-  discardColor: {r: 0.09411765, g: 0.09411765, b: 0.09411765, a: 0.6}
-  treasureColor: {r: 0.745283, g: 0.65710086, b: 0.2214756, a: 0.6}
-  doorLockedColor: {r: 0.3679245, g: 0.0763617, b: 0.0763617, a: 0.6}
-  doorUnlockedColor: {r: 0.21026166, g: 0.7075472, b: 0.29495865, a: 0.6}
-  gameManager: {fileID: 0}
+  suitSpriteRenderer: {fileID: 8478282949906091295}
+  buffIconsTransform: {fileID: 3407666735241765040}
+  Clickable: 1
 --- !u!61 &964506102154751877
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1073,6 +1053,21 @@ MonoBehaviour:
   delay: 0.2
   anchor: {fileID: 1826265446834506120}
   forceAnchor: 1
+--- !u!114 &4010655865666647196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2983930758097186374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0d3d7f60a5a9ad4da54a3c5677033e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topMouseOverContext: {fileID: 3668722419022172137}
+  botMouseOverContext: {fileID: 2443363397008048952}
+  fullMouseOverContext: {fileID: 8308200117013749687}
 --- !u!1 &3610247004690400493
 GameObject:
   m_ObjectHideFlags: 0
@@ -1636,7 +1631,7 @@ GameObject:
   - component: {fileID: 891009784536200567}
   - component: {fileID: 8478282949906091295}
   m_Layer: 0
-  m_Name: Icon
+  m_Name: SuitSpriteIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1896,7 +1891,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3486650149392682121}
   m_Layer: 0
-  m_Name: HoverGroups
+  m_Name: MouseOverContexts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2437,5 +2432,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 105b246ad1100c34c9496e00f338f273, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bgSprite: {fileID: 6516891378344519796}
-  TMP_Text: {fileID: 8697117939699906591}
+  backgroundSprite: {fileID: 6516891378344519796}
+  text: {fileID: 8697117939699906591}
