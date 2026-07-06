@@ -89,8 +89,28 @@ PrefabInstance:
       value: 0.255518
       objectReference: {fileID: 0}
     - target: {fileID: 8274782206241407285, guid: fe9c75b914820ac4581b2d26265f30d5, type: 3}
+      propertyPath: notEnoughGoldText
+      value: Not enough gold
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274782206241407285, guid: fe9c75b914820ac4581b2d26265f30d5, type: 3}
       propertyPath: buffNotSelectedText
       value: Select upgrade first
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274782206241407285, guid: fe9c75b914820ac4581b2d26265f30d5, type: 3}
+      propertyPath: cannotUpgradeColor.a
+      value: 0.5019608
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274782206241407285, guid: fe9c75b914820ac4581b2d26265f30d5, type: 3}
+      propertyPath: cannotUpgradeColor.b
+      value: 0.14150941
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274782206241407285, guid: fe9c75b914820ac4581b2d26265f30d5, type: 3}
+      propertyPath: cannotUpgradeColor.g
+      value: 0.14150941
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274782206241407285, guid: fe9c75b914820ac4581b2d26265f30d5, type: 3}
+      propertyPath: cannotUpgradeColor.r
+      value: 0.14150941
       objectReference: {fileID: 0}
     - target: {fileID: 8274782206241407285, guid: fe9c75b914820ac4581b2d26265f30d5, type: 3}
       propertyPath: buffNotSelectedColor.a
@@ -107,6 +127,10 @@ PrefabInstance:
     - target: {fileID: 8274782206241407285, guid: fe9c75b914820ac4581b2d26265f30d5, type: 3}
       propertyPath: buffNotSelectedColor.r
       value: 0.103773594
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274782206241407285, guid: fe9c75b914820ac4581b2d26265f30d5, type: 3}
+      propertyPath: noUpgradeRemainingText
+      value: Cannot upgrade anymore
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

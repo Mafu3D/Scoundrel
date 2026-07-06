@@ -6,8 +6,10 @@ public class BlacksmithWeaponItemView : CardViewExtender
     // TODO: Move into globals?
     [SerializeField] private Color upgradeColor;
     [SerializeField] private string upgradeText;
-    [SerializeField] private Color buffNotSelectedColor;
+    [SerializeField] private Color cannotUpgradeColor;
     [SerializeField] private string buffNotSelectedText;
+    [SerializeField] private string noUpgradeRemainingText;
+    [SerializeField] private string notEnoughGoldText;
 
     CardView cardView;
 
@@ -26,7 +28,7 @@ public class BlacksmithWeaponItemView : CardViewExtender
         blacksmithInstance.SelectWeapon(weaponItem);
         if (!blacksmithInstance.TryApplyUpgrade())
         {
-            blacksmithInstance.DeselectAll();
+            blacksmithInstance.DeselectWeapon();
         }
     }
 
@@ -34,10 +36,20 @@ public class BlacksmithWeaponItemView : CardViewExtender
 
     public override void OnMouseStay(MousePositionContext mousePositionContext)
     {
-        if (blacksmithInstance.CurrentlySelectedBuffItem == null)
+        if (!blacksmithInstance.ValidateSelectedWeaponCanBeUpgrade(weaponItem))
+        {
+            mouseOverContextManager.ShowFull(noUpgradeRemainingText,
+                                             cannotUpgradeColor);
+        }
+        else if (blacksmithInstance.CurrentlySelectedBuffItem == null)
         {
             mouseOverContextManager.ShowFull(buffNotSelectedText,
-                                             buffNotSelectedColor);
+                                             cannotUpgradeColor);
+        }
+        else if (!blacksmithInstance.ValidatePlayerHasEnoughGold())
+        {
+            mouseOverContextManager.ShowFull(notEnoughGoldText,
+                                             cannotUpgradeColor);
         }
         else
         {
@@ -66,9 +78,6 @@ public class BlacksmithWeaponItemView : CardViewExtender
 
         this.weaponItem = weaponItem;
         this.blacksmithInstance = blacksmithInstance;
-        Debug.Log(cardView);
-        Debug.Log(weaponItem);
-        Debug.Log(weaponItem.Card);
         cardView.RegisterCard(weaponItem.Card);
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Mafu.Extensions;
 using Project.Decks;
 using Project.UI.Tooltips;
@@ -35,6 +36,10 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
     [SerializeField] private SpriteRenderer suitSpriteRenderer;
     [SerializeField] private Transform buffIconsTransform;
 
+    [Header("Animation")]
+    [SerializeField] private float onHoverGrowthSize = 1.1f;
+    [SerializeField] private float onHoverGrowthSpeed = 0.1f;
+
     [HideInInspector] public bool Clickable = true;
     public bool IsActive { get; private set; } = false;
     public RuntimeCardModel Card {get; private set; }
@@ -43,6 +48,7 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
     public Action OnMouseExit;
     public Action<MousePositionContext> OnMouseStay;
 
+    private Transform myTransform;
     private BoxCollider2D myCollider;
     private SortingGroup mySortingGroup;
 
@@ -114,6 +120,7 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
     #region Unity Loop
     private void Awake()
     {
+        myTransform = GetComponent<Transform>();
         myCollider = GetComponent<BoxCollider2D>();
         mySortingGroup = GetComponent<SortingGroup>();
     }
@@ -264,12 +271,14 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        myTransform.DOScale(onHoverGrowthSize, onHoverGrowthSpeed);
         cardViewExtender?.OnMouseEnter();
         OnMouseOver?.Invoke();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        myTransform.DOScale(1f, onHoverGrowthSpeed);
         cardViewExtender?.OnMouseExit();
         OnMouseExit?.Invoke();
     }

@@ -13,8 +13,8 @@ public class Blacksmith
 
     public Action OnBuffInventoryChanged;
     public Action OnWeaponInventoryChanged;
-    public Action OnBuffSelected;
-    public Action OnWeaponSelected;
+    public Action<BlacksmithBuffItem> OnBuffSelectionChanged;
+    public Action OnWeaponSelectionChanged;
 
     private readonly Player player;
     private readonly DeckController deckController;
@@ -48,13 +48,13 @@ public class Blacksmith
         }
 
         CurrentlySelectedBuffItem = blacksmithBuffItem;
-        OnBuffSelected?.Invoke();
+        OnBuffSelectionChanged?.Invoke(blacksmithBuffItem);
     }
 
     public void DeselectBuffItem()
     {
         CurrentlySelectedBuffItem = null;
-        OnBuffSelected?.Invoke();
+        OnBuffSelectionChanged?.Invoke(null);
     }
 
     public void SelectWeapon(BlacksmithWeaponItem blacksmithWeaponItem)
@@ -72,13 +72,13 @@ public class Blacksmith
         }
 
         CurrentlySelectedWeaponItem = blacksmithWeaponItem;
-        OnWeaponSelected?.Invoke();
+        OnWeaponSelectionChanged?.Invoke();
     }
 
     public void DeselectWeapon()
     {
         CurrentlySelectedWeaponItem = null;
-        OnWeaponSelected?.Invoke();
+        OnWeaponSelectionChanged?.Invoke();
     }
 
     public void DeselectAll()
@@ -89,14 +89,54 @@ public class Blacksmith
 
     public bool TryApplyUpgrade()
     {
-        if (CurrentlySelectedBuffItem == null || CurrentlySelectedWeaponItem == null)
+        if (!RunUpgradeValidations(out _))
         {
-            Debug.Log("A valid buff item and weapon item must be selected to apply the ugprade!");
             return false;
         }
 
+        player.TryRemoveGold(CurrentlySelectedBuffItem.Cost);
+
         CurrentlySelectedWeaponItem.Card.AddNewBuff(CurrentlySelectedBuffItem.Buff);
         CurrentlySelectedWeaponItem.NumberOfTimesUpgraded++;
+
+        // Remove the buff from the pool and deselect everything
+        BlacksmithBuffItem appliedBuff = CurrentlySelectedBuffItem;
+        DeselectAll();
+        RemoveBuff(appliedBuff);
+
+        return true;
+    }
+
+    public bool ValidateBothItemsAreSelected() => CurrentlySelectedBuffItem != null && CurrentlySelectedWeaponItem != null;
+
+    public bool ValidateSelectedWeaponCanBeUpgrade(BlacksmithWeaponItem weaponItem) => weaponItem != null && weaponItem.CanUpgrade;
+
+    public bool ValidatePlayerHasEnoughGold() => CurrentlySelectedBuffItem != null && player.CurrentGold >= CurrentlySelectedBuffItem.Cost;
+
+    public bool RunUpgradeValidations(out string message)
+    {
+        if (!ValidateBothItemsAreSelected())
+        {
+            message = "A valid buff item and weapon item must be selected to apply the ugprade!";
+            Debug.Log(message);
+            return false;
+        }
+
+        if (!ValidateSelectedWeaponCanBeUpgrade(CurrentlySelectedWeaponItem))
+        {
+            message = $"{CurrentlySelectedWeaponItem.Card} has already received the maximum number of upgrades!";
+            Debug.Log(message);
+            return false;
+        }
+
+        if (!ValidatePlayerHasEnoughGold())
+        {
+            message = $"Not enough gold to purchase {CurrentlySelectedWeaponItem.Card}. Costs {CurrentlySelectedBuffItem.Cost}, has {player.CurrentGold}";
+            Debug.Log(message);
+            return false;
+        }
+
+        message = "Can upgrade";
         return true;
     }
 
@@ -109,6 +149,25 @@ public class Blacksmith
     public void RollRandomBuffs(int amount)
     {
         AvailableBuffItems = GetRandomlyChosenWeaponBuffs(amount);
+        OnBuffInventoryChanged?.Invoke();
+    }
+
+    private void RemoveBuff(BlacksmithBuffItem buffItem)
+    {
+        if (buffItem == null)
+        {
+            Debug.LogWarning("Tried to remove a null buff item!");
+            return;
+        }
+
+        if (!AvailableBuffItems.Contains(buffItem))
+        {
+            Debug.LogError($"Tried to remove {buffItem} from available buff items. But this item isn't registered to this blacksmith instance");
+            return;
+        }
+
+        int index = Array.IndexOf(AvailableBuffItems, buffItem);
+        AvailableBuffItems[index] = null;
         OnBuffInventoryChanged?.Invoke();
     }
 
