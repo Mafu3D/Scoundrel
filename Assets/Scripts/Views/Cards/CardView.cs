@@ -114,6 +114,8 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
         MousePositionContext mousePositionContext = GetMousePositionContext();
         cardViewExtender?.OnClicked(mousePositionContext);
         OnClicked?.Invoke(mousePositionContext);
+
+        myTransform.localScale = new Vector3(1f, 1f, 1f);
     }
     #endregion
 
