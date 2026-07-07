@@ -12,6 +12,7 @@ public class BlacksmithBuffItemView : MonoBehaviour, IPointerEnterHandler, IPoin
     [SerializeField] private TMP_Text descriptionTMP_Text;
     [SerializeField] private TMP_Text costTMP_Text;
     [SerializeField] private Transform arrowTransform;
+    [SerializeField] private PointerIndicator pointerIndicator;
 
     [Header("Animation")]
     [SerializeField] private float onHoverGrowthSize = 1.1f;
@@ -35,23 +36,20 @@ public class BlacksmithBuffItemView : MonoBehaviour, IPointerEnterHandler, IPoin
 
     private void Update()
     {
-        HandleMousePosition();
-
         if (isSelected)
         {
-            arrowTransform.gameObject.SetActive(true);
-
-            Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            Vector2 direction = worldPos - (Vector2)arrowTransform.position;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            arrowTransform.rotation = Quaternion.Euler(new Vector3(0, 0, angle-90));
-
-            arrowTransform.localPosition = arrowStartingPosition + (direction / 2);
+            if (pointerIndicator != null)
+            {
+                pointerIndicator.Show();
+                pointerIndicator.UpdatePointerPosition();
+            }
         }
         else
         {
-            arrowTransform.gameObject.SetActive(false);
+            if (pointerIndicator != null)
+            {
+                pointerIndicator.Hide();
+            }
         }
 
         if (isSelected)
@@ -112,15 +110,6 @@ public class BlacksmithBuffItemView : MonoBehaviour, IPointerEnterHandler, IPoin
         else
         {
             myTransform.DOScale(1f, onHoverGrowthSpeed);
-        }
-    }
-
-    private void HandleMousePosition()
-    {
-        Vector3 mousePos = Input.mousePosition;
-        Vector2 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-        if (myCollider.OverlapPoint(worldPos))
-        {
         }
     }
 
