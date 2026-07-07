@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class DungeonView : MonoBehaviour
@@ -13,7 +14,7 @@ public class DungeonView : MonoBehaviour
         gameManager.OnStartNewGame += OnStartNewGame;
         dungeonController.OnNewRoomOpened += OnOpenNewRoom;
         gameManager.OnGameOver += OnGameOver;
-        gameManager.Player.OnWeaponChanged += OnWeaponChanged;
+        gameManager.Player.OnWeaponChanged += UpdateWeaponView;
     }
 
     void OnDisable()
@@ -21,14 +22,27 @@ public class DungeonView : MonoBehaviour
         gameManager.OnStartNewGame -= OnStartNewGame;
         dungeonController.OnNewRoomOpened -= OnOpenNewRoom;
         gameManager.OnGameOver -= OnGameOver;
-        gameManager.Player.OnWeaponChanged -= OnWeaponChanged;
+        gameManager.Player.OnWeaponChanged -= UpdateWeaponView;
+    }
+
+    public void Show()
+    {
+        roomView.gameObject.SetActive(true);
+        weaponView.gameObject.SetActive(true);
+        UpdateWeaponView();
+    }
+
+    public void Hide()
+    {
+        roomView.gameObject.SetActive(false);
+        weaponView.gameObject.SetActive(false);
     }
 
     private void OnStartNewGame()
     {
         roomView.OnStartNewGame();
         weaponView.OnStartNewGame();
-        OnWeaponChanged();
+        UpdateWeaponView();
     }
 
     private void OnOpenNewRoom()
@@ -37,7 +51,7 @@ public class DungeonView : MonoBehaviour
         roomView.RegisterRoom(gameManager.DungeonController.CurrentRoom);
     }
 
-    private void OnWeaponChanged()
+    private void UpdateWeaponView()
     {
         weaponView.DeregisterWeapon();
         if (gameManager.Player.Weapon != null)

@@ -11,8 +11,6 @@ public class BlacksmithWeaponItemView : CardViewExtender
     [SerializeField] private string noUpgradeRemainingText;
     [SerializeField] private string notEnoughGoldText;
 
-    CardView cardView;
-
     private BlacksmithWeaponItem weaponItem;
     private Blacksmith blacksmithInstance;
     private MouseOverContextManager mouseOverContextManager;
@@ -71,20 +69,18 @@ public class BlacksmithWeaponItemView : CardViewExtender
             return;
         }
 
-        if (cardView == null)
-        {
-            cardView = GetComponent<CardView>();
-        }
-
         this.weaponItem = weaponItem;
         this.blacksmithInstance = blacksmithInstance;
-        cardView.RegisterCard(weaponItem.Card);
+        CardView.RegisterCard(weaponItem.Card);
     }
 
     public void DeregisterWeaponItem()
     {
         weaponItem = null;
-        cardView.DeregisterCard();
+        if (CardView != null)
+        {
+            CardView.DeregisterCard();
+        }
     }
 
 }

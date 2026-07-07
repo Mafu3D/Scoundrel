@@ -13,7 +13,8 @@ public class UIManager : MonoBehaviour
 
     [Header("During Game")]
     [SerializeField] private GameObject currentRunCanvas;
-    [SerializeField] private List<GameObject> cardsUI = new();
+    [SerializeField] private DungeonView dungeonView;
+    [SerializeField] private GameObject playerActionsButtons;
     [SerializeField] private List<GameObject> worldSpaceUI = new();
 
     [Header("Game Over")]
@@ -48,7 +49,10 @@ public class UIManager : MonoBehaviour
     {
         gameOverCanvas.gameObject.SetActive(false);
         currentRunCanvas.SetActive(false);
-        cardsUI.ForEach(go => go.SetActive(false));
+
+        dungeonView.Hide();
+        playerActionsButtons.SetActive(false);
+
         worldSpaceUI.ForEach(go => go.SetActive(false));
         powerUpDungeonObjects.ForEach(go => go.SetActive(false));
         shopObjects.ForEach(go => go.SetActive(false));
@@ -63,14 +67,21 @@ public class UIManager : MonoBehaviour
         gameOverCanvas.gameObject.SetActive(false);
 
         currentRunCanvas.SetActive(true);
-        cardsUI.ForEach(go => go.SetActive(true));
+
+        Debug.Log("showing");
+        dungeonView.Show();
+        playerActionsButtons.SetActive(true);
+
         worldSpaceUI.ForEach(go => go.SetActive(true));
     }
 
     private void ShowGameOver()
     {
         currentRunCanvas.SetActive(false);
-        cardsUI.ForEach(go => go.SetActive(false));
+
+        dungeonView.Hide();
+        playerActionsButtons.SetActive(false);
+
         worldSpaceUI.ForEach(go => go.SetActive(false));
 
         gameOverCanvas.gameObject.SetActive(true);
@@ -82,8 +93,9 @@ public class UIManager : MonoBehaviour
 
     private void ShowPowerUpDungeonObjects()
     {
-        // currentRunUI.ForEach(go => go.SetActive(false));
-        cardsUI.ForEach(go => go.SetActive(false));
+        dungeonView.Hide();
+        playerActionsButtons.SetActive(false);
+
 
         powerUpDungeonObjects.ForEach(go => go.SetActive(true));
     }
@@ -103,6 +115,9 @@ public class UIManager : MonoBehaviour
     private void ShowNewFloorObjects()
     {
         chooseFloorObjects.ForEach(go => go.SetActive(false));
-        cardsUI.ForEach(go => go.SetActive(true));
+
+        dungeonView.Show();
+        playerActionsButtons.SetActive(true);
+
     }
 }

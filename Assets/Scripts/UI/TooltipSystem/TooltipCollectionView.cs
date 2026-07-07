@@ -31,6 +31,11 @@ namespace Project.UI.Tooltips
         {
             DeregisterTooltips();
 
+            if (tooltipCollection.TooltipDatas == null)
+            {
+                return;
+            }
+
             foreach (TooltipData tooltipData in tooltipCollection.TooltipDatas)
             {
                 GameObject tooltipGameObject = Instantiate(tooltipViewPrefab, this.transform.position, Quaternion.identity, this.transform);
