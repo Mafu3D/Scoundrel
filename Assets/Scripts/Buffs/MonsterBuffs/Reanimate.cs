@@ -12,7 +12,7 @@ public class Reanimate : Buff
     public override void OnSelfDiePreRemoval()
     {
         newMonster = new (Owner.Suit, strength);
-        index = gameManager.DungeonController.CurrentRoom.GetIndexOf(Owner);
+        index = gameManager.DungeonController.CurrentRoom.GetSlotOf(Owner);
 
         // gameManager.GameplayEffectQueue.Add(new RuntimeGameplayEffect(
         //     onProcessMethod: (deltaTime) =>

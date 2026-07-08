@@ -78,7 +78,7 @@ public class ClassicScoreKeeper : IScoreKeeper
                 monsterScore += card.BaseValue;
             }
         }
-        foreach (RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetCards())
+        foreach (RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetAllCards())
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
@@ -103,7 +103,7 @@ public class ClassicScoreKeeper : IScoreKeeper
                 monsterScore += card.BaseValue;
             }
         }
-        foreach (RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetCards())
+        foreach (RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetAllCards())
         {
             if (card != null && (card.Suit == Suit.SPADES || card.Suit == Suit.CLUBS))
             {
@@ -117,7 +117,7 @@ public class ClassicScoreKeeper : IScoreKeeper
             if (gameManager.Player.CurrentHealth == gameManager.Player.MaxHealth)
             {
                 int potionScore = 0;
-                foreach (RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetCards())
+                foreach (RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetAllCards())
                 {
                     if (card.Suit == Suit.HEARTS)
                     {

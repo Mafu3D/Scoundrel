@@ -61,7 +61,7 @@ namespace Project.DebugCommands
         public void Invoke(int index)
         {
             ServiceLocator.Global.Get(out GameManager gameManager);
-            gameManager.DungeonController.CurrentRoom.TryRemoveCard(gameManager.DungeonController.CurrentRoom.GetCards()[index]);
+            gameManager.DungeonController.CurrentRoom.TryRemoveCard(gameManager.DungeonController.CurrentRoom.GetAllCards()[index]);
         }
     }
 
@@ -148,7 +148,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetCards()[0].AddNewBuff(buff);
+            // Buff newInstance = gameManager.DungeonController.CurrentRoom.GetAllCards()[0].AddNewBuff(buff);
             newInstance.OnDraw();
         }
     }
@@ -176,7 +176,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetCards()[1].AddNewBuff(buff);
+            // Buff newInstance = gameManager.DungeonController.CurrentRoom.GetAllCards()[1].AddNewBuff(buff);
             newInstance.OnDraw();
         }
     }
@@ -204,7 +204,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetCards()[2].AddNewBuff(buff);
+            // Buff newInstance = gameManager.DungeonController.CurrentRoom.GetAllCards()[2].AddNewBuff(buff);
             newInstance.OnDraw();
         }
     }
@@ -232,7 +232,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetCards()[3].AddNewBuff(buff);
+            // Buff newInstance = gameManager.DungeonController.CurrentRoom.GetAllCards()[3].AddNewBuff(buff);
             newInstance.OnDraw();
         }
     }
@@ -314,7 +314,7 @@ namespace Project.DebugCommands
             foreach(RuntimeCardModel card in deck.AllItems)
             {
                 string status = "";
-                if (gameManager.DungeonController.CurrentRoom.GetCards().Contains(card))
+                if (gameManager.DungeonController.CurrentRoom.GetAllCards().Contains(card))
                 {
                     status = " (In Room)";
                 }

@@ -41,7 +41,7 @@ public class PackTactics : Buff
 
     private bool CheckIfLastCardInRoom()
     {
-        foreach(RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetCards())
+        foreach(RuntimeCardModel card in gameManager.DungeonController.CurrentRoom.GetAllCards())
         {
             if (card != Owner && card is MonsterCardModel)
             {

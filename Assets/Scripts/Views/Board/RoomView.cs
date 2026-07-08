@@ -69,9 +69,9 @@ public class RoomView : MonoBehaviour
                 cardView.DeregisterCard();
             }
 
-            if (room.GetCards()[i] != null)
+            if (room.GetAllCards()[i] != null)
             {
-                cardView.RegisterCard(room.GetCards()[i]);
+                cardView.RegisterCard(room.GetAllCards()[i]);
                 cardView.gameObject.SetActive(true);
             }
             else

@@ -17,131 +17,188 @@ public class RoomController
 
     public void RunCardsOnUpdate()
     {
-        foreach (RuntimeCardModel card in roomModel.Cards)
+        foreach (RuntimeCardModel card in RemainingCards())
         {
-            if (card != null)
-            {
-                card.Update();
-            }
+            card.Update();
         }
     }
 
     public bool CanGoToNextRoom()
     {
-        List<RuntimeCardModel> remaining = RemainingCards();
-        int remainingCount = remaining.Count;
-        foreach(RuntimeCardModel cardModel in remaining)
+        List<RuntimeCardModel> remainingCards = RemainingCards();
+        int amountRemaining = remainingCards.Count;
+        foreach(RuntimeCardModel cardModel in remainingCards)
         {
-            if (cardModel.Suit == Suit.DOORS)
+            if (cardModel.CardType == CardType.DOOR)
             {
-                remainingCount -= 1;
+                amountRemaining -= 1;
             }
         }
-        return remainingCount <= 1;
+        return amountRemaining <= 1;
     }
 
-    public RuntimeCardModel[] GetCards() => roomModel.Cards;
+    public RoomSlot[] Slots => roomModel.Slots;
 
-    public List<RuntimeCardModel> RemainingCards()
+    public RuntimeCardModel[] GetAllCards()
     {
-        List<RuntimeCardModel> remaining = new();
-        foreach (var card in roomModel.Cards)
+        int amount = roomModel.Slots.Sum(slot => slot.Cards.Count);
+        List<RuntimeCardModel> allCards = new ();
+        foreach(RoomSlot slot in roomModel.Slots)
         {
-            if (card != null)
+            allCards.AddRange(slot.Cards);
+        }
+        return allCards.ToArray();
+    }
+
+    public List<RuntimeCardModel> RemainingCards() => GetAllCards().Where(card => card != null).ToList();
+
+    public int GetSlotIndexOf(RuntimeCardModel card)
+    {
+        int index = -1;
+        for (int i = 0; i < roomModel.Slots.Length; i++)
+        {
+            RoomSlot slot = roomModel.Slots[i];
+            if (slot.Cards.Contains(card))
             {
-                remaining.Add(card);
+                index = i;
             }
         }
-        return remaining;
-    }
 
-    public int GetIndexOf(RuntimeCardModel card)
-    {
-        if (!roomModel.Cards.Contains(card))
+        if (index < 0)
         {
             Debug.LogWarning("card is not in the current room!");
-            return -1;
+        }
+        return index;
+    }
+
+    public RoomSlot GetSlotOf(RuntimeCardModel card)
+    {
+        for (int i = 0; i < roomModel.Slots.Length; i++)
+        {
+            RoomSlot slot = roomModel.Slots[i];
+            if (slot.Cards.Contains(card))
+            {
+                return slot;
+            }
         }
 
-        return Array.IndexOf(roomModel.Cards, card);
+        Debug.LogWarning($"{card} is not in the current room!");
+        return null;
     }
 
-    public List<RuntimeCardModel> GetNeighbors(RuntimeCardModel card)
+    public RoomSlot GetSlotOfindex(int index)
     {
-        if (!roomModel.Cards.Contains(card))
+        if (index < 0 || index >= roomModel.Slots.Count())
         {
-            Debug.LogWarning("card is not in the current room!");
+            Debug.LogError("List index out of range!");
+            return null;
+        }
+
+        return roomModel.Slots[index];
+    }
+
+    public bool Contains(RuntimeCardModel card) => GetAllCards().Contains(card);
+
+    public List<RuntimeCardModel> GetActiveNeighbors(RuntimeCardModel card, bool wrap=false)
+    {
+        if (!Contains(card))
+        {
+            Debug.LogWarning($"{card} is not in the current room!");
             return default;
         }
 
-        int index = Array.IndexOf(roomModel.Cards, card);
+        RoomSlot roomSlot = GetSlotOf(card);
         List<RuntimeCardModel> neighbors = new();
-        if (index > 0)
+        foreach(RoomSlot neighborSlot in GetNeighborSlots(roomSlot, wrap))
         {
-            RuntimeCardModel neighbor = roomModel.Cards[index - 1];
-            if (neighbor != null)
+            RuntimeCardModel neighborCard = neighborSlot.ActiveCard;
+            if (neighborCard != null)
             {
-                neighbors.Add(neighbor);
-            }
-        }
-        if (index < roomModel.Size - 1)
-        {
-            RuntimeCardModel neighbor = roomModel.Cards[index + 1];
-            if (neighbor != null)
-            {
-                neighbors.Add(neighbor);
+                neighbors.Add(neighborCard);
             }
         }
 
         return neighbors;
     }
 
-    public List<RuntimeCardModel> GetNeighbors(RuntimeCardModel card, List<Suit> acceptedSuits)
+    public List<RoomSlot> GetNeighborSlots(RoomSlot slot, bool wrap=false)
     {
-        List<RuntimeCardModel> unfilteredNeighbors = GetNeighbors(card);
-        List<RuntimeCardModel> filteredNeighbors = new();
-        foreach(RuntimeCardModel neighbor in unfilteredNeighbors)
+        int originalIndex = Array.IndexOf(roomModel.Slots, slot);
+        List<int> neighborIndices = new();
+        if (originalIndex == 0)
         {
-            if (!acceptedSuits.Contains(neighbor.Suit))
+            if (wrap)
+            {
+                neighborIndices.Add(roomModel.Slots.Count() - 1);
+            }
+            neighborIndices.Add(originalIndex + 1);
+        }
+        else if (originalIndex == roomModel.Slots.Count() - 1)
+        {
+            if (wrap)
+            {
+                neighborIndices.Add(0);
+            }
+            neighborIndices.Add(originalIndex - 1);
+        }
+        else
+        {
+            neighborIndices.Add(originalIndex - 1);
+            neighborIndices.Add(originalIndex + 1);
+        }
+
+        List<RoomSlot> neighborSlots = new();
+        foreach(int index in neighborIndices)
+        {
+            RoomSlot neighborSlot = roomModel.Slots[index];
+            if (neighborSlots.Contains(neighborSlot))
             {
                 continue;
             }
-            filteredNeighbors.Add(neighbor);
+            neighborSlots.Add(neighborSlot);
         }
-        return filteredNeighbors;
+        return neighborSlots;
+    }
+
+    public List<RuntimeCardModel> GetActiveNeighbors(RuntimeCardModel card, List<Suit> acceptedSuits)
+    {
+        return GetActiveNeighbors(card)
+               .Where(neighbor => acceptedSuits.Contains(neighbor.Suit)).ToList();
     }
 
     public List<RuntimeCardModel> GetOthers(RuntimeCardModel card)
     {
-        List<RuntimeCardModel> others = new();
-        foreach (RuntimeCardModel other in roomModel.Cards)
-        {
-            if (other != null && other != card)
-            {
-                others.Add(other);
-            }
-        }
-        return others;
+        return RemainingCards().Where(other => other != card).ToList();
     }
 
-    public bool TryAddCard(RuntimeCardModel card, int index)
+    public bool TryAddCard(RuntimeCardModel card, int slotIndex, int cardIndex = 0)
     {
-        if (roomModel.Cards[index] != null)
+        return TryAddCard(card, roomModel.Slots[slotIndex], cardIndex);
+    }
+
+    public bool TryAddCard(RuntimeCardModel card, RoomSlot slot, int cardIndex = 0)
+    {
+        if (slot.Cards[cardIndex] != null)
         {
-            Debug.LogWarning($"Tried to add card: {card} to slot {index}, but the index already has a card!");
+            Debug.LogWarning($"Tried to add card: {card} to slot {Array.IndexOf(roomModel.Slots, slot)} - {cardIndex}, but the index already has a card!");
+            return false;
+        }
+        if (slot.Contains(card))
+        {
+            Debug.LogWarning($"Tried to add card: {card} to slot {Array.IndexOf(roomModel.Slots, slot)} - {cardIndex}, but that instance is already in the slot!");
             return false;
         }
 
-        roomModel.Cards[index] = card;
+        slot.AddAt(card, cardIndex);
         OnCardsChanged?.Invoke();
         return true;
     }
 
     public bool TryRemoveCard(RuntimeCardModel card)
     {
-        if (!roomModel.Cards.Contains(card))
+        if (!Contains(card))
         {
-            Debug.LogWarning("card is not in the current room!");
+            Debug.LogWarning($"{card} is not in the current room!");
             return false;
         }
 
@@ -151,16 +208,23 @@ public class RoomController
 
     private void RemoveCard(RuntimeCardModel card)
     {
-        int index = Array.IndexOf(roomModel.Cards, card);
-        roomModel.Cards[index] = null;
-        OnCardsChanged?.Invoke();
+        foreach(RoomSlot slot in roomModel.Slots)
+        {
+            if (slot.Contains(card))
+            {
+                slot.Remove(card);
+                OnCardsChanged?.Invoke();
+                return;
+            }
+        }
+        Debug.LogWarning($"Could not find {card} in room");
     }
 
     public void ClearCards()
     {
-        for (int i = 0; i < roomModel.Cards.Length; i++)
+        for (int i = 0; i < roomModel.Slots.Length; i++)
         {
-            roomModel.Cards[i] = null;
+            roomModel.Slots[i].Clear();
         }
         OnCardsChanged?.Invoke();
     }
@@ -199,5 +263,5 @@ public class RoomController
 
     public int RemainingCount => RemainingCards().Count;
 
-    public bool IsEmpty => roomModel.Cards.Count(x => x == null) == roomModel.Cards.Length;
+    public bool IsEmpty => roomModel.Slots.Count(x => x.IsEmpty) == roomModel.Slots.Length;
 }

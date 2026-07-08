@@ -159,6 +159,29 @@ namespace Project.Decks
             return drawn;
         }
 
+        public List<T> DrawUntil(int amount, Func<T, bool> predicate, out List<T> validItems, out List<T> invalidItems)
+        {
+            List<T> drawn = new ();
+            validItems = new();
+            invalidItems = new();
+            int i = 0;
+            while(validItems.Count < amount && i <= RemainingItems.Count)
+            {
+                T item = Draw();
+                if (predicate(item))
+                {
+                    validItems.Add(item);
+                }
+                else
+                {
+                    invalidItems.Add(item);
+                }
+                drawn.Add(item);
+                i++;
+            }
+            return drawn;
+        }
+
         private List<T> DrawAmount(int amount, int index)
         {
             List<T> drawn = new();

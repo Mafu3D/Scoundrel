@@ -260,7 +260,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
-        if (!DungeonController.CurrentRoom.GetCards().Contains(card))
+        if (!DungeonController.CurrentRoom.GetAllCards().Contains(card))
         {
             return;
         }

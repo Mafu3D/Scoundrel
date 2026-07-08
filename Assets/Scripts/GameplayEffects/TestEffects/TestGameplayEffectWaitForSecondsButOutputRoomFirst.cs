@@ -28,7 +28,7 @@ namespace Project.Core
             else
             {
                 // Get the contents of the active room
-                RuntimeCardModel[] cards = gameManager.DungeonController.CurrentRoom.GetCards();
+                RuntimeCardModel[] cards = gameManager.DungeonController.CurrentRoom.GetAllCards();
                 for (int i = 0; i < cards.Length; i++)
                 {
                     RuntimeCardModel card = cards[i];

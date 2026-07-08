@@ -46,10 +46,18 @@ public class DeckController : MonoBehaviour
         Deck.Reset();
     }
 
-
+    // Deck Controller and Deck are basically doing the same thing, controlling the deck
+    //      This should all just be moved into an extended version of the deck
     public List<RuntimeCardModel> Draw(int amount)
     {
         List<RuntimeCardModel> drawn = Deck.DrawMultiple(amount);
+        OnCardDraw?.Invoke();
+        return drawn;
+    }
+
+    public List<RuntimeCardModel> DrawUntil(int amount, Func<RuntimeCardModel, bool> predicate, out List<RuntimeCardModel> validIems, out List<RuntimeCardModel> invalidItems)
+    {
+        List<RuntimeCardModel> drawn = Deck.DrawUntil(amount, predicate, out validIems, out invalidItems);
         OnCardDraw?.Invoke();
         return drawn;
     }

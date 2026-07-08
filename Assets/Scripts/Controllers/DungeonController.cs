@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using Project.Decks;
 using Sirenix.Utilities;
 using UnityEngine;
@@ -66,36 +68,18 @@ public class DungeonController
     public void OpenNewRoom()
     {
         int roomSize = 4; // TODO: Magic number, get from the floor model
-        List<RuntimeCardModel> newCards = new();
 
         if (CurrentRoom != null)
         {
-            // Something that could be done here is to have a CloseCurrentRoom() function that handles
-            //  all of this + cleaning up buffs and things. Then stores newCards in a list here in the
-            //  dungeon controller, called like lingeringCards or something. Then when a new room is
-            //  opened, it adds lingering cards.
-
-            // Shuffle in any doors that still remain
-            List<RuntimeCardModel> doorCards = CurrentRoom.PopDoorCards();
-            deckController.Deck.ShuffleIn(doorCards);
-
-            // Add the remaining cards from the current room to the new room
-            newCards.AddRange(CurrentRoom.RemainingCards());
-
             CurrentRoom.OnCardsChanged -= OnCurrentRoomCardsChanged;
         }
 
-        // Create the new room contents by taking the remaining cards from the current room and drawing new cards from the deck
-        int amountToDraw = roomSize - (CurrentRoom?.RemainingCount ?? 0);
-        List<RuntimeCardModel> drawnCards = deckController.Draw(amountToDraw);
-        newCards.AddRange(drawnCards);
-
         // Create the new room controller with the new room contents
-        CurrentRoom = new RoomController(new RoomModel(roomSize, newCards));
+        CurrentRoom = RoomFactory.CreateNew(roomSize, deckController, CurrentRoom);
         CurrentRoom.OnCardsChanged += OnCurrentRoomCardsChanged;
 
         // Run all of the on drawn events for the cards in the room
-        CurrentRoom.GetCards().ForEach(card => card?.HandleOnDraw());
+        CurrentRoom.GetAllCards().ForEach(card => card?.HandleOnDraw());
 
         IncrementRoomNumber();
         OnNewRoomOpened?.Invoke();
@@ -103,7 +87,7 @@ public class DungeonController
 
     public void RunFromRoom()
     {
-        foreach(RuntimeCardModel card in CurrentRoom.GetCards())
+        foreach(RuntimeCardModel card in CurrentRoom.GetAllCards())
         {
             card?.BuffManager.CleanupTemporaryBuffs();
         }
@@ -126,4 +110,51 @@ public class DungeonController
 
     private void IncrementFloorNumber() => dungeonModel.FloorNumber++;
     private void ResetFloorNumber() => dungeonModel.FloorNumber = 0;
+}
+
+public static class RoomFactory
+{
+    private static readonly ReadOnlyCollection<CardType> VALID_ACTIVE_CARD_TYPES = new( new List<CardType> { CardType.MONSTER, CardType.WEAPON, CardType.POTION} );
+
+    public static RoomController CreateNew(int roomSize, DeckController deckController, RoomController existingRoom=null)
+    {
+        // Get any slots that need to carry over to the next room
+        List<RoomSlot> remainingPopulatedSlots = new();
+        if (existingRoom != null)
+        {
+            // Shuffle in any doors that still remain across all slots
+            List<RuntimeCardModel> doorCards = existingRoom.PopDoorCards();
+            deckController.Deck.ShuffleIn(doorCards);
+
+            // Add the remaining slots from the current room to the new room, shifting them
+            remainingPopulatedSlots.AddRange(GetRemainingPopulatedSlotsFromRoom(existingRoom));
+        }
+
+        // Get the amount of new slots to create
+        int amountOfSlotsToCreate = roomSize - remainingPopulatedSlots.Count;
+
+        // Draw a pool of new cards
+        List<RuntimeCardModel> drawnCards = deckController.DrawUntil(amountOfSlotsToCreate,
+                                                                     (card) => VALID_ACTIVE_CARD_TYPES.Contains(card.CardType),
+                                                                     out List<RuntimeCardModel> validCards,
+                                                                     out List<RuntimeCardModel> invalidCards);
+
+        // Create new slots with each valid as that slot's active card
+        List<RoomSlot> newSlots = validCards.Select(card => new RoomSlot(new () { card })).ToList();
+
+        // Divide the remaining invalid cards amongst the newly created slots
+        for (int i = 0; i < invalidCards.Count; i++)
+        {
+            int slotIndex = i % newSlots.Count;
+            newSlots[slotIndex].Add(invalidCards[i]);
+        }
+
+        // Create the new room controller with the new room contents
+        return new (new RoomModel(roomSize, remainingPopulatedSlots.Concat(newSlots).ToList()));
+    }
+
+    private static List<RoomSlot> GetRemainingPopulatedSlotsFromRoom(RoomController roomController)
+    {
+        return roomController.Slots.Where(slot => !slot.IsEmpty).ToList();
+    }
 }
