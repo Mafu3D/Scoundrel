@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Hungry", menuName="Buffs/Monster/Hungry")]
 public class Hungry : Buff
 {
+    private bool hasEatenThisFloor = false;
     // public override void OnBuffApplied()
     // {
     //     if (gameManager.CurrentRoom.Cards.Contains(Owner))
@@ -19,15 +20,30 @@ public class Hungry : Buff
         DoBuffEffect(); // Replace with apply when drawn parameter
     }
 
+    public override void OnExitFloor()
+    {
+        hasEatenThisFloor = false;
+        Debug.Log("resetting has eaten");
+    }
+
     private void DoBuffEffect()
     {
         List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetActiveNeighbors(Owner, new List<CardType>() { CardType.MONSTER });
-        int totalPower = 0;
+        if (neighbors.Count == 0)
+        {
+            return;
+        }
+        RuntimeCardModel lowestNeighbor = neighbors[0];
         foreach (RuntimeCardModel neighbor in neighbors)
         {
-            totalPower += neighbor.Value;
-            gameManager.DungeonController.CurrentRoom.TryRemoveCard(neighbor);
+            if (neighbor.Value < lowestNeighbor.Value)
+            {
+                lowestNeighbor = neighbor;
+            }
         }
-        Owner.RegisterValueModifier(totalPower);
+        gameManager.DungeonController.CurrentRoom.TryRemoveCard(lowestNeighbor);
+        Owner.RegisterValueModifier(lowestNeighbor.Value);
+
+        hasEatenThisFloor = true;
     }
 }

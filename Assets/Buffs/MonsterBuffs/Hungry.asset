@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Hungry
   Sprite: {fileID: -6937499602746883264, guid: 4c49442fb79d31449ac19cd8eb75d26b, type: 3}
-  Description: This monster eats its neighbors and gains their power
+  Description: This monster eats the weakest adjacent monster card and gains its
+    power (once per floor)
   ValidCardTypes: 00000000
   IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0
   RemoveOnParentCleanup: 0
-  RemoveOnDeath: 1
+  RemoveOnDeath: 0
   registeredChildBuffs: []

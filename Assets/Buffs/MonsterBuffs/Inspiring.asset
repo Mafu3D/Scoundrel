@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Inspiring
   Sprite: {fileID: -2281825907135416840, guid: 4cc4292a11395fd409f7132df8c55df2, type: 3}
-  Description: Grant allies adjacent to this card +1
+  Description: Grant other monster cards in this room +1
   ValidCardTypes: 00000000
+  IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0
   RemoveOnParentCleanup: 0
-  RemoveOnDeath: 1
+  RemoveOnDeath: 0
   registeredChildBuffs:
   - {fileID: 11400000, guid: 269f9cbc8fdab8349bd500548be150da, type: 2}

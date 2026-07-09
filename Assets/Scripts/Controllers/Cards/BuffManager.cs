@@ -182,6 +182,8 @@ public class BuffManager : IDisposable
 
     public void HandleOnPlayerRun() => orderedBuffs.ForEach(n => n.OnRun());
 
+    public void HandleOnExitFloor() => orderedBuffs.ForEach(n => n.OnExitFloor());
+
     public void HandleOnOtherDiePreRemoval(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDiePreRemoval(other));
 
     public void HandleOnOtherDiePostRemoval(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDiePostRemoval(other));

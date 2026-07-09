@@ -159,6 +159,7 @@ public abstract class Buff : ScriptableObject
     public virtual void OnUpdate() { }
 
     public virtual void OnEnterRoom() { }
+    public virtual void OnExitFloor() { }
     public virtual void OnRun() { }
     public virtual void OnSelfDiePreRemoval() { }
     public virtual void OnSelfDiePostRemoval() { }

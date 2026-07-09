@@ -16,8 +16,9 @@ MonoBehaviour:
   Sprite: {fileID: 7515357123834451210, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
   Description: +2 strength and +1 gold on defeat
   ValidCardTypes: 00000000
+  IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0
   RemoveOnParentCleanup: 0
-  RemoveOnDeath: 1
+  RemoveOnDeath: 0
   registeredChildBuffs: []

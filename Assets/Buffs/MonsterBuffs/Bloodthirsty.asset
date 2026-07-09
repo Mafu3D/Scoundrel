@@ -20,6 +20,6 @@ MonoBehaviour:
   ApplyOnDraw: 1
   IsTemporary: 0
   RemoveOnParentCleanup: 0
-  RemoveOnDeath: 1
+  RemoveOnDeath: 0
   registeredChildBuffs: []
   amount: 2

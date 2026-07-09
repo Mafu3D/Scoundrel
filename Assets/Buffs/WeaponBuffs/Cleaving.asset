@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Cleaving
   Sprite: {fileID: -8636803134427674600, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
-  Description: When a monster is killed, reduce the power of its neighbors by 1
+  Description: When a monster is killed, reduce the power of other monsters in the
+    room by 1
   ValidCardTypes: 01000000
   IsHidden: 0
   ApplyOnDraw: 1

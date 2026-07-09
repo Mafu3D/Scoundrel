@@ -176,9 +176,33 @@ public class RoomController
         return neighborSlots;
     }
 
-    public List<RuntimeCardModel> GetOthers(RuntimeCardModel card)
+    public List<RuntimeCardModel> GetAllOtherCards(RuntimeCardModel card)
     {
         return RemainingCards().Where(other => other != card).ToList();
+    }
+
+    public List<RuntimeCardModel> GetAllOtherCards(RuntimeCardModel card, List<CardType> cardTypes)
+    {
+        return GetAllOtherCards(card).Where(other => cardTypes.Contains(other.CardType)).ToList();
+    }
+
+    public List<RuntimeCardModel> GetOtherActiveCards(RuntimeCardModel card)
+    {
+        List<RuntimeCardModel> otherActiveCards = new();
+        foreach(RoomSlot slot in Slots.Where(slot => !slot.Contains(card)))
+        {
+            if (slot.ActiveCard == null)
+            {
+                continue;
+            }
+            otherActiveCards.Add(slot.ActiveCard);
+        }
+        return otherActiveCards;
+    }
+
+    public List<RuntimeCardModel> GetOtherActiveCards(RuntimeCardModel card, List<CardType> cardTypes)
+    {
+        return GetOtherActiveCards(card).Where(other => cardTypes.Contains(other.CardType)).ToList();
     }
 
     public bool TryAddCard(RuntimeCardModel card, int slotIndex, int cardIndex = 0)

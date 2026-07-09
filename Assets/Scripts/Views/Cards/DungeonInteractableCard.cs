@@ -90,7 +90,7 @@ public class DungeonInteractableCardView : CardViewExtender
 
     private void ShowPotionContext()
     {
-        // ServiceLocator.Global.Get(out GameManager gameManager);
+        ServiceLocator.Global.Get(out GameManager gameManager);
         if (gameManager.Player.HasDrankPotionThisRoom || gameManager.Player.IsAtMaxHealth)
         {
             mouseOverContextManager.ShowFull(globalCardData.DiscardPotionText,
@@ -105,7 +105,7 @@ public class DungeonInteractableCardView : CardViewExtender
 
     private void ShowDoorContext()
     {
-        // ServiceLocator.Global.Get(out GameManager gameManager);
+        ServiceLocator.Global.Get(out GameManager gameManager);
         int scoreNeeded = gameManager.GetScoreToGoToNextFloor();
         if (gameManager.ScoreKeeper.GetScore() >= scoreNeeded)
         {

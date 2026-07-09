@@ -62,6 +62,10 @@ public class DungeonController
     {
         CurrentRoom.ClearCards();
         deckController.ResetDeck();
+        foreach(RuntimeCardModel cardModel in deckController.Deck.AllItems)
+        {
+            cardModel.BuffManager.HandleOnExitFloor();
+        }
         OnExitCurrentFloor?.Invoke();
     }
 
@@ -123,7 +127,17 @@ public static class RoomFactory
         if (existingRoom != null)
         {
             // Shuffle in any doors that still remain across all slots
-            List<RuntimeCardModel> doorCards = existingRoom.PopDoorCards();
+            // List<RuntimeCardModel> doorCards = existingRoom.PopDoorCards();
+            List<RuntimeCardModel> doorCards = new ();
+            foreach(RoomSlot slot in existingRoom.Slots)
+            {
+                RuntimeCardModel activeCard = slot.ActiveCard;
+                if (activeCard != null && activeCard is DoorCardModel)
+                {
+                    existingRoom.TryRemoveCard(activeCard);
+                    doorCards.Add(activeCard);
+                }
+            }
             deckController.Deck.ShuffleIn(doorCards);
 
             // Add the remaining slots from the current room to the new room, shifting them

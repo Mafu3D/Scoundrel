@@ -75,7 +75,7 @@ public class Combat
         attacker.Weapon?.BuffManager.HandleOnOtherDiePreRemoval(defender);
         defender.BuffManager.HandleOnSelfDiePreRemoval();
 
-        foreach (RuntimeCardModel other in dungeonController.CurrentRoom.GetOthers(defender))
+        foreach (RuntimeCardModel other in dungeonController.CurrentRoom.GetAllOtherCards(defender))
         {
             other?.BuffManager.HandleOnOtherDiePreRemoval(defender);
         }
@@ -87,7 +87,7 @@ public class Combat
         attacker.Weapon?.BuffManager.HandleOnOtherDiePostRemoval(defender);
         defender.BuffManager.HandleOnSelfDiePostRemoval();
 
-        foreach (RuntimeCardModel other in dungeonController.CurrentRoom.GetOthers(defender))
+        foreach (RuntimeCardModel other in dungeonController.CurrentRoom.GetAllOtherCards(defender))
         {
             other?.BuffManager.HandleOnOtherDiePostRemoval(defender);
         }
