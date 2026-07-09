@@ -1,20 +1,21 @@
 using System.Collections.Generic;
+using Project.Decks;
 using UnityEngine;
 
 public class RoomView : MonoBehaviour
 {
-    [SerializeField] public List<CardView> CardViews;
+    [SerializeField] List<RoomSlotView> roomSlotViews;
 
     private RoomController room;
 
-    void Start()
-    {
-        RefreshView();
-    }
+    // void Start()
+    // {
+    //     RefreshView();
+    // }
 
     public void OnStartNewGame()
     {
-        RefreshView();
+        // RefreshView();
     }
 
     public void RegisterRoom(RoomController newRoom)
@@ -25,60 +26,40 @@ public class RoomView : MonoBehaviour
             DeregisterRoom();
         }
         room = newRoom;
-        room.OnCardsChanged += OnCardsChanged;
-        RefreshView();
+
+        for (int i = 0; i < roomSlotViews.Count; i++)
+        {
+            RoomSlotView roomSlotView = roomSlotViews[i];
+            roomSlotView.RegisterRoomSlot(newRoom.Slots[i]);
+        }
+
+        // room.OnCardsChanged += OnCardsChanged;
+        // RefreshView();
     }
 
     public void DeregisterRoom()
     {
         if (room != null)
         {
-            room.OnCardsChanged -= OnCardsChanged;
+            // room.OnCardsChanged -= OnCardsChanged;
         }
         room = null;
 
-        RefreshView();
-    }
-
-    private void OnCardsChanged()
-    {
-        RefreshView();
-    }
-
-    private void RefreshView()
-    {
-        return;
-        // Disable all cards if no room
-        if (room == null)
+        foreach(RoomSlotView roomSlotView in roomSlotViews)
         {
-            for (int i = 0; i < CardViews.Count; i++)
-            {
-                CardView cardView = CardViews[i];
-                cardView.gameObject.SetActive(false);
-                cardView.DeregisterCard();
-            }
-
-            return;
+            roomSlotView.DeregisterRoomSlot();
         }
 
-        // Otherwise, register the card model to each card view
-        for (int i = 0; i < CardViews.Count; i++)
-        {
-            CardView cardView = CardViews[i];
-            if (cardView.Card != null)
-            {
-                cardView.DeregisterCard();
-            }
-
-            if (room.GetAllCards()[i] != null)
-            {
-                cardView.RegisterCard(room.GetAllCards()[i]);
-                cardView.gameObject.SetActive(true);
-            }
-            else
-            {
-                cardView.gameObject.SetActive(false);
-            }
-        }
+        // RefreshView();
     }
+
+    // private void OnCardsChanged()
+    // {
+    //     RefreshView();
+    // }
+
+    // private void RefreshView()
+    // {
+
+    // }
 }

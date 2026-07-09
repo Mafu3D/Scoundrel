@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(MouseOverContextManager))]
 public class DungeonInteractableCardView : CardViewExtender
 {
-    [SerializeField] GameManager gameManager;
+    GameManager gameManager;
 
     private MouseOverContextManager mouseOverContextManager;
 
@@ -14,6 +14,11 @@ public class DungeonInteractableCardView : CardViewExtender
     {
         base.Awake();
         mouseOverContextManager = GetComponent<MouseOverContextManager>();
+    }
+
+    void Start()
+    {
+        ServiceLocator.Global.Get(out gameManager);
     }
 
     public override void OnClicked(MousePositionContext mousePositionContext)

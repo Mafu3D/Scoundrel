@@ -113,13 +113,18 @@ namespace Project.Decks
 
         public string GetCardValueStringSymbol()
         {
-            return Value switch
+            return CardType switch
             {
-                11 => "J",
-                12 => "Q",
-                13 => "K",
-                14 => "A",
-                _ => Value.ToString(),
+                CardType.DOOR => "D",
+                CardType.TREASURE => "T",
+                _ => Value switch
+                {
+                    11 => "J",
+                    12 => "Q",
+                    13 => "K",
+                    14 => "A",
+                    _ => Value.ToString(),
+                }
             };
         }
 

@@ -188,7 +188,7 @@ public class RoomController
 
     public bool TryAddCard(RuntimeCardModel card, RoomSlot slot, int cardIndex = 0)
     {
-        if (slot.Cards[cardIndex] != null)
+        if (cardIndex < slot.Cards.Count && slot.Cards[cardIndex] != null)
         {
             Debug.LogWarning($"Tried to add card: {card} to slot {Array.IndexOf(roomModel.Slots, slot)} - {cardIndex}, but the index already has a card!");
             return false;

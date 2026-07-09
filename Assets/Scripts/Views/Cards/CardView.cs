@@ -51,6 +51,7 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
     private Transform myTransform;
     private BoxCollider2D myCollider;
     private SortingGroup mySortingGroup;
+    private int startingSortingLayer;
 
     public void SetSortingLayer(int layer)
     {
@@ -119,12 +120,14 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
     }
     #endregion
 
-    #region Unity Loop
+    #region Unity Lifecycle
     private void Awake()
     {
         myTransform = GetComponent<Transform>();
         myCollider = GetComponent<BoxCollider2D>();
         mySortingGroup = GetComponent<SortingGroup>();
+
+        startingSortingLayer = mySortingGroup.sortingOrder;
     }
 
     private void Update()
@@ -140,6 +143,11 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
             cardViewExtender?.OnMouseStay(mousePositionContext);
             OnMouseStay?.Invoke(mousePositionContext);
         }
+    }
+
+    private void OnDestroy()
+    {
+        DeregisterCard();
     }
     #endregion
 
@@ -273,6 +281,8 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        startingSortingLayer = mySortingGroup.sortingOrder;
+        SetSortingLayer(startingSortingLayer + 50);
         myTransform.DOScale(onHoverGrowthSize, onHoverGrowthSpeed);
         cardViewExtender?.OnMouseEnter();
         OnMouseOver?.Invoke();
@@ -280,6 +290,7 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        SetSortingLayer(startingSortingLayer);
         myTransform.DOScale(1f, onHoverGrowthSpeed);
         cardViewExtender?.OnMouseExit();
         OnMouseExit?.Invoke();
