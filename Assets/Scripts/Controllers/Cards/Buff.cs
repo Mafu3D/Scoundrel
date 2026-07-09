@@ -162,7 +162,8 @@ public abstract class Buff : ScriptableObject
     public virtual void OnRun() { }
     public virtual void OnSelfDiePreRemoval() { }
     public virtual void OnSelfDiePostRemoval() { }
-    public virtual void OnOtherDie(MonsterCardModel other) { }
+    public virtual void OnOtherDiePreRemoval(MonsterCardModel other) { }
+    public virtual void OnOtherDiePostRemoval(MonsterCardModel other) { }
     public virtual void OnCardsChanged() { }
     public virtual void OnEquipWeapon() { }
     public virtual void OnDrinkPotion() { }
@@ -171,4 +172,6 @@ public abstract class Buff : ScriptableObject
     public virtual void OnPlayerAttackPostDamage(CombatReport attackReport) { }
     public virtual void OnSelfAttackedPreDamage(CombatReport attackReport) { }
     public virtual void OnSelfAttackedPostDamage(CombatReport attackReport) { }
+    public virtual void OnWeaponAttackPreDamage(CombatReport combatReport) { }
+    public virtual void OnWeaponAttackPostDamage(CombatReport combatReport) { }
 }

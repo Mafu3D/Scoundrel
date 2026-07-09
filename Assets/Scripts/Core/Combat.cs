@@ -43,7 +43,7 @@ public class Combat
     {
         // Handle all pre-attack events. Player is processed before the cards in the room
         attacker.BuffManager.HandleOnPlayerAttackPreDamage(combatReport);
-        attacker.Weapon?.BuffManager.HandleOnPlayerAttackPreDamage(combatReport);
+        attacker.Weapon?.BuffManager.HandleOnWeaponAttackPreDamage(combatReport);
         defender.BuffManager.HandleOnSelfAttackedPreDamage(combatReport);
         foreach(RuntimeCardModel card in dungeonController.CurrentRoom.RemainingCards())
         {
@@ -61,7 +61,7 @@ public class Combat
     {
         // Handle all pre-attack events. Player is processed before the cards in the room
         attacker.BuffManager.HandleOnPlayerAttackPostDamage(combatReport);
-        attacker.Weapon?.BuffManager.HandleOnPlayerAttackPostDamage(combatReport);
+        attacker.Weapon?.BuffManager.HandleOnWeaponAttackPostDamage(combatReport);
         defender.BuffManager.HandleOnSelfAttackedPostDamage(combatReport);
         foreach(RuntimeCardModel card in dungeonController.CurrentRoom.RemainingCards())
         {
@@ -72,18 +72,24 @@ public class Combat
     public void TriggerOnDeathPreRemovalEvents()
     {
         attacker.BuffManager.HandleOnOtherDiePreRemoval(defender);
+        attacker.Weapon?.BuffManager.HandleOnOtherDiePreRemoval(defender);
         defender.BuffManager.HandleOnSelfDiePreRemoval();
+
+        foreach (RuntimeCardModel other in dungeonController.CurrentRoom.GetOthers(defender))
+        {
+            other?.BuffManager.HandleOnOtherDiePreRemoval(defender);
+        }
     }
 
     public void TriggerOnDeathPostRemovalEvents()
     {
         attacker.BuffManager.HandleOnOtherDiePostRemoval(defender);
-        attacker.Weapon?.BuffManager.HandleOnOtherDie(defender);
+        attacker.Weapon?.BuffManager.HandleOnOtherDiePostRemoval(defender);
         defender.BuffManager.HandleOnSelfDiePostRemoval();
 
         foreach (RuntimeCardModel other in dungeonController.CurrentRoom.GetOthers(defender))
         {
-            other?.BuffManager.HandleOnOtherDie(defender);
+            other?.BuffManager.HandleOnOtherDiePostRemoval(defender);
         }
     }
 

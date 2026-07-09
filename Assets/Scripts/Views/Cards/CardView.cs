@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Mafu.Extensions;
+using Mafu.UnityServiceLocator;
 using Project.Decks;
 using Project.UI.Tooltips;
 using Sirenix.Serialization;
@@ -89,6 +90,23 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
     #endregion
 
     #region Mouse Handling
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        startingSortingLayer = mySortingGroup.sortingOrder;
+        SetSortingLayer(startingSortingLayer + 50);
+        myTransform.DOScale(onHoverGrowthSize, onHoverGrowthSpeed);
+        cardViewExtender?.OnMouseEnter();
+        OnMouseOver?.Invoke();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        SetSortingLayer(startingSortingLayer);
+        myTransform.DOScale(1f, onHoverGrowthSpeed);
+        cardViewExtender?.OnMouseExit();
+        OnMouseExit?.Invoke();
+    }
+
     public MousePositionContext GetMousePositionContext()
     {
         // This function only returns TOP or BOT (or maybe NONE but it really shouldn't). It should NEVER return
@@ -237,7 +255,8 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
         string content = "";
         if (Card.Suit == Suit.DOORS)
         {
-            content = "Proceed to the next floor of the dungeon. Only unlocks once you have received the appropriate number of points";
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            content = $"Requires {gameManager.GetScoreToGoToNextFloor()} score to proceed to the next floor of the dungeon";
         }
         else if (Card.Suit == Suit.TREASURES)
         {
@@ -277,23 +296,6 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
         //     content += $"\n{value}";
         // }
         return true;
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        startingSortingLayer = mySortingGroup.sortingOrder;
-        SetSortingLayer(startingSortingLayer + 50);
-        myTransform.DOScale(onHoverGrowthSize, onHoverGrowthSpeed);
-        cardViewExtender?.OnMouseEnter();
-        OnMouseOver?.Invoke();
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        SetSortingLayer(startingSortingLayer);
-        myTransform.DOScale(1f, onHoverGrowthSpeed);
-        cardViewExtender?.OnMouseExit();
-        OnMouseExit?.Invoke();
     }
     #endregion
 }

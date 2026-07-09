@@ -8,7 +8,7 @@ using UnityEngine;
 public class Bloodthirsty : Buff
 {
     [SerializeField] int amount = 1;
-    public override void OnOtherDie(MonsterCardModel other)
+    public override void OnOtherDiePreRemoval(MonsterCardModel other)
     {
         Owner.RegisterValueModifier(amount);
     }

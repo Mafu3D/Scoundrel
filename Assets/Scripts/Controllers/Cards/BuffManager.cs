@@ -182,7 +182,9 @@ public class BuffManager : IDisposable
 
     public void HandleOnPlayerRun() => orderedBuffs.ForEach(n => n.OnRun());
 
-    public void HandleOnOtherDie(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDie(other));
+    public void HandleOnOtherDiePreRemoval(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDiePreRemoval(other));
+
+    public void HandleOnOtherDiePostRemoval(MonsterCardModel other) => orderedBuffs.ForEach(n => n.OnOtherDiePostRemoval(other));
 
     public void HandleOnDraw() => orderedBuffs.ForEach(n => n.OnDraw());
 
@@ -191,4 +193,8 @@ public class BuffManager : IDisposable
     public void HandleOnSelfDiePostRemoval() => orderedBuffs.ForEach(n => n.OnSelfDiePostRemoval());
 
     public void HandleOnCardsChanged() => orderedBuffs.ForEach(n => n.OnCardsChanged());
+
+    internal void HandleOnWeaponAttackPreDamage(CombatReport combatReport) => orderedBuffs.ForEach(n => n.OnWeaponAttackPreDamage(combatReport));
+
+    internal void HandleOnWeaponAttackPostDamage(CombatReport combatReport) => orderedBuffs.ForEach(n => n.OnWeaponAttackPostDamage(combatReport));
 }

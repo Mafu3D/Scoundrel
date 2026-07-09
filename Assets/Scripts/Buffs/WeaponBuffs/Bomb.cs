@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Bomb", menuName="Buffs/Weapons/Bomb")]
 public class Bomb : Buff
 {
-    public override void OnPlayerAttackPostDamage(CombatReport attackReport)
+    public override void OnWeaponAttackPostDamage(CombatReport attackReport)
     {
         gameManager.Player.UnequipWeapon();
         Debug.Log("Bomb detonated, unequipping weapon");

@@ -108,7 +108,7 @@ public class RoomController
         if (!Contains(card))
         {
             Debug.LogWarning($"{card} is not in the current room!");
-            return default;
+            return new();
         }
 
         RoomSlot roomSlot = GetSlotOf(card);
@@ -127,13 +127,13 @@ public class RoomController
 
     public List<RuntimeCardModel> GetActiveNeighbors(RuntimeCardModel card, List<CardType> cardTypes, bool wrap=false)
     {
-        return GetActiveNeighbors(card)
+        return GetActiveNeighbors(card, wrap)
                .Where(neighbor => cardTypes.Contains(neighbor.CardType)).ToList();
     }
 
-    public List<RuntimeCardModel> GetActiveNeighbors(RuntimeCardModel card, List<Suit> acceptedSuits)
+    public List<RuntimeCardModel> GetActiveNeighbors(RuntimeCardModel card, List<Suit> acceptedSuits, bool wrap=false)
     {
-        return GetActiveNeighbors(card)
+        return GetActiveNeighbors(card, wrap)
                .Where(neighbor => acceptedSuits.Contains(neighbor.Suit)).ToList();
     }
 
