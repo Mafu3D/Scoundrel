@@ -47,6 +47,7 @@ public class RoomView : MonoBehaviour
 
     private void RefreshView()
     {
+        return;
         // Disable all cards if no room
         if (room == null)
         {

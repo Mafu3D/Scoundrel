@@ -15,6 +15,27 @@ public class RoomController
         this.roomModel = roomModel;
     }
 
+    public int RemainingCount => RemainingCards().Count;
+
+    public bool IsEmpty => roomModel.Slots.Count(x => x.IsEmpty) == roomModel.Slots.Length;
+
+    public RoomSlot[] Slots => roomModel.Slots;
+
+    public RuntimeCardModel[] GetAllCards()
+    {
+        int amount = roomModel.Slots.Sum(slot => slot.Cards.Count);
+        List<RuntimeCardModel> allCards = new ();
+        foreach(RoomSlot slot in roomModel.Slots)
+        {
+            allCards.AddRange(slot.Cards);
+        }
+        return allCards.ToArray();
+    }
+
+    public List<RuntimeCardModel> RemainingCards() => GetAllCards().Where(card => card != null).ToList();
+
+    public bool Contains(RuntimeCardModel card) => GetAllCards().Contains(card);
+
     public void RunCardsOnUpdate()
     {
         foreach (RuntimeCardModel card in RemainingCards())
@@ -36,21 +57,6 @@ public class RoomController
         }
         return amountRemaining <= 1;
     }
-
-    public RoomSlot[] Slots => roomModel.Slots;
-
-    public RuntimeCardModel[] GetAllCards()
-    {
-        int amount = roomModel.Slots.Sum(slot => slot.Cards.Count);
-        List<RuntimeCardModel> allCards = new ();
-        foreach(RoomSlot slot in roomModel.Slots)
-        {
-            allCards.AddRange(slot.Cards);
-        }
-        return allCards.ToArray();
-    }
-
-    public List<RuntimeCardModel> RemainingCards() => GetAllCards().Where(card => card != null).ToList();
 
     public int GetSlotIndexOf(RuntimeCardModel card)
     {
@@ -97,8 +103,6 @@ public class RoomController
         return roomModel.Slots[index];
     }
 
-    public bool Contains(RuntimeCardModel card) => GetAllCards().Contains(card);
-
     public List<RuntimeCardModel> GetActiveNeighbors(RuntimeCardModel card, bool wrap=false)
     {
         if (!Contains(card))
@@ -119,6 +123,18 @@ public class RoomController
         }
 
         return neighbors;
+    }
+
+    public List<RuntimeCardModel> GetActiveNeighbors(RuntimeCardModel card, List<CardType> cardTypes, bool wrap=false)
+    {
+        return GetActiveNeighbors(card)
+               .Where(neighbor => cardTypes.Contains(neighbor.CardType)).ToList();
+    }
+
+    public List<RuntimeCardModel> GetActiveNeighbors(RuntimeCardModel card, List<Suit> acceptedSuits)
+    {
+        return GetActiveNeighbors(card)
+               .Where(neighbor => acceptedSuits.Contains(neighbor.Suit)).ToList();
     }
 
     public List<RoomSlot> GetNeighborSlots(RoomSlot slot, bool wrap=false)
@@ -158,12 +174,6 @@ public class RoomController
             neighborSlots.Add(neighborSlot);
         }
         return neighborSlots;
-    }
-
-    public List<RuntimeCardModel> GetActiveNeighbors(RuntimeCardModel card, List<Suit> acceptedSuits)
-    {
-        return GetActiveNeighbors(card)
-               .Where(neighbor => acceptedSuits.Contains(neighbor.Suit)).ToList();
     }
 
     public List<RuntimeCardModel> GetOthers(RuntimeCardModel card)
@@ -260,8 +270,4 @@ public class RoomController
         }
         return poppedCards;
     }
-
-    public int RemainingCount => RemainingCards().Count;
-
-    public bool IsEmpty => roomModel.Slots.Count(x => x.IsEmpty) == roomModel.Slots.Length;
 }

@@ -148,7 +148,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            // Buff newInstance = gameManager.DungeonController.CurrentRoom.GetAllCards()[0].AddNewBuff(buff);
+            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetSlotOfindex(0).ActiveCard.AddNewBuff(buff);
             newInstance.OnDraw();
         }
     }
@@ -176,7 +176,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            // Buff newInstance = gameManager.DungeonController.CurrentRoom.GetAllCards()[1].AddNewBuff(buff);
+            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetSlotOfindex(1).ActiveCard.AddNewBuff(buff);
             newInstance.OnDraw();
         }
     }
@@ -204,7 +204,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            // Buff newInstance = gameManager.DungeonController.CurrentRoom.GetAllCards()[2].AddNewBuff(buff);
+            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetSlotOfindex(2).ActiveCard.AddNewBuff(buff);
             newInstance.OnDraw();
         }
     }
@@ -232,7 +232,7 @@ namespace Project.DebugCommands
                 return;
             }
 
-            // Buff newInstance = gameManager.DungeonController.CurrentRoom.GetAllCards()[3].AddNewBuff(buff);
+            Buff newInstance = gameManager.DungeonController.CurrentRoom.GetSlotOfindex(3).ActiveCard.AddNewBuff(buff);
             newInstance.OnDraw();
         }
     }

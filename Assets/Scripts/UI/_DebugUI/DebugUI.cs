@@ -129,11 +129,11 @@ namespace Project.UI.DebugUI
                 roomNumber += $": {entered}";
 
                 // Get the contents of the active room
-                RuntimeCardModel[] cards = gameManager.DungeonController.CurrentRoom.GetAllCards();
-                for (int i = 0; i < cards.Length; i++)
+                RoomSlot[] slots = gameManager.DungeonController.CurrentRoom.Slots;
+                for (int i = 0; i < slots.Length; i++)
                 {
-                    RuntimeCardModel card = cards[i];
-                    string slotOutput = $"Slot {i} (No Mod): "; // Add modifiers later once thats implemented
+                    RuntimeCardModel card = slots[i].ActiveCard;
+                    string slotOutput = $"Slot {i} ({slots[i].Cards.Count}): "; // Add modifiers later once thats implemented
                     if (card != null)
                     {
                         slotOutput += $"{card.ToString()}";

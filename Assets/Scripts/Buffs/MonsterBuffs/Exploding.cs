@@ -9,7 +9,7 @@ public class Exploding : Buff
 {
     public override void OnSelfDiePreRemoval()
     {
-        List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetNeighbors(Owner, new() {Suit.CLUBS, Suit.SPADES, Suit.HEARTS, Suit.DIAMONDS});
+        List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetActiveNeighbors(Owner, new List<CardType>() { CardType.MONSTER, CardType.WEAPON, CardType.POTION });
         foreach (RuntimeCardModel neighbor in neighbors)
         {
             int newValue = neighbor.Value - Owner.Value;

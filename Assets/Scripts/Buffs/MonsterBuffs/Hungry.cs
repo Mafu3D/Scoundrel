@@ -21,7 +21,7 @@ public class Hungry : Buff
 
     private void DoBuffEffect()
     {
-        List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetNeighbors(Owner, new() {Suit.CLUBS, Suit.SPADES});
+        List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetActiveNeighbors(Owner, new List<CardType>() { CardType.MONSTER });
         int totalPower = 0;
         foreach (RuntimeCardModel neighbor in neighbors)
         {

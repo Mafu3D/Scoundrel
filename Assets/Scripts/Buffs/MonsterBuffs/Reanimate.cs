@@ -6,13 +6,13 @@ public class Reanimate : Buff
 {
     [SerializeField] private int strength = 1;
 
-    private int index;
+    private RoomSlot slot;
     private MonsterCardModel newMonster;
 
     public override void OnSelfDiePreRemoval()
     {
         newMonster = new (Owner.Suit, strength);
-        index = gameManager.DungeonController.CurrentRoom.GetSlotOf(Owner);
+        slot = gameManager.DungeonController.CurrentRoom.GetSlotOf(Owner);
 
         // gameManager.GameplayEffectQueue.Add(new RuntimeGameplayEffect(
         //     onProcessMethod: (deltaTime) =>
@@ -32,6 +32,6 @@ public class Reanimate : Buff
     public override void OnSelfDiePostRemoval()
     {
         Debug.Log("Reanimate effect ended");
-        gameManager.DungeonController.CurrentRoom.TryAddCard(newMonster, index);
+        gameManager.DungeonController.CurrentRoom.TryAddCard(newMonster, slot, 0);
     }
 }

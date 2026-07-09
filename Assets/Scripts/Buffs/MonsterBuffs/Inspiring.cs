@@ -13,7 +13,7 @@ public class Inspiring : Buff
     {
         Buff buffToApply = GetRegisteredChildBuffByName("Inspired");
         Debug.Log(Owner);
-        List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetNeighbors(Owner, new() {Suit.CLUBS, Suit.SPADES});
+        List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetActiveNeighbors(Owner, new List<CardType>() { CardType.MONSTER });
         foreach (RuntimeCardModel neighbor in neighbors)
         {
             Buff buff = AddBuff(neighbor, buffToApply);
