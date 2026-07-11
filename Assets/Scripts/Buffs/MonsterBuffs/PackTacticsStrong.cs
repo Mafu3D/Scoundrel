@@ -7,11 +7,11 @@ public class PackTacticsStrong : Buff
 
     public override void OnBuffApplied()
     {
-        Owner.RegisterValueModifier(strength);
+        Owner.RegisterPermanentValueModifier(strength);
     }
 
     public override void OnCleanup()
     {
-        Owner.DeregisterValueModifier(strength);
+        Owner.DeregisterPermanentValueModifier(strength);
     }
 }

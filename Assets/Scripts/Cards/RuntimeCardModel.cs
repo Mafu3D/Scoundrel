@@ -43,6 +43,10 @@ namespace Project.Decks
                 {
                     value += val;
                 }
+                foreach (int val in TemporaryValueModifiers)
+                {
+                    value += val;
+                }
                 return value;
             }
         }
@@ -57,6 +61,7 @@ namespace Project.Decks
 
         public BuffManager BuffManager { get; private set; }
         public List<int> ValueModifiers = new();
+        public List<int> TemporaryValueModifiers = new();
 
         private readonly Guid uuid;
 
@@ -128,17 +133,41 @@ namespace Project.Decks
             };
         }
 
-        public void RegisterValueModifier(int value)
+        public void OnShuffleBackIn()
+        {
+            BuffManager.CleanupTemporaryBuffs();
+            ClearTemporaryValueModifiers();
+        }
+
+        public void RegisterPermanentValueModifier(int value)
         {
             ValueModifiers.Add(value);
         }
 
-        public void DeregisterValueModifier(int value)
+        public void DeregisterPermanentValueModifier(int value)
         {
             if (ValueModifiers.Contains(value))
             {
                 ValueModifiers.Remove(value);
             }
+        }
+
+        public void RegisterTemporaryValueModifier(int value)
+        {
+            TemporaryValueModifiers.Add(value);
+        }
+
+        public void DeregisterTemporaryValueModifier(int value)
+        {
+            if (TemporaryValueModifiers.Contains(value))
+            {
+                TemporaryValueModifiers.Remove(value);
+            }
+        }
+
+        public void ClearTemporaryValueModifiers()
+        {
+            TemporaryValueModifiers = new();
         }
 
         public void Kill()
@@ -163,6 +192,17 @@ namespace Project.Decks
         public void Dispose()
         {
             BuffManager.Dispose();
+        }
+
+        public void OnDrawnFromDeck()
+        {
+            // This is called any time the card is drawn, even if its put back
+        }
+
+        public void OnReturnToDeck()
+        {
+            BuffManager.CleanupTemporaryBuffs();
+            ClearTemporaryValueModifiers();
         }
     }
 }

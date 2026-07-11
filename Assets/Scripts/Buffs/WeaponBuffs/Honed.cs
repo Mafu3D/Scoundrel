@@ -5,6 +5,6 @@ public class Honed : Buff
 {
     public override void OnBuffApplied()
     {
-        Owner.RegisterValueModifier(2);
+        Owner.RegisterPermanentValueModifier(2);
     }
 }

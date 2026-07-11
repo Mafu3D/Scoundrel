@@ -24,7 +24,7 @@ public class PackTactics : Buff
         {
             if (buffApplied)
             {
-                Owner.DeregisterValueModifier(2);
+                Owner.DeregisterPermanentValueModifier(2);
             }
             buffApplied = false;
         }
@@ -32,9 +32,9 @@ public class PackTactics : Buff
         {
             if (buffApplied)
             {
-                Owner.DeregisterValueModifier(2);
+                Owner.DeregisterPermanentValueModifier(2);
             }
-            Owner.RegisterValueModifier(2);
+            Owner.RegisterPermanentValueModifier(2);
             buffApplied = true;
         }
     }

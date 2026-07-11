@@ -42,7 +42,7 @@ public class Hungry : Buff
             }
         }
         gameManager.DungeonController.CurrentRoom.TryRemoveCard(lowestNeighbor);
-        Owner.RegisterValueModifier(lowestNeighbor.Value);
+        Owner.RegisterPermanentValueModifier(lowestNeighbor.Value);
 
         hasEatenThisFloor = true;
     }

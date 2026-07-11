@@ -43,12 +43,12 @@ public class Combat
     {
         // Handle all pre-attack events. Player is processed before the cards in the room
         attacker.BuffManager.HandleOnPlayerAttackPreDamage(combatReport);
-        attacker.Weapon?.BuffManager.HandleOnWeaponAttackPreDamage(combatReport);
-        defender.BuffManager.HandleOnSelfAttackedPreDamage(combatReport);
+        weapon?.BuffManager.HandleOnWeaponAttackPreDamage(combatReport);
         foreach(RuntimeCardModel card in dungeonController.CurrentRoom.RemainingCards())
         {
             card.BuffManager.HandleOnPlayerAttackPreDamage(combatReport);
         }
+        defender.BuffManager.HandleOnSelfAttackedPreDamage(combatReport);
     }
 
     public void ProcessDamage()
@@ -61,7 +61,7 @@ public class Combat
     {
         // Handle all pre-attack events. Player is processed before the cards in the room
         attacker.BuffManager.HandleOnPlayerAttackPostDamage(combatReport);
-        attacker.Weapon?.BuffManager.HandleOnWeaponAttackPostDamage(combatReport);
+        weapon?.BuffManager.HandleOnWeaponAttackPostDamage(combatReport);
         defender.BuffManager.HandleOnSelfAttackedPostDamage(combatReport);
         foreach(RuntimeCardModel card in dungeonController.CurrentRoom.RemainingCards())
         {
@@ -72,7 +72,7 @@ public class Combat
     public void TriggerOnDeathPreRemovalEvents()
     {
         attacker.BuffManager.HandleOnOtherDiePreRemoval(defender);
-        attacker.Weapon?.BuffManager.HandleOnOtherDiePreRemoval(defender);
+        weapon?.BuffManager.HandleOnOtherDiePreRemoval(defender);
         defender.BuffManager.HandleOnSelfDiePreRemoval();
 
         foreach (RuntimeCardModel other in dungeonController.CurrentRoom.GetAllOtherCards(defender))
@@ -84,7 +84,7 @@ public class Combat
     public void TriggerOnDeathPostRemovalEvents()
     {
         attacker.BuffManager.HandleOnOtherDiePostRemoval(defender);
-        attacker.Weapon?.BuffManager.HandleOnOtherDiePostRemoval(defender);
+        weapon?.BuffManager.HandleOnOtherDiePostRemoval(defender);
         defender.BuffManager.HandleOnSelfDiePostRemoval();
 
         foreach (RuntimeCardModel other in dungeonController.CurrentRoom.GetAllOtherCards(defender))

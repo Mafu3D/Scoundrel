@@ -7,12 +7,12 @@ public class Inspired : Buff
 
     public override void OnBuffApplied()
     {
-        Owner.RegisterValueModifier(amount);
+        Owner.RegisterPermanentValueModifier(amount);
     }
 
     public override void OnCleanup()
     {
-        Owner.DeregisterValueModifier(amount);
+        Owner.DeregisterPermanentValueModifier(amount);
     }
 }
 

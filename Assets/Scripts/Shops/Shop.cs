@@ -91,7 +91,7 @@ public class Merchant : Shop
             ShopAction newAction = new(
                 title: buff.Name,
                 description: buff.Description,
-                cost: 10,
+                cost: 0,
                 OnPurchaseAction: (gameManager) =>
                 {
                     gameManager.Player.BuffManager.AddNewBuff(buff);

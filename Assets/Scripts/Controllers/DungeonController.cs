@@ -91,11 +91,6 @@ public class DungeonController
 
     public void RunFromRoom()
     {
-        foreach(RuntimeCardModel card in CurrentRoom.GetAllCards())
-        {
-            card?.BuffManager.CleanupTemporaryBuffs();
-        }
-
         List<RuntimeCardModel> nonpersistantCards = CurrentRoom.PopNonPersistantCards();
         deckController.Deck.AddToRemaining(nonpersistantCards, addToTop: false, shuffle: false);
     }

@@ -10,6 +10,6 @@ public class Bloodthirsty : Buff
     [SerializeField] int amount = 1;
     public override void OnOtherDiePreRemoval(MonsterCardModel other)
     {
-        Owner.RegisterValueModifier(amount);
+        Owner.RegisterPermanentValueModifier(amount);
     }
 }

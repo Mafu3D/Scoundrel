@@ -7,12 +7,12 @@ public class TempDamage : Buff
 
     public override void OnBuffApplied()
     {
-        Owner.RegisterValueModifier(-Amount);
+        Owner.RegisterPermanentValueModifier(-Amount);
     }
 
     public override void OnCleanup()
     {
-        Owner.DeregisterValueModifier(-Amount);
+        Owner.DeregisterPermanentValueModifier(-Amount);
     }
 }
 

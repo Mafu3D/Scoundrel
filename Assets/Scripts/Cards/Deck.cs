@@ -9,6 +9,10 @@ namespace Project.Decks
     public interface IDeckStorable
     {
         public string ID { get; }
+
+        public void OnDrawnFromDeck();
+
+        public void OnReturnToDeck();
     }
 
     public class Deck<T> where T : IDeckStorable
@@ -50,8 +54,9 @@ namespace Project.Decks
                 if (item == null) continue;
                 if (addToTop) RemainingItems.Insert(0, item);
                 else RemainingItems.Add(item);
-                if (shuffle) Shuffle();
+                item.OnReturnToDeck();
             }
+            if (shuffle) Shuffle();
         }
 
         public void ShuffleIn(T item)
@@ -59,6 +64,7 @@ namespace Project.Decks
             System.Random random = new();
             int randomIndex = random.Next(RemainingItems.Count - 1);
             RemainingItems.Insert(randomIndex, item);
+            item.OnReturnToDeck();
         }
 
         public void ShuffleIn(List<T> items)
@@ -89,6 +95,7 @@ namespace Project.Decks
                 if (RemainingItems.Contains(targetItem))
                 {
                     RemainingItems.Pop(RemainingItems.IndexOf(targetItem), out drawn);
+                    targetItem.OnDrawnFromDeck();
                     return true;
                 }
             }
@@ -127,7 +134,7 @@ namespace Project.Decks
             }
 
             AddToRemaining(invalidItems);
-            // Shuffle();
+            drawnItem.OnDrawnFromDeck();
 
             return drawnItem;
         }

@@ -19,9 +19,10 @@ public class Exploding : Buff
             }
             else
             {
-                Buff tempDamageBuff = GetRegisteredChildBuffByName("TempDamage");
-                (tempDamageBuff as TempDamage).Amount = Owner.Value;
-                Buff buff = AddBuff(neighbor, tempDamageBuff);
+                // Buff tempDamageBuff = GetRegisteredChildBuffByName("TempDamage");
+                // (tempDamageBuff as TempDamage).Amount = Owner.Value;
+                // Buff buff = AddBuff(neighbor, tempDamageBuff);
+                neighbor.RegisterTemporaryValueModifier(Owner.Value);
             }
         }
     }

@@ -14,13 +14,13 @@ public class Elite : Buff
 
     public override void OnCleanup()
     {
-        Owner.DeregisterValueModifier(1);
+        Owner.DeregisterPermanentValueModifier(1);
     }
 
     private void DoBuffEffect()
     {
         // ServiceLocator.Global.Get(out gameManager);
-        Owner.RegisterValueModifier(2);
+        Owner.RegisterPermanentValueModifier(2);
     }
 
     public override void OnSelfDiePreRemoval()

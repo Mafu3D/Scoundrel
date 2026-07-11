@@ -15,6 +15,6 @@ public class Bomb : Buff
 
     public override void OnBuffApplied()
     {
-        Owner.RegisterValueModifier(5);
+        Owner.RegisterPermanentValueModifier(5);
     }
 }
