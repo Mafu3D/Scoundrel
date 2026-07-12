@@ -91,7 +91,8 @@ public class DungeonInteractableCardView : CardViewExtender
     private void ShowPotionContext()
     {
         ServiceLocator.Global.Get(out GameManager gameManager);
-        if ((gameManager.Player.HasDrankPotionThisRoom || gameManager.Player.IsAtMaxHealth) && !(CardView.Card as PotionCardModel).IsArmor)
+        // Gross, clean up later!
+        if ((gameManager.Player.HasDrankPotionThisRoom || gameManager.Player.IsAtMaxHealth) && (!(CardView.Card as PotionCardModel).IsArmor || !(CardView.Card as PotionCardModel).IsWhetstone))
         {
             mouseOverContextManager.ShowFull(globalCardData.DiscardPotionText,
                                              globalCardData.DiscardPotionColor);

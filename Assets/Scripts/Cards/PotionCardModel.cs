@@ -2,12 +2,24 @@ using Project.Decks;
 
 public class PotionCardModel : RuntimeCardModel
 {
+    public bool IsWhetstone = false;
     public bool IsArmor = false;
     public PotionCardModel(Suit suit, int value) : base(suit,  CardType.POTION, value) { }
 
     public override bool TryUse(Player player, GameManager gameManager)
     {
-        if (IsArmor)
+        if (IsWhetstone)
+        {
+            for (int i = 0; i < this.Value; i++)
+            {
+                if (player.Weapon.SlainCards.Count > 0)
+                {
+                    player.Weapon.RemoveMonsterFromSlain(player.Weapon.SlainCards[0]);
+                }
+            }
+            return true;
+        }
+        else if (IsArmor)
         {
             player.ClearArmor();
             player.AddArmor(this.Value);

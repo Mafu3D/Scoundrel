@@ -60,6 +60,11 @@ namespace Project.Decks
         public bool PersistsThroughRun = false;
 
         public BuffManager BuffManager { get; private set; }
+
+        public bool IsTemporary => isTemporary;
+
+        private bool isTemporary;
+
         public List<int> ValueModifiers = new();
         public List<int> TemporaryValueModifiers = new();
 
@@ -86,7 +91,13 @@ namespace Project.Decks
         public abstract bool TryUse(Player player, GameManager gameManager);
 
         public abstract bool TryUseTop(Player player, GameManager gameManager);
+
         public abstract bool TryUseBot(Player player, GameManager gameManager);
+
+        public void SetIsTemporary(bool value)
+        {
+            isTemporary = value;
+        }
 
         public virtual void Update()
         {

@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ced16c5d4571e14d9978ac0e5a6b1ba, type: 3}
-  m_Name: ArmorPotionBuff
+  m_Script: {fileID: 11500000, guid: 8c16bf00a0af2bb4997ef5bcfbc89763, type: 3}
+  m_Name: WhetstonePotionBuff
   m_EditorClassIdentifier: 
-  Name: ArmorPotion
-  Sprite: {fileID: -3196951998779301042, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
-  Description: Gain armor instead of healing. \nArmor reduces damage taken from ONLY
-    the next enemy. \nNew armor replaces old armor.
+  Name: WhetstonePotionBuff
+  Sprite: {fileID: 3810024479153627537, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
+  Description: Remove slain cards from your currently equipped weapon equal to this
+    potions value
   ValidCardTypes: 02000000
   IsHidden: 0
   ApplyOnDraw: 1

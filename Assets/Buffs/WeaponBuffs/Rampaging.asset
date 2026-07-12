@@ -9,17 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ced16c5d4571e14d9978ac0e5a6b1ba, type: 3}
-  m_Name: ArmorPotionBuff
+  m_Script: {fileID: 11500000, guid: f5b050a46e2afc848b4bb7a895beb605, type: 3}
+  m_Name: Rampaging
   m_EditorClassIdentifier: 
-  Name: ArmorPotion
-  Sprite: {fileID: -3196951998779301042, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
-  Description: Gain armor instead of healing. \nArmor reduces damage taken from ONLY
-    the next enemy. \nNew armor replaces old armor.
-  ValidCardTypes: 02000000
+  Name: Rampaging
+  Sprite: {fileID: -8544479566902165759, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
+  Description: Whenever this weapon defeats an enemy, increase its power by 1
+  ValidCardTypes: 01000000
   IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0
   RemoveOnParentCleanup: 0
   RemoveOnDeath: 1
   registeredChildBuffs: []
+  amount: 1

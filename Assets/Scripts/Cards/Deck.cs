@@ -10,6 +10,8 @@ namespace Project.Decks
     {
         public string ID { get; }
 
+        public bool IsTemporary { get; }
+
         public void OnDrawnFromDeck();
 
         public void OnReturnToDeck();
@@ -17,9 +19,10 @@ namespace Project.Decks
 
     public class Deck<T> where T : IDeckStorable
     {
-        private List<T> allItems = new();
-        public List<T> RemainingItems { get; private set; } = new();
         public List<T> AllItems => allItems;
+        public List<T> RemainingItems { get; private set; } = new();
+
+        private List<T> allItems = new();
         private Dictionary<int, T> hashedItems = new();
         public int CurrentCount => RemainingItems.Count;
         public int TotalCount => allItems.Count;

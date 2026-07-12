@@ -7,6 +7,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName="Exploding", menuName="Buffs/Monster/Exploding")]
 public class Exploding : Buff
 {
+    [SerializeField] int amount = 3;
+
     public override void OnSelfDiePreRemoval()
     {
         List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetActiveNeighbors(Owner, new List<CardType>() { CardType.MONSTER, CardType.WEAPON, CardType.POTION });
@@ -19,10 +21,8 @@ public class Exploding : Buff
             }
             else
             {
-                // Buff tempDamageBuff = GetRegisteredChildBuffByName("TempDamage");
-                // (tempDamageBuff as TempDamage).Amount = Owner.Value;
-                // Buff buff = AddBuff(neighbor, tempDamageBuff);
-                neighbor.RegisterTemporaryValueModifier(Owner.Value);
+                // neighbor.RegisterTemporaryValueModifier(Owner.Value);
+                neighbor.RegisterTemporaryValueModifier(amount);
             }
         }
     }
