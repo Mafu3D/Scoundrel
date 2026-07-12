@@ -175,4 +175,5 @@ public abstract class Buff : ScriptableObject
     public virtual void OnSelfAttackedPostDamage(CombatReport attackReport) { }
     public virtual void OnWeaponAttackPreDamage(CombatReport combatReport) { }
     public virtual void OnWeaponAttackPostDamage(CombatReport combatReport) { }
+    public virtual void OnPotionUsed() { }
 }

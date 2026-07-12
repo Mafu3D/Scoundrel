@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GlobalBuffRegistry BuffRegistry;
     [SerializeField] public Player Player;
 
+    public CombatController CombatController { get; private set; }
     public DungeonController DungeonController { get; private set; } = new();
     public AdvancedScoreKeeper ScoreKeeper { get; private set; } = null;
     public GameProcessQueue<GameplayEffect> GameplayEffectQueue { get; private set; }
@@ -37,7 +38,6 @@ public class GameManager : MonoBehaviour
     public Action OnEnterChooseFloorPhase;
 
     private StateMachine stateMachine;
-    private CombatController combatController;
 
     void OnEnable()
     {
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         // Temp - remove
         ShopManager.gameObject.SetActive(false);
         ScoreKeeper = new(this);
-        combatController = new(Player, stateMachine, GameplayEffectQueue, DungeonController, ScoreKeeper);
+        CombatController = new(Player, stateMachine, GameplayEffectQueue, DungeonController, ScoreKeeper);
         StartGame();
     }
 
@@ -266,56 +266,28 @@ public class GameManager : MonoBehaviour
         }
 
         // Try to handle the player action based on the card suit
-        bool success = card.Suit switch
+        // bool success = card.Suit switch
+        // {
+        //     Suit.HEARTS => HandlePotion(card),
+        //     Suit.DIAMONDS => HandleWeapon(card),
+        //     Suit.SPADES or Suit.CLUBS => HandleEnemy(card, context),
+        //     Suit.DOORS => HandleDoor(card),
+        //     Suit.TREASURES => HandleTreasure(card),
+        //     _ => false
+        // };
+
+        bool success = context switch
         {
-            Suit.HEARTS => HandlePotion(card),
-            Suit.DIAMONDS => HandleWeapon(card),
-            Suit.SPADES or Suit.CLUBS => HandleEnemy(card, context),
-            Suit.DOORS => HandleDoor(card),
-            Suit.TREASURES => HandleTreasure(card),
-            _ => false
+            MousePositionContext.FULL => card.TryUse(Player, this),
+            MousePositionContext.TOP => card.TryUseTop(Player, this),
+            MousePositionContext.BOT => card.TryUseBot(Player, this),
+            _ => false,
         };
-    }
 
-    private bool HandleDoor(RuntimeCardModel card)
-    {
-        if (ScoreKeeper.GetScore() >= GetScoreToGoToNextFloor())
-        {
-            stateMachine.SwitchState(new ResolveCardState(card, stateMachine, GameplayEffectQueue, Player, DungeonController, ScoreKeeper));
-            GoToExitFloorState();
-            return true;
-        }
-        return false;
-    }
-
-    private bool HandleTreasure(RuntimeCardModel card)
-    {
-        Player.AddGold(3);
-        stateMachine.SwitchState(new ResolveCardState(card, stateMachine, GameplayEffectQueue, Player, DungeonController, ScoreKeeper));
-        return true;
-    }
-
-
-    private bool HandlePotion(RuntimeCardModel card)
-    {
-        Player.TryDrinkPotion(card);
-        stateMachine.SwitchState(new ResolveCardState(card, stateMachine, GameplayEffectQueue, Player, DungeonController, ScoreKeeper));
-        return true;
-    }
-
-    private bool HandleEnemy(RuntimeCardModel card, MousePositionContext context)
-    {
-        return context == MousePositionContext.TOP ? combatController.TryFightWeapon(card) : combatController.TryFightUnarmed(card);
-    }
-
-    private bool HandleWeapon(RuntimeCardModel card)
-    {
-        bool success = Player.TryEquipWeapon(card);
-        if (success)
+        if (success && card.CardType != CardType.MONSTER)
         {
             stateMachine.SwitchState(new ResolveCardState(card, stateMachine, GameplayEffectQueue, Player, DungeonController, ScoreKeeper));
         }
-        return success;
     }
 
 

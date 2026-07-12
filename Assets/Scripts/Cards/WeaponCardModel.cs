@@ -65,4 +65,12 @@ public class WeaponCardModel : RuntimeCardModel
         }
         OnWeaponUpdate?.Invoke();
     }
+
+    public override bool TryUse(Player player, GameManager gameManager)
+    {
+        return player.TryEquipWeapon(this);
+    }
+
+    public override bool TryUseBot(Player player, GameManager gameManager) => TryUse(player, gameManager);
+    public override bool TryUseTop(Player player, GameManager gameManager) => TryUse(player, gameManager);
 }

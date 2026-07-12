@@ -83,6 +83,11 @@ namespace Project.Decks
             }
         }
 
+        public abstract bool TryUse(Player player, GameManager gameManager);
+
+        public abstract bool TryUseTop(Player player, GameManager gameManager);
+        public abstract bool TryUseBot(Player player, GameManager gameManager);
+
         public virtual void Update()
         {
             BuffManager.Update();

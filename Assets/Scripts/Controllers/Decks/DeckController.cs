@@ -31,10 +31,10 @@ public class DeckController : MonoBehaviour
         }
 
         // Special cards
-        cards.Add(new DoorCardModel(Suit.DOORS, 14));
-        cards.Add(new DoorCardModel(Suit.DOORS, 14));
-        cards.Add(new TreasureCardModel(Suit.TREASURES, 14));
-        cards.Add(new TreasureCardModel(Suit.TREASURES, 14));
+        cards.Add(new DoorCardModel(Suit.DOORS, 99));
+        cards.Add(new DoorCardModel(Suit.DOORS, 99));
+        cards.Add(new TreasureCardModel(Suit.TREASURES, 2));
+        cards.Add(new TreasureCardModel(Suit.TREASURES, 4));
 
         // Create deck
         Deck = new Deck<RuntimeCardModel>(cards);
