@@ -1,13 +1,14 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName="TestPotionBuff", menuName="Buffs/Potions/TestPotionBuff")]
-public class TestPotionBuff : Buff
+[CreateAssetMenu(fileName="ArmorPotionBuff", menuName="Buffs/Potions/ArmorPotionBuff")]
+public class ArmorPotionBuff : Buff
 {
-    [SerializeField] private int amount = 1;
-
     public override void OnBuffApplied()
     {
-        Debug.Log("go go go");
+        if (Owner is PotionCardModel)
+        {
+            (Owner as PotionCardModel).IsArmor = true;
+        }
     }
 }
 

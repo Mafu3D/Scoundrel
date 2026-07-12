@@ -9,6 +9,8 @@ public class PotionCardModel : RuntimeCardModel
     {
         if (IsArmor)
         {
+            player.ClearArmor();
+            player.AddArmor(this.Value);
             return true;
         }
         player.TryDrinkPotion(this);

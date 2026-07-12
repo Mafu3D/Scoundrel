@@ -86,6 +86,26 @@ namespace Project.DebugCommands
     }
 
     [DebugCommand]
+    public class AddArmor : IDebugCommand<int>
+    {
+        public string ID => "addArmor";
+
+        public string Description => "Add X armor";
+
+        public string Format => "addArmor <int>";
+
+        public bool HasDefaultValue => true;
+
+        public string DefaultParameter => "0";
+
+        public void Invoke(int amount)
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            gameManager.Player.AddArmor(amount);
+        }
+    }
+
+    [DebugCommand]
     public class AddGold : IDebugCommand<int>
     {
         public string ID => "addGold";

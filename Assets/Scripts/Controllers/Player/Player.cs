@@ -23,6 +23,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
 
     public int CurrentHealth { get; private set; }
     public int MaxHealth;
+    public int Armor { get; private set; }
     public WeaponCardModel Weapon { get; private set; }
     public bool HasRunToken { get; private set; } = true;
     public bool HasEnteredTheRoom { get; private set; } = false;
@@ -37,6 +38,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     private PlayerBuffManager buffManager;
 
     public Action<int> OnHealthChanged;
+    public Action<int> OnArmorChanged;
     public Action<int> OnGoldChanged;
     public Action<int> OnRunTokensChanged;
     public Action OnDeath;
@@ -141,7 +143,12 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
 
     public void TakeDamage(int amount)
     {
-        CurrentHealth = Math.Clamp(CurrentHealth - Math.Abs(amount), 0, MaxHealth);
+        int amountRemaining = Armor - Math.Abs(amount);
+        if (amountRemaining < 0)
+        {
+            CurrentHealth = Math.Clamp(CurrentHealth - Math.Abs(amountRemaining), 0, MaxHealth);
+        }
+        ClearArmor();
         OnHealthChanged?.Invoke(CurrentHealth);
         if (CurrentHealth <= 0)
         {
@@ -196,6 +203,24 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
         return true;
     }
 
+    public void AddArmor(int amount)
+    {
+        Armor += amount;
+        OnArmorChanged?.Invoke(Armor);
+    }
+
+    public void RemoveArmor(int amount)
+    {
+        Armor = Math.Clamp(Armor - amount, 0, 9999);
+        OnArmorChanged?.Invoke(Armor);
+    }
+
+    public void ClearArmor()
+    {
+        Armor = 0;
+        OnArmorChanged?.Invoke(Armor);
+    }
+
     public void UnequipWeapon()
     {
         if (this.Weapon != null)
@@ -240,6 +265,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     {
         MaxHealth = StartingMaxHealth;
         CurrentHealth = MaxHealth;
+        ClearArmor();
         RunCooldownCounter = 0;
         ExtraRunTokens = 0;
         HasRunToken = true;
