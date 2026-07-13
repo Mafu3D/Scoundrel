@@ -47,6 +47,10 @@ public class GlobalCardData : ScriptableObject
     [SerializeField] public string TreasureText;
     [SerializeField] public Color TreasureColor;
 
+    [Header("Blocked by Taunt")]
+    [SerializeField] public string BlockedByTauntText;
+    [SerializeField] public Color BlockedByTauntColor;
+
     [Header("DoorContext")]
 
     [Header("Door (Unlocked) Context")]

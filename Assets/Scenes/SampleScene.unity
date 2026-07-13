@@ -8889,6 +8889,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a17792ff4f7ab1f4285b9abe549f4df0, type: 2}
   - {fileID: 11400000, guid: 31fb9b84a3ab967449ddf9794de0e75d, type: 2}
   - {fileID: 11400000, guid: 740b2a308f19fff4198fea52e86e0995, type: 2}
+  - {fileID: 11400000, guid: 202e05391e53dd24bb813e93f40b5544, type: 2}
   GlobalPlayerBuffs:
   - {fileID: 11400000, guid: 9a38ba94febaa7d4cbce44650fc1ad9b, type: 2}
   - {fileID: 11400000, guid: c095c7ac68ef81649b75515d9a57c0c5, type: 2}
@@ -12371,11 +12372,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -533.10046
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4676727351039614694, guid: de867d38c0fc7514784eaf967cbfb606, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 515.6332
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

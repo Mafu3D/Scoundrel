@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class MonsterCardModel : RuntimeCardModel
 {
+    public bool HasTaunt = false;
+
     public MonsterCardModel(Suit suit, int value) : base(suit,  CardType.MONSTER, value)
     {
     }

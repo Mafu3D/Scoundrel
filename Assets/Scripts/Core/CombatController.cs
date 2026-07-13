@@ -20,21 +20,45 @@ public class CombatController
         this.scoreKeeper = scoreKeeper;
     }
 
-    public bool TryFightUnarmed(RuntimeCardModel defender)
+    public bool CheckForTaunt(MonsterCardModel defender)
     {
-        StartNewCombat(player, null, defender as MonsterCardModel);
+        if (defender.HasTaunt)
+        {
+            return true;
+        }
+        else
+        {
+            foreach(RuntimeCardModel card in dungeonController.CurrentRoom.GetOtherActiveCards(defender))
+            {
+                if (card is MonsterCardModel)
+                {
+                    if ((card as MonsterCardModel).HasTaunt)
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
         return true;
     }
 
-    public bool TryFightWeapon(RuntimeCardModel defender)
+    public bool TryFightUnarmed(MonsterCardModel defender)
     {
+        if (!CheckForTaunt(defender)) return false;
+        StartNewCombat(player, null, defender);
+        return true;
+    }
+
+    public bool TryFightWeapon(MonsterCardModel defender)
+    {
+        if (!CheckForTaunt(defender)) return false;
         if (player.Weapon == null || player.Weapon.GetCurrentStrength() <= defender.Value)
         {
             // Attack was not successful, nothing happens
             return false;
         }
 
-        StartNewCombat(player, player.Weapon, defender as MonsterCardModel);
+        StartNewCombat(player, player.Weapon, defender);
         return true;
     }
 

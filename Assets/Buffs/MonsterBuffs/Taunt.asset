@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c16bf00a0af2bb4997ef5bcfbc89763, type: 3}
-  m_Name: WhetstonePotionBuff
+  m_Script: {fileID: 11500000, guid: db66a391e53ab114d9654569520d6563, type: 3}
+  m_Name: Taunt
   m_EditorClassIdentifier: 
-  Name: WhetstonePotionBuff
-  Sprite: {fileID: 3810024479153627537, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
-  Description: Remove slain cards from your currently equipped weapon equal to this
-    potions value
-  ValidCardTypes: 02000000
+  Name: Taunt
+  Sprite: {fileID: -429658388, guid: 3820d7d0f462d7c41ab4a87af39bd67f, type: 3}
+  Description: This monster must be attacked first before other monsters wihtout
+    taunt
+  ValidCardTypes: 00000000
   IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0

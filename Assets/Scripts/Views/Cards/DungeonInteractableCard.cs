@@ -70,6 +70,15 @@ public class DungeonInteractableCardView : CardViewExtender
 
     private void ShowMonsterContext(MousePositionContext mousePositionContext)
     {
+        GameManager gameManager;
+        ServiceLocator.Global.Get(out gameManager);
+        if (!gameManager.CombatController.CheckForTaunt((this.CardView.Card as MonsterCardModel)))
+        {
+            mouseOverContextManager.ShowFull(globalCardData.BlockedByTauntText,
+                                             globalCardData.BlockedByTauntColor);
+            return;
+        }
+
         if (mousePositionContext == MousePositionContext.TOP)
         {
             mouseOverContextManager.ShowTop(globalCardData.AttackWeaponText,
