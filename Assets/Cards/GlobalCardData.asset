@@ -37,6 +37,8 @@ MonoBehaviour:
   DiscardPotionColor: {r: 0.09411765, g: 0.09411765, b: 0.09411765, a: 0.5019608}
   TreasureText: +3 Gold
   TreasureColor: {r: 0.74509805, g: 0.65882355, b: 0.21960784, a: 0.5019608}
+  BlockedByTauntText: Blocked by Taunt
+  BlockedByTauntColor: {r: 0.09411765, g: 0.09411765, b: 0.09411765, a: 0.5019608}
   DoorUnlockedText: Unlocked
   DoorLockedColor: {r: 0.36862746, g: 0.07450981, b: 0.07450981, a: 0.5019608}
   DoorUnlockedColor: {r: 0.21176471, g: 0.7058824, b: 0.29411766, a: 0.5019608}

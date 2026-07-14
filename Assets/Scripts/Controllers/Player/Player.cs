@@ -101,6 +101,7 @@ public class Player : MonoBehaviour, IPlayerBuffRegisterable
     {
         UnequipWeapon();
         // CurrentHealth = MaxHealth;
+        ClearArmor();
         RunCooldownCounter = 0;
         HasEnteredTheRoom = false;
         HasRunToken = true;

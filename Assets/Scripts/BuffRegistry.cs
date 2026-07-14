@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Project.Decks;
 using UnityEngine;
 
@@ -36,10 +37,24 @@ public class GlobalBuffRegistry : MonoBehaviour
 
     public Buff GetRandomBuff(CardType cardType)
     {
-        List<Buff> validBuffs = GetAllBuffsOfType(cardType);
+        List<Buff> unpackedList = new();
+        foreach(Buff buff in GetAllBuffsOfType(cardType))
+        {
+            int amount = buff.Rarity switch
+            {
+                Rarity.Common => 3,
+                Rarity.Uncommon => 2,
+                Rarity.Rare => 1,
+                _ => 3,
+            };
+            for (int i = 0; i < amount; i++)
+            {
+                unpackedList.Add(buff);
+            }
+        }
 
-        int randomIndex = Random.Range(0, validBuffs.Count);
-        return validBuffs[randomIndex];
+        int randomIndex = Random.Range(0, unpackedList.Count);
+        return unpackedList[randomIndex];
     }
 
     public PlayerBuff GetRandomPlayerBuff()
@@ -56,15 +71,6 @@ public class GlobalBuffRegistry : MonoBehaviour
 
     public List<Buff> GetAllBuffsOfType(CardType cardType)
     {
-        List<Buff> validBuffs = new();
-        foreach (Buff buff in GlobalBuffs)
-        {
-            if (buff.ValidCardTypes.Contains(cardType))
-            {
-                validBuffs.Add(buff);
-            }
-        }
-
-        return validBuffs;
+        return GlobalBuffs.Where(buff => buff.ValidCardTypes.Contains(cardType)).ToList();
     }
 }

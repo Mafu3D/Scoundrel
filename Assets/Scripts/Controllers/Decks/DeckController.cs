@@ -5,6 +5,7 @@ using UnityEngine;
 using Project.Decks;
 using TMPro;
 using System;
+using System.Linq;
 
 // TODO: split this into controller, model, and view
 public class DeckController : MonoBehaviour
@@ -99,5 +100,25 @@ public class DeckController : MonoBehaviour
             }
         }
         return remaining;
+    }
+
+    public int RemainingOfType(CardType cardType)
+    {
+        return GetRemainingOfType(cardType).Count;
+    }
+
+    public int RemainingOfType(List<CardType> cardTypes)
+    {
+        return GetRemainingOfType(cardTypes).Count;
+    }
+
+    public List<RuntimeCardModel> GetRemainingOfType(CardType cardType)
+    {
+        return Deck.RemainingItems.Where(card => card.CardType == cardType).ToList();
+    }
+
+    public List<RuntimeCardModel> GetRemainingOfType(List<CardType> cardTypes)
+    {
+        return Deck.RemainingItems.Where(card => cardTypes.Contains(card.CardType)).ToList();
     }
 }

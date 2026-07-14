@@ -17,10 +17,11 @@ MonoBehaviour:
   Description: This card deals 3 damage to its neighbors when it dies. It destroys
     any gold.
   ValidCardTypes: 00000000
+  Rarity: 1
   IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0
-  RemoveOnParentCleanup: 0
+  RemoveWhenParentLeaves: 0
   RemoveOnDeath: 0
   registeredChildBuffs:
   - {fileID: 11400000, guid: 18a651b7a0e78af498528516e5a00bd7, type: 2}

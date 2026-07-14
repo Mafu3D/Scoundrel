@@ -216,15 +216,15 @@ namespace Project.Decks
 
     }
 
-    public static class Deck
-    {
-        public static Deck<T> InitializeDeck<T>(IDeckDefinition<T> deckDefinition) where T : IDeckStorable
-        {
-            if (deckDefinition == null) return new();
-            Deck<T> deck = new Deck<T>(deckDefinition.UnpackContents());
-            deck.Reset();
-            deck.Shuffle();
-            return deck;
-        }
-    }
+    // public static class Deck
+    // {
+    //     public static Deck<T> InitializeDeck<T>(IDeckDefinition<T> deckDefinition) where T : IDeckStorable
+    //     {
+    //         if (deckDefinition == null) return new();
+    //         Deck<T> deck = new Deck<T>(deckDefinition.UnpackContents());
+    //         deck.Reset();
+    //         deck.Shuffle();
+    //         return deck;
+    //     }
+    // }
 }

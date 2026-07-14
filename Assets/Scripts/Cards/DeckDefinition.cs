@@ -4,26 +4,14 @@ using UnityEngine;
 
 namespace Project.Decks
 {
-    public interface IDeckDefinition<T> where T : IDeckStorable
-    {
-        public List<T> UnpackContents();
-    }
-
-    // [CreateAssetMenu(fileName="NewDeck", menuName="New Deck")]
-    // public class DeckDefinition : ScriptableObject, IDeckDefinition<RuntimeCardModel>
+    // public interface IDeckDefinition<T> where T : IDeckStorable
     // {
-    //     public SuitDeckDefinition monsterDeck1;
-    //     public SuitDeckDefinition monsterDeck2;
-    //     public SuitDeckDefinition potionsDeck;
-    //     public SuitDeckDefinition weaponsDeck;
-
-    //     public List<RuntimeCardModel> UnpackContents()
-    //     {
-    //         List<RuntimeCardModel> contents = monsterDeck1.UnpackContents();
-    //         contents.AddRange(monsterDeck2.UnpackContents());
-    //         contents.AddRange(monsterDeck2.UnpackContents());
-    //         contents.AddRange(weaponsDeck.UnpackContents());
-    //         return contents;
-    //     }
+    //     public List<T> UnpackContents();
     // }
+}
+
+[CreateAssetMenu(fileName = "NewCardDeckDefinition", menuName = "CardDeckDefinition", order = 0)]
+public class CardDeckDefinition : ScriptableObject
+{
+
 }

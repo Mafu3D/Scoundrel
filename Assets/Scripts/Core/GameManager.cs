@@ -10,6 +10,7 @@ using Mafu.UnityServiceLocator;
 using Project.Core.StateMachineSystem;
 using Project.Core;
 using Project.GameStates;
+using Mafu.Extensions;
 
 public class GameManager : MonoBehaviour
 {
@@ -199,48 +200,16 @@ public class GameManager : MonoBehaviour
     public void TEMP_AddRandomMonsterBuffs(int min, int max)
     {
         string outputString = "Random monster buffs:\n";
-        // TEMP: add random monster buffs
-        List<string> buffs = new() { "Inspiring", "Elite", "Bloodthirsty", "Exploding", "Hungry", "LoneWolf", "PackTactics", "Pursuer", "Reanimate" };
-        int amount = UnityEngine.Random.Range(min, max);
-        List<RuntimeCardModel> cardsToBuff = new();
-        List<RuntimeCardModel> monsterCards = new();
-        foreach (Suit suit in new List<Suit>() { Suit.CLUBS, Suit.SPADES})
-        {
-            monsterCards.AddRange(DeckController.GetRemainingOfSuit(new() {suit}));
-        }
-        for (int i = 0; i < amount; i++)
-        {
-            int randIndex = UnityEngine.Random.Range(0, monsterCards.Count);
-            cardsToBuff.Add(monsterCards[randIndex]);
-        }
-        foreach (RuntimeCardModel card in cardsToBuff)
-        {
-            int randBuff = UnityEngine.Random.Range(0, buffs.Count);
-            Buff buff = BuffRegistry.GetBuffFromName(buffs[randBuff]);
-            card.AddNewBuff(buff);
-            outputString += $"{card} >>> {buff}\n";
-        }
-        Debug.Log(outputString);
-    }
 
-    private void TEMP_AddRandomWeaponBuffs(int min, int max)
-    {
-        string outputString = "Random weapon buffs:\n";
-        // TEMP: add random weapon buffs
-        List<string> buffs = new() { "Bomb", "Cleaving", "Honed", "Reinforced" };
         int amount = UnityEngine.Random.Range(min, max);
-        List<RuntimeCardModel> cardsToBuff = new();
-        List<RuntimeCardModel> weaponCards = DeckController.GetRemainingOfSuit(new() {Suit.DIAMONDS});
-        for (int i = 0; i < amount; i++)
-        {
-            int randIndex = UnityEngine.Random.Range(0, weaponCards.Count);
-            cardsToBuff.Add(weaponCards[randIndex]);
-        }
+        List<RuntimeCardModel> monsterCards = DeckController.GetRemainingOfType(CardType.MONSTER);
+        List<RuntimeCardModel> cardsToBuff = monsterCards.GetRandomUniqueElements(amount);
+
         foreach (RuntimeCardModel card in cardsToBuff)
         {
-            int randBuff = UnityEngine.Random.Range(0, buffs.Count);
-            Buff buff = BuffRegistry.GetBuffFromName(buffs[randBuff]);
-            card.AddNewBuff(buff);outputString += $"{card} >>> {buff}\n";
+            Buff randomBuff = BuffRegistry.GetRandomBuff(CardType.MONSTER);
+            card.AddNewBuff(randomBuff);
+            outputString += $"{card} >>> {randomBuff}\n";
         }
         Debug.Log(outputString);
     }

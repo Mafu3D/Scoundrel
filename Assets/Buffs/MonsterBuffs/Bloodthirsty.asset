@@ -16,10 +16,11 @@ MonoBehaviour:
   Sprite: {fileID: 1744348678, guid: b68ba3f6c54a41a46beb5aa4bccf6ed7, type: 3}
   Description: Gain 2 power every time another card dies
   ValidCardTypes: 00000000
+  Rarity: 1
   IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0
-  RemoveOnParentCleanup: 0
+  RemoveWhenParentLeaves: 0
   RemoveOnDeath: 0
   registeredChildBuffs: []
   amount: 2

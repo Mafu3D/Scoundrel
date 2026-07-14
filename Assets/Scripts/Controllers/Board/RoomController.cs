@@ -50,7 +50,7 @@ public class RoomController
         int amountRemaining = remainingCards.Count;
         foreach(RuntimeCardModel cardModel in remainingCards)
         {
-            if (cardModel.CardType == CardType.DOOR)
+            if (cardModel.CardType == CardType.DOOR || cardModel.CardType == CardType.TREASURE)
             {
                 amountRemaining -= 1;
             }

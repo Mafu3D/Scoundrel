@@ -153,13 +153,21 @@ public class BuffManager : IDisposable
         DeregisterBuff(buff);
     }
 
+    public void CleanupChildren()
+    {
+        foreach (Buff buff in registeredBuffs.Values)
+        {
+            buff.RemoveChildrenThatRemoveWhenThisLeaves();
+        }
+    }
+
     private void DeregisterBuff(Buff buff)
     {
         foreach(Buff childBuff in buff.ChildBuffInstances)
         {
             // TODO: If a child buff is destroyed or deregistered before
             // its parent the object may become null?
-            if (childBuff != null && childBuff.RemoveOnParentCleanup)
+            if (childBuff != null && childBuff.RemoveWhenParentLeaves)
             {
                 childBuff.Remove();
             }

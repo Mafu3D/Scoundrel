@@ -16,9 +16,10 @@ MonoBehaviour:
   Sprite: {fileID: -5161173795680686134, guid: 50ff22ede09ab6648b47d10d2fa0a082, type: 3}
   Description: This card persists through running away
   ValidCardTypes: 00000000
+  Rarity: 2
   IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0
-  RemoveOnParentCleanup: 0
+  RemoveWhenParentLeaves: 0
   RemoveOnDeath: 0
   registeredChildBuffs: []

@@ -42,13 +42,14 @@ public abstract class Buff : ScriptableObject
     [SerializeField] public Sprite Sprite;
     [SerializeField] public string Description;
     [SerializeField] public List<CardType> ValidCardTypes;
+    [SerializeField] public Rarity Rarity;
 
     [Header("Base Buff Parameters")]
     [SerializeField] public bool IsHidden = false;
     [SerializeField] public bool ApplyOnDraw = true;
     [SerializeField] public bool IsTemporary = false;
-    [SerializeField] public bool RemoveOnParentCleanup = false;
-    [SerializeField] public bool RemoveOnDeath = true;
+    [SerializeField] public bool RemoveWhenParentLeaves = false;
+    [SerializeField] public bool RemoveOnDeath = false;
     [SerializeField] public List<Buff> registeredChildBuffs = new();
 
     public List<Buff> ChildBuffInstances { get; private set; } = new();
@@ -105,14 +106,7 @@ public abstract class Buff : ScriptableObject
 
     public void Cleanup()
     {
-        // foreach (Buff buff in childBuffInstances)
-        // {
-        //     if (!buff.CleanupWithParent)
-        //     {
-        //         continue;
-        //     }
-        //     buff.Cleanup();
-        // }
+        ChildBuffInstances = new();
         OnCleanup();
     }
 
@@ -121,6 +115,25 @@ public abstract class Buff : ScriptableObject
         Buff newInstance = target.AddNewBuff(buff);
         ChildBuffInstances.Add(newInstance);
         return newInstance;
+    }
+
+    public void RemoveChildrenThatRemoveWhenThisLeaves()
+    {
+        List<Buff> removedChildren = new();
+        foreach (var child in ChildBuffInstances)
+        {
+            if (!child.RemoveWhenParentLeaves)
+            {
+                continue;
+            }
+            child.Remove();
+            removedChildren.Add(child);
+        }
+
+        foreach(var child in removedChildren)
+        {
+            ChildBuffInstances.Remove(child);
+        }
     }
 
     /// <summary>

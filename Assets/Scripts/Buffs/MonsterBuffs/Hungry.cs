@@ -28,6 +28,8 @@ public class Hungry : Buff
 
     private void DoBuffEffect()
     {
+        if (hasEatenThisFloor) return;
+
         List<RuntimeCardModel> neighbors = gameManager.DungeonController.CurrentRoom.GetActiveNeighbors(Owner, new List<CardType>() { CardType.MONSTER });
         if (neighbors.Count == 0)
         {

@@ -36,6 +36,7 @@ namespace Project.GameStates
             // For now, all monsters die in combat
             MonsterCardModel defender = combat.combatReport.Defender;
             dungeonController.CurrentRoom.TryRemoveCard(defender);
+            defender.BuffManager.CleanupChildren();
 
             // Add gold if its the last card in the room
             if (dungeonController.CurrentRoom.IsEmpty)

@@ -16,10 +16,11 @@ MonoBehaviour:
   Sprite: {fileID: -7170473627477248649, guid: 1b3a780d2c57ad2468937f79e7caf100, type: 3}
   Description: When this card is killed, ressurect it as a 2 power monster
   ValidCardTypes: 00000000
+  Rarity: 1
   IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0
-  RemoveOnParentCleanup: 0
+  RemoveWhenParentLeaves: 0
   RemoveOnDeath: 0
   registeredChildBuffs: []
   strength: 2

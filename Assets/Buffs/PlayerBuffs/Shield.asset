@@ -9,17 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c5bcbfbd940c084bba588560890415b, type: 3}
-  m_Name: PackTacticsStrong
+  m_Script: {fileID: 11500000, guid: b2eeb43ffe62c6444a5229b147c2930c, type: 3}
+  m_Name: Shield
   m_EditorClassIdentifier: 
-  Name: PackTacticsStrong
-  Sprite: {fileID: 0}
-  Description: 
-  ValidCardTypes: 00000000
-  IsHidden: 1
-  ApplyOnDraw: 1
+  Name: Shield
+  Sprite: {fileID: -177402381, guid: 3820d7d0f462d7c41ab4a87af39bd67f, type: 3}
+  Description: Start each new floor with 4 armor
+  IsHidden: 0
   IsTemporary: 0
-  RemoveOnParentCleanup: 1
-  RemoveOnDeath: 1
+  RemoveOnParentCleanup: 0
   registeredChildBuffs: []
-  strength: 4
+  Amount: 4

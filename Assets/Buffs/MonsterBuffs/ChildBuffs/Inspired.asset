@@ -16,10 +16,11 @@ MonoBehaviour:
   Sprite: {fileID: 1427359898640848927, guid: a8649cb40ea96d7499e4346c14f5d91c, type: 3}
   Description: +1 from being inspired by a neighboring inspired ally
   ValidCardTypes: 00000000
+  Rarity: 0
   IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 1
-  RemoveOnParentCleanup: 1
+  RemoveWhenParentLeaves: 1
   RemoveOnDeath: 1
   registeredChildBuffs: []
   amount: 1

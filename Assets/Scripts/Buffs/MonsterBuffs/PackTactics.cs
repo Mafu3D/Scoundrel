@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Project.Decks;
 using UnityEngine;
@@ -5,8 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName="PackTactics", menuName="Buffs/Monster/PackTactics")]
 public class PackTactics : Buff
 {
+    [SerializeField] int valuePerMonster = 2;
     private bool buffApplied;
 
+    int lastValue = 0;
 
     public override void OnDraw()
     {
@@ -20,11 +23,12 @@ public class PackTactics : Buff
 
     private void DoBuffEffect()
     {
+        int value = gameManager.DungeonController.CurrentRoom.GetOtherActiveCards(Owner, new () { CardType.MONSTER }).Count * valuePerMonster;
         if (CheckIfLastCardInRoom())
         {
             if (buffApplied)
             {
-                Owner.DeregisterPermanentValueModifier(2);
+                Owner.DeregisterTemporaryValueModifier(lastValue);
             }
             buffApplied = false;
         }
@@ -32,9 +36,10 @@ public class PackTactics : Buff
         {
             if (buffApplied)
             {
-                Owner.DeregisterPermanentValueModifier(2);
+                Owner.DeregisterTemporaryValueModifier(lastValue);
             }
-            Owner.RegisterPermanentValueModifier(2);
+            Owner.RegisterTemporaryValueModifier(value);
+            lastValue = value;
             buffApplied = true;
         }
     }

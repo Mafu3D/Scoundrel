@@ -74,9 +74,13 @@ namespace Mafu.Extensions
             list[index2] = temp;
         }
 
-        public static List<T> GetRandomElements<T>(this IEnumerable<T> list, int elementsCount)
+        public static List<T> GetRandomUniqueElements<T>(this IEnumerable<T> list, int elementsCount)
         {
-            return list.OrderBy(arg => Guid.NewGuid()).Take(elementsCount).ToList();
+            // return list.OrderBy(arg => Guid.NewGuid()).Take(elementsCount).ToList();
+            List<T> copy = list.ToList();
+            copy.Shuffle();
+
+            return copy.Take(elementsCount).ToList();
         }
     }
 }

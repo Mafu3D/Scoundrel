@@ -17,9 +17,10 @@ MonoBehaviour:
   Description: This monster eats the weakest adjacent monster card and gains its
     power (once per floor)
   ValidCardTypes: 00000000
+  Rarity: 2
   IsHidden: 0
   ApplyOnDraw: 1
   IsTemporary: 0
-  RemoveOnParentCleanup: 0
+  RemoveWhenParentLeaves: 0
   RemoveOnDeath: 0
   registeredChildBuffs: []
