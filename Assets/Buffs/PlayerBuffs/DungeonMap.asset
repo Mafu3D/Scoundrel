@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad9f30daed1f471439ef5570b296dbc9, type: 3}
+  m_Name: DungeonMap
+  m_EditorClassIdentifier: 
+  Name: DungeonMap
+  Sprite: {fileID: -6123862933394953355, guid: 3820d7d0f462d7c41ab4a87af39bd67f, type: 3}
+  Description: Shows the cards in the next room
+  IsHidden: 0
+  IsTemporary: 0
+  RemoveOnParentCleanup: 0
+  registeredChildBuffs: []

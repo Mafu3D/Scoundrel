@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] public GameSettings GameSettings;
     [SerializeField] private bool debugLoop;
+    [SerializeField] public bool ShowNextCards;
+    [SerializeField] public int AmountOfNextCardsToShow;
 
     [Header("Services")]
     [SerializeField] public DeckController DeckController;

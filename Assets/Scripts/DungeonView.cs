@@ -6,6 +6,7 @@ public class DungeonView : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private RoomView roomView;
     [SerializeField] private WeaponCardView weaponView;
+    [SerializeField] private NextCardsView nextCardsView;
 
     private DungeonController dungeonController => gameManager.DungeonController;
 
@@ -42,6 +43,7 @@ public class DungeonView : MonoBehaviour
     {
         roomView.OnStartNewGame();
         weaponView.OnStartNewGame();
+        nextCardsView.OnStartNewGame();
         UpdateWeaponView();
     }
 
@@ -49,6 +51,15 @@ public class DungeonView : MonoBehaviour
     {
         roomView.DeregisterRoom();
         roomView.RegisterRoom(gameManager.DungeonController.CurrentRoom);
+
+        if (gameManager.ShowNextCards)
+        {
+            nextCardsView.RegisterNextCards(gameManager.DungeonController.GetNextCards(gameManager.AmountOfNextCardsToShow));
+        }
+        else
+        {
+            nextCardsView.DeregisterNextCards();
+        }
     }
 
     private void UpdateWeaponView()

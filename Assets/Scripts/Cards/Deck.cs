@@ -50,7 +50,7 @@ namespace Project.Decks
             }
         }
 
-        public void AddToRemaining(List<T> itemsToAdd, bool shuffle=true, bool addToTop=false)
+        public void AddToRemaining(List<T> itemsToAdd, bool shuffle=false, bool addToTop=false)
         {
             foreach (T item in itemsToAdd)
             {
@@ -62,7 +62,7 @@ namespace Project.Decks
             if (shuffle) Shuffle();
         }
 
-        public void ShuffleIn(T item)
+        public void InsertRandomly(T item)
         {
             System.Random random = new();
             int randomIndex = random.Next(RemainingItems.Count - 1);
@@ -70,17 +70,18 @@ namespace Project.Decks
             item.OnReturnToDeck();
         }
 
-        public void ShuffleIn(List<T> items)
+        public void InsertRandomly(List<T> items)
         {
             foreach (T item in items)
             {
-                ShuffleIn(item);
+                InsertRandomly(item);
             }
         }
 
         public void Shuffle()
         {
             RemainingItems.Shuffle();
+            Debug.Log("everyday im shufflin");
         }
 
         public void Reset()

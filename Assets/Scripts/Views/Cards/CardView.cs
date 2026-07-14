@@ -28,6 +28,7 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
 {
     [Header("Globals")]
     [SerializeField] public GlobalCardData GlobalCardData;
+    [SerializeField] public bool Hoverable = true;
 
     [Header("Extender (Optional)")]
     [SerializeField] private CardViewExtender cardViewExtender;
@@ -94,7 +95,12 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
     {
         startingSortingLayer = mySortingGroup.sortingOrder;
         SetSortingLayer(startingSortingLayer + 50);
-        myTransform.DOScale(onHoverGrowthSize, onHoverGrowthSpeed);
+
+        if (Hoverable)
+        {
+            myTransform.DOScale(onHoverGrowthSize, onHoverGrowthSpeed);
+        }
+
         cardViewExtender?.OnMouseEnter();
         OnMouseOver?.Invoke();
     }
@@ -102,7 +108,12 @@ public class CardView : MonoBehaviour, ITooltipGettable, IPointerEnterHandler, I
     public void OnPointerExit(PointerEventData eventData)
     {
         SetSortingLayer(startingSortingLayer);
-        myTransform.DOScale(1f, onHoverGrowthSpeed);
+
+        if (Hoverable)
+        {
+            myTransform.DOScale(1f, onHoverGrowthSpeed);
+        }
+
         cardViewExtender?.OnMouseExit();
         OnMouseExit?.Invoke();
     }

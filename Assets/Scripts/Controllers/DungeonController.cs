@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Mafu.UnityServiceLocator;
 using Project.Decks;
 using Sirenix.Utilities;
 using UnityEngine;
@@ -41,6 +42,13 @@ public class DungeonController
     public void Update()
     {
         CurrentRoom?.RunCardsOnUpdate();
+
+        // TODO: Clean up, store cards in their own class that can run through the update loop
+        ServiceLocator.Global.Get(out GameManager gameManager);
+        foreach (var card in GetNextCards(gameManager.AmountOfNextCardsToShow))
+        {
+            card.Update();
+        }
     }
 
     public void StartNewDungeon()
@@ -96,6 +104,24 @@ public class DungeonController
     }
     #endregion
 
+    public List<RuntimeCardModel> GetNextCards(int amount)
+    {
+        List<RuntimeCardModel> nextCards = new();
+
+        int i = 0;
+        while (nextCards.Count < amount && i < deckController.Deck.RemainingItems.Count)
+        {
+            RuntimeCardModel nextCard = deckController.Deck.RemainingItems[i];
+            i++;
+            if (nextCard.CardType == CardType.DOOR || nextCard.CardType == CardType.TREASURE)
+            {
+                continue;
+            }
+            nextCards.Add(nextCard);
+        }
+        return nextCards;
+    }
+
     private void OnCurrentRoomCardsChanged()
     {
         foreach(RuntimeCardModel card in CurrentRoom.RemainingCards())
@@ -133,7 +159,7 @@ public static class RoomFactory
                     doorCards.Add(activeCard);
                 }
             }
-            deckController.Deck.ShuffleIn(doorCards);
+            deckController.Deck.InsertRandomly(doorCards);
 
             // Add the remaining slots from the current room to the new room, shifting them
             remainingPopulatedSlots.AddRange(GetRemainingPopulatedSlotsFromRoom(existingRoom));
