@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using Project.Core;
 using Project.Core.StateMachineSystem;
+using UnityEngine;
 
 namespace Project.GameStates
 {
@@ -34,7 +36,10 @@ namespace Project.GameStates
             dungeonController.RegisterDeckController(deckController);
             dungeonController.StartNewDungeon();
 
-            GameManager.TEMP_AddRandomMonsterBuffs(6, 9);
+            List<UpgradePackage> upgradePackages = GameManager.DeckUpgrader.GetRandomUniqueUpgradePackages(2, GameManager.RarityWeights);
+            GameManager.DeckUpgrader.UpgradeMonsterDeckFromPackage(upgradePackages[0]);
+
+            // GameManager.DeckUpgrader.UpgradeMonsterDeckRandomly(6, 9, GameManager.BuffRegistry);
 
             // OpenFirstRoom();
 

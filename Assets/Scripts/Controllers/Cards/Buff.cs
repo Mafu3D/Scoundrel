@@ -35,14 +35,14 @@ public class BuffID
 /// Main class for buffs.
 ///
 /// </summary>
-public abstract class Buff : ScriptableObject
+public abstract class Buff : ScriptableObject, IRarity
 {
     [Header("Buff Meta")]
     [SerializeField] public string Name;
     [SerializeField] public Sprite Sprite;
     [SerializeField] public string Description;
     [SerializeField] public List<CardType> ValidCardTypes;
-    [SerializeField] public Rarity Rarity;
+    [SerializeField] private Rarity rarity;
 
     [Header("Base Buff Parameters")]
     [SerializeField] public bool IsHidden = false;
@@ -52,6 +52,7 @@ public abstract class Buff : ScriptableObject
     [SerializeField] public bool RemoveOnDeath = false;
     [SerializeField] public List<Buff> registeredChildBuffs = new();
 
+    public Rarity Rarity => rarity;
     public List<Buff> ChildBuffInstances { get; private set; } = new();
 
     public BuffID ID  { get; private set; }

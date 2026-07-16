@@ -6,16 +6,16 @@ namespace Mafu.Extensions
 {
     public static class ListExtensions
     {
-        static Random rng;
+        static Random random;
 
         public static IList<T> Shuffle<T>(this IList<T> list)
         {
-            if (rng == null) { rng = new Random(); }
+            if (random == null) { random = new Random(); }
             int count = list.Count;
             while (count > 1)
             {
                 --count;
-                int index = rng.Next(count + 1);
+                int index = random.Next(count + 1);
                 (list[index], list[count]) = (list[count], list[index]);
             }
 

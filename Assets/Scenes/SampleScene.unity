@@ -8749,7 +8749,9 @@ MonoBehaviour:
   DeckController: {fileID: 995225364}
   ShopManager: {fileID: 1180323120}
   BuffRegistry: {fileID: 995225365}
+  UpgradePackageCollection: {fileID: 11400000, guid: faa4c4803adfe8b458628500c2d35eef, type: 2}
   Player: {fileID: 995225363}
+  rarityWeightsDefinition: {fileID: 11400000, guid: 1a64a57948579e54ea588df2f1a5fda7, type: 2}
 --- !u!4 &995225362
 Transform:
   m_ObjectHideFlags: 0

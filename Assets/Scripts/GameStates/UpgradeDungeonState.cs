@@ -25,7 +25,7 @@ namespace Project.GameStates
             player.SetInteractionState(PlayerInteractionState.UIOnly);
 
             ServiceLocator.Global.Get(out GameManager gamemanager);
-            gamemanager.TEMP_AddRandomMonsterBuffs(4, 6);
+            gamemanager.DeckUpgrader.UpgradeMonsterDeckRandomly(4, 6, gamemanager.BuffRegistry);
         }
 
         public override void Update(float deltaTime)

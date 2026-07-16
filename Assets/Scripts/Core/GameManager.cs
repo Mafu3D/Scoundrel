@@ -25,12 +25,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] public DeckController DeckController;
     [SerializeField] public ShopManager ShopManager;
     [SerializeField] public GlobalBuffRegistry BuffRegistry;
+    [SerializeField] public UpgradePackageCollection UpgradePackageCollection;
     [SerializeField] public Player Player;
+    [SerializeField] private RarityWeightsDefinition rarityWeightsDefinition;
 
     public CombatController CombatController { get; private set; }
     public DungeonController DungeonController { get; private set; } = new();
     public AdvancedScoreKeeper ScoreKeeper { get; private set; } = null;
     public GameProcessQueue<GameplayEffect> GameplayEffectQueue { get; private set; }
+    public DeckUpgrader DeckUpgrader { get; private set; }
+
+    public Dictionary<Rarity, int> RarityWeights;
 
     public Action OnStartNewGame;
     public Action OnEnterNewFloor;
@@ -63,6 +68,8 @@ public class GameManager : MonoBehaviour
         ShopManager.gameObject.SetActive(false);
         ScoreKeeper = new(this);
         CombatController = new(Player, stateMachine, GameplayEffectQueue, DungeonController, ScoreKeeper);
+        DeckUpgrader = new(DeckController, UpgradePackageCollection);
+        RarityWeights = new(rarityWeightsDefinition.Weights);
         StartGame();
     }
 
@@ -197,24 +204,6 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
-
-    // TODO: This should be its own class? Dungeon Upgrader?
-    public void TEMP_AddRandomMonsterBuffs(int min, int max)
-    {
-        string outputString = "Random monster buffs:\n";
-
-        int amount = UnityEngine.Random.Range(min, max);
-        List<RuntimeCardModel> monsterCards = DeckController.GetRemainingOfType(CardType.MONSTER);
-        List<RuntimeCardModel> cardsToBuff = monsterCards.GetRandomUniqueElements(amount);
-
-        foreach (RuntimeCardModel card in cardsToBuff)
-        {
-            Buff randomBuff = BuffRegistry.GetRandomBuff(CardType.MONSTER);
-            card.AddNewBuff(randomBuff);
-            outputString += $"{card} >>> {randomBuff}\n";
-        }
-        Debug.Log(outputString);
-    }
 
     public int GetScoreToGoToNextFloor()
     {
