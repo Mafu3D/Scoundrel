@@ -29,6 +29,7 @@ public class DungeonView : MonoBehaviour
     public void Show()
     {
         roomView.gameObject.SetActive(true);
+        nextCardsView.gameObject.SetActive(true);
         weaponView.gameObject.SetActive(true);
         UpdateWeaponView();
     }
@@ -36,6 +37,7 @@ public class DungeonView : MonoBehaviour
     public void Hide()
     {
         roomView.gameObject.SetActive(false);
+        nextCardsView.gameObject.SetActive(false);
         weaponView.gameObject.SetActive(false);
     }
 
