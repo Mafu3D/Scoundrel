@@ -67,9 +67,20 @@ public class DeckUpgradeChoiceView : MonoBehaviour
         }
     }
 
-    private void SelectPackage(UpgradePackage upgradePackage)
+    private void SelectPackage(UpgradePackage upgradePackage, int index)
     {
         deckUpgradeChoice.SelectPackage(upgradePackage);
+        for (int i = 0; i < upgradePackageViews.Count; i++)
+        {
+            if (i == index)
+            {
+                upgradePackageViews[i].SetAsSelected(true);
+            }
+            else
+            {
+                upgradePackageViews[i].SetAsSelected(false);
+            }
+        }
     }
 
 }

@@ -325,8 +325,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 999093460a482e743a607097d7d3abef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
   hoverScale: 1.05
   hoverSpeed: 0.1
+  notSelectedColor: {r: 0.14117648, g: 0.13725491, b: 0.13333334, a: 1}
+  selectedColor: {r: 0.6792453, g: 0.2246116, b: 0.14417945, a: 1}
+  backgroundSprite: {fileID: 4607030101434082526}
   upgradePackageNameTMP_Text: {fileID: 6490372777528504411}
   buffUpgradeViewPrefab: {fileID: 9082588911004895582, guid: d23ca242633708a43a5c3f4582732a8e, type: 3}
   buffUpgradeObjectContainer: {fileID: 5685442428297261294}

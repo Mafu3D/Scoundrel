@@ -7,14 +7,19 @@ using UnityEngine.EventSystems;
 
 public class UpgradePackageView : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    [SerializeField] private int index;
     [SerializeField] private float hoverScale = 1.2f;
     [SerializeField] private float hoverSpeed = 0.5f;
+
+    [SerializeField] private Color notSelectedColor = Color.black;
+    [SerializeField] private Color selectedColor = Color.red;
+    [SerializeField] private SpriteRenderer backgroundSprite;
 
     [SerializeField] private TMP_Text upgradePackageNameTMP_Text;
     [SerializeField] private GameObject buffUpgradeViewPrefab;
     [SerializeField] private Transform buffUpgradeObjectContainer;
 
-    public Action<UpgradePackage> OnClicked;
+    public Action<UpgradePackage, int> OnClicked;
 
     private UpgradePackage upgradePackage;
     private List<BuffUpgradeView> instantiatedBuffUpgradeViewPrefabs = new();
@@ -67,6 +72,11 @@ public class UpgradePackageView : MonoBehaviour, IPointerEnterHandler, IPointerE
 
     public void OnMouseDown()
     {
-        OnClicked?.Invoke(upgradePackage);
+        OnClicked?.Invoke(upgradePackage, index);
+    }
+
+    public void SetAsSelected(bool value)
+    {
+        backgroundSprite.color = value ? selectedColor : notSelectedColor;
     }
 }
