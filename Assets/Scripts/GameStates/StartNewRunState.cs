@@ -36,7 +36,7 @@ namespace Project.GameStates
             dungeonController.RegisterDeckController(deckController);
             dungeonController.StartNewDungeon();
 
-            List<UpgradePackage> upgradePackages = GameManager.DeckUpgrader.GetRandomUniqueUpgradePackages(2, GameManager.RarityWeights);
+            List<UpgradePackage> upgradePackages = GameManager.DeckUpgrader.GetRandomUniqueUpgradePackages(1);
             GameManager.DeckUpgrader.UpgradeMonsterDeckFromPackage(upgradePackages[0]);
 
             // GameManager.DeckUpgrader.UpgradeMonsterDeckRandomly(6, 9, GameManager.BuffRegistry);

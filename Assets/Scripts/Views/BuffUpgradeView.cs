@@ -12,6 +12,8 @@ public class BuffUpgradeView : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField] private float hoverScale = 1.2f;
     [SerializeField] private float hoverSpeed = 0.5f;
 
+    public Action OnClicked;
+
     private Vector3 startingScale;
     private Buff buff;
 
@@ -52,5 +54,10 @@ public class BuffUpgradeView : MonoBehaviour, IPointerEnterHandler, IPointerExit
                                       image: buff.Sprite);
         tooltipCollection = new(new() {tooltipData});
         return true;
+    }
+
+    public void OnMouseDown()
+    {
+        OnClicked?.Invoke();
     }
 }

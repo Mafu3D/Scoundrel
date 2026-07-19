@@ -7,11 +7,13 @@ public class DeckUpgrader
 {
     private readonly UpgradePackageCollection upgradePackages;
     private readonly DeckController deckController;
+    private readonly Dictionary<Rarity, int> weights;
 
-    public DeckUpgrader(DeckController deckController, UpgradePackageCollection upgradePackages)
+    public DeckUpgrader(DeckController deckController, UpgradePackageCollection upgradePackages, Dictionary<Rarity, int> weights)
     {
         this.deckController = deckController;
         this.upgradePackages = upgradePackages;
+        this.weights = weights;
     }
 
     public void UpgradeMonsterDeckRandomly(int min, int max, GlobalBuffRegistry buffRegistry)
@@ -49,7 +51,7 @@ public class DeckUpgrader
         Debug.Log(outputString);
     }
 
-    public List<UpgradePackage> GetRandomUniqueUpgradePackages(int amount, Dictionary<Rarity, int> weights)
+    public List<UpgradePackage> GetRandomUniqueUpgradePackages(int amount)
     {
         Rarity rarity = default;
         System.Random random = new();

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Mafu.UnityServiceLocator;
 using Project.Core;
 using Project.Core.StateMachineSystem;
@@ -9,23 +10,28 @@ namespace Project.GameStates
         private readonly Player player;
         private readonly GameProcessQueue<GameplayEffect> gameplayEffectQueue;
         private readonly DungeonController dungeonController;
+        private readonly GameManager gameManager;
 
         public UpgradeDungeonState(StateMachine stateMachine,
-                                    GameProcessQueue<GameplayEffect> gameplayEffectQueue,
-                                    Player player,
-                                    DungeonController dungeonController) : base(stateMachine)
+                                   GameProcessQueue<GameplayEffect> gameplayEffectQueue,
+                                   Player player,
+                                   DungeonController dungeonController) : base(stateMachine)
         {
             this.player = player;
             this.gameplayEffectQueue = gameplayEffectQueue;
             this.dungeonController = dungeonController;
+            ServiceLocator.Global.Get(out gameManager);
         }
 
         public override void OnEnter()
         {
             player.SetInteractionState(PlayerInteractionState.UIOnly);
 
-            ServiceLocator.Global.Get(out GameManager gamemanager);
-            gamemanager.DeckUpgrader.UpgradeMonsterDeckRandomly(4, 6, gamemanager.BuffRegistry);
+
+            DeckUpgradeChoice deckUpgradeChoice = new(gameManager.DeckUpgrader, 2);
+
+            gameManager.DeckUpgraderView.RegisterDeckUpgradeChoice(deckUpgradeChoice);
+            gameManager.DeckUpgraderView.Show();
         }
 
         public override void Update(float deltaTime)
@@ -36,6 +42,10 @@ namespace Project.GameStates
             }
         }
 
-        public override void OnExit() { }
+        public override void OnExit()
+        {
+            gameManager.DeckUpgraderView.DeregisterDeckUpgradeChoice();
+            gameManager.DeckUpgraderView.Hide();
+        }
     }
 }

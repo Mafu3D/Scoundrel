@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
@@ -12,6 +13,8 @@ public class UpgradePackageView : MonoBehaviour, IPointerEnterHandler, IPointerE
     [SerializeField] private TMP_Text upgradePackageNameTMP_Text;
     [SerializeField] private GameObject buffUpgradeViewPrefab;
     [SerializeField] private Transform buffUpgradeObjectContainer;
+
+    public Action<UpgradePackage> OnClicked;
 
     private UpgradePackage upgradePackage;
     private List<BuffUpgradeView> instantiatedBuffUpgradeViewPrefabs = new();
@@ -42,9 +45,11 @@ public class UpgradePackageView : MonoBehaviour, IPointerEnterHandler, IPointerE
         foreach(Buff buff in upgradePackage.Buffs)
         {
             GameObject newGameObject = Instantiate(buffUpgradeViewPrefab, buffUpgradeObjectContainer);
+            newGameObject.transform.localPosition += new Vector3(0f, 0f, -1f);
             BuffUpgradeView buffUpgradeView = newGameObject.GetComponent<BuffUpgradeView>();
             buffUpgradeView.RegisterBuff(buff);
             instantiatedBuffUpgradeViewPrefabs.Add(buffUpgradeView);
+            buffUpgradeView.OnClicked += OnMouseDown;
         }
     }
 
@@ -52,10 +57,16 @@ public class UpgradePackageView : MonoBehaviour, IPointerEnterHandler, IPointerE
     {
         foreach (BuffUpgradeView buffUpgradeView in instantiatedBuffUpgradeViewPrefabs)
         {
+            buffUpgradeView.OnClicked -= OnMouseDown;
             Destroy(buffUpgradeView.gameObject);
         }
         upgradePackage = null;
         instantiatedBuffUpgradeViewPrefabs = new();
         upgradePackageNameTMP_Text.text = "";
+    }
+
+    public void OnMouseDown()
+    {
+        OnClicked?.Invoke(upgradePackage);
     }
 }

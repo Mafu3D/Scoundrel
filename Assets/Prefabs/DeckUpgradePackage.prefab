@@ -310,7 +310,7 @@ Transform:
   - {fileID: 8650457747928896679}
   - {fileID: 9097421135509920349}
   - {fileID: 3865161979402383257}
-  - {fileID: 3691737385707279963}
+  - {fileID: 5685442428297261294}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6572457712359575993
@@ -329,7 +329,7 @@ MonoBehaviour:
   hoverSpeed: 0.1
   upgradePackageNameTMP_Text: {fileID: 6490372777528504411}
   buffUpgradeViewPrefab: {fileID: 9082588911004895582, guid: d23ca242633708a43a5c3f4582732a8e, type: 3}
-  buffUpgradeObjectContainer: {fileID: 3691737385707279963}
+  buffUpgradeObjectContainer: {fileID: 5685442428297261294}
 --- !u!61 &1770434663093164778
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -376,7 +376,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 4, y: 8}
   m_EdgeRadius: 0
---- !u!1 &7582028264999101348
+--- !u!1 &7058412944259289242
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -384,47 +384,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3691737385707279963}
-  - component: {fileID: 8078742159848442156}
+  - component: {fileID: 5685442428297261294}
+  - component: {fileID: 1143685409407313097}
   m_Layer: 0
-  m_Name: UpgradeCards
+  m_Name: UpgradeCardsContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &3691737385707279963
-RectTransform:
+--- !u!4 &5685442428297261294
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7582028264999101348}
+  m_GameObject: {fileID: 7058412944259289242}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: -0.47, y: 2.59, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7333293378544178423}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.53, y: -3.34}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8078742159848442156
+--- !u!114 &1143685409407313097
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7582028264999101348}
+  m_GameObject: {fileID: 7058412944259289242}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11abb929c0640474f8018f47971eb913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   offset: 1
+  layoutDirection: 1
 --- !u!1 &7768560043577785964
 GameObject:
   m_ObjectHideFlags: 0

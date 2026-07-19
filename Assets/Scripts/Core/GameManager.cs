@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [Header("Services")]
     [SerializeField] public DeckController DeckController;
     [SerializeField] public ShopManager ShopManager;
+    [SerializeField] public DeckUpgradeChoiceView DeckUpgraderView;
     [SerializeField] public GlobalBuffRegistry BuffRegistry;
     [SerializeField] public UpgradePackageCollection UpgradePackageCollection;
     [SerializeField] public Player Player;
@@ -66,10 +67,13 @@ public class GameManager : MonoBehaviour
     {
         // Temp - remove
         ShopManager.gameObject.SetActive(false);
+        DeckUpgraderView?.Hide();
+        // DeckUpgraderView.RegisterDeckUpgrader(DeckUpgrader);
+
         ScoreKeeper = new(this);
         CombatController = new(Player, stateMachine, GameplayEffectQueue, DungeonController, ScoreKeeper);
-        DeckUpgrader = new(DeckController, UpgradePackageCollection);
         RarityWeights = new(rarityWeightsDefinition.Weights);
+        DeckUpgrader = new(DeckController, UpgradePackageCollection, RarityWeights);
         StartGame();
     }
 

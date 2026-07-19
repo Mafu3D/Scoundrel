@@ -1463,7 +1463,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &238818179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6817,7 +6817,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 604058708242014635, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6158229557758894941, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
 --- !u!4 &757752179 stripped
 Transform:
@@ -7549,7 +7555,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 604058708242014635, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6158229557758894941, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
 --- !u!114 &919033620 stripped
 MonoBehaviour:
@@ -7703,29 +7715,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 925804242}
   m_CullTransparentMesh: 1
---- !u!1 &929524325 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5086816942476520915, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-  m_PrefabInstance: {fileID: 1725335409}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &929524326 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7333293378544178423, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
   m_PrefabInstance: {fileID: 1725335409}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &929524329
+--- !u!114 &929524327 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 6572457712359575993, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
+  m_PrefabInstance: {fileID: 1725335409}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 929524325}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b060bd5476e37fd429dc79660d2d0456, type: 3}
+  m_Script: {fileID: 11500000, guid: 999093460a482e743a607097d7d3abef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgradePackage: {fileID: 11400000, guid: 4de39c809f5a2df48923fcc4a2a0b9d9, type: 2}
 --- !u!1 &934816430
 GameObject:
   m_ObjectHideFlags: 0
@@ -8074,6 +8079,7 @@ MonoBehaviour:
   AmountOfNextCardsToShow: 3
   DeckController: {fileID: 995225364}
   ShopManager: {fileID: 1180323120}
+  DeckUpgraderView: {fileID: 1711849669}
   BuffRegistry: {fileID: 995225365}
   UpgradePackageCollection: {fileID: 11400000, guid: faa4c4803adfe8b458628500c2d35eef, type: 2}
   Player: {fileID: 995225363}
@@ -8290,7 +8296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1043912499
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10942,6 +10948,7 @@ MonoBehaviour:
   gameOverCanvas: {fileID: 747082762}
   powerUpDungeonObjects:
   - {fileID: 1504966277}
+  - {fileID: 1711849667}
   shopObjects:
   - {fileID: 1180323118}
   chooseFloorObjects:
@@ -11273,7 +11280,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 604058708242014635, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6158229557758894941, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
 --- !u!4 &1420706547 stripped
 Transform:
@@ -11845,29 +11858,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1470673412}
   m_CullTransparentMesh: 1
---- !u!1 &1481632878 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5086816942476520915, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-  m_PrefabInstance: {fileID: 4710532452656735037}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1481632879 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7333293378544178423, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
   m_PrefabInstance: {fileID: 4710532452656735037}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1481632882
+--- !u!114 &1481632880 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 6572457712359575993, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
+  m_PrefabInstance: {fileID: 4710532452656735037}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1481632878}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b060bd5476e37fd429dc79660d2d0456, type: 3}
+  m_Script: {fileID: 11500000, guid: 999093460a482e743a607097d7d3abef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgradePackage: {fileID: 11400000, guid: 766c35ca8f8084840803d7a5b04f9a24, type: 2}
 --- !u!1 &1492182552
 GameObject:
   m_ObjectHideFlags: 0
@@ -12103,7 +12109,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 604058708242014635, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 6158229557758894941, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 9a8269384c1c49d4482d3b2da0aefcc4, type: 3}
 --- !u!4 &1497745001 stripped
 Transform:
@@ -12178,7 +12190,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1504966278}
   m_Layer: 5
-  m_Name: MonsterDeckUpgrades
+  m_Name: DeckUpgradeUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13620,6 +13632,7 @@ GameObject:
   - component: {fileID: 1675707385}
   - component: {fileID: 1675707384}
   - component: {fileID: 1675707383}
+  - component: {fileID: 1675707386}
   m_Layer: 5
   m_Name: ProceedButton
   m_TagString: Untagged
@@ -13691,9 +13704,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 995225361}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: GoToShopState
+      - m_Target: {fileID: 1675707386}
+        m_TargetAssemblyTypeName: DeckUpgradeChoiceProceedButton, Assembly-CSharp
+        m_MethodName: Proceed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13741,6 +13754,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1675707381}
   m_CullTransparentMesh: 1
+--- !u!114 &1675707386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675707381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73d743f9de4d3bc47b6ff1319ff8097c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deckUpgradeChoiceView: {fileID: 1711849669}
 --- !u!1 &1684084358
 GameObject:
   m_ObjectHideFlags: 0
@@ -14062,13 +14088,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1711849668}
+  - component: {fileID: 1711849669}
   m_Layer: 0
   m_Name: DeckUpgradeView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1711849668
 Transform:
   m_ObjectHideFlags: 0
@@ -14087,6 +14114,21 @@ Transform:
   - {fileID: 2029211176}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1711849669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1711849667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48966c9ed99dfd24a9107ef0eecffc58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upgradePackageViews:
+  - {fileID: 1481632880}
+  - {fileID: 929524327}
 --- !u!1 &1718878741
 GameObject:
   m_ObjectHideFlags: 0
@@ -14167,6 +14209,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3582009968132213763, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 3582009968132213763, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
     - target: {fileID: 3908763867139576811, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
       propertyPath: serializationData.Prefab
       value: 
@@ -14255,9 +14301,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5086816942476520915, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 929524329}
     - targetCorrespondingSourceObject: {fileID: 3432105518362560907, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -16439,7 +16482,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Choose which pool of upgrades will go into the deck
+  m_text: Choose which pool of upgrades will added to the monsters in the deck
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 75264fa9e13da2b41919fefa895e40a6, type: 2}
   m_sharedMaterial: {fileID: 255578546575997133, guid: 75264fa9e13da2b41919fefa895e40a6, type: 2}
@@ -17695,7 +17738,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6944857834783449805, guid: 8b7f628739214eb489f388eb27b19abd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 4428576039150788667, guid: 8b7f628739214eb489f388eb27b19abd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 7835341942309766138, guid: 8b7f628739214eb489f388eb27b19abd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 3578348419698082060, guid: 8b7f628739214eb489f388eb27b19abd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 8b7f628739214eb489f388eb27b19abd, type: 3}
 --- !u!1001 &4710532452656735037
 PrefabInstance:
@@ -17705,58 +17760,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1711849668}
     m_Modifications:
-    - target: {fileID: 357219202353761989, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
+    - target: {fileID: 3582009968132213763, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
       propertyPath: serializationData.Prefab
       value: 
-      objectReference: {fileID: 357219202353761989, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-    - target: {fileID: 500380352424273088, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 500380352424273088, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-    - target: {fileID: 934359626562654184, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 934359626562654184, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-    - target: {fileID: 1077255992150861293, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 1077255992150861293, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-    - target: {fileID: 2945785029970407335, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3020759167317967787, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3908763867139576811, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 3908763867139576811, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-    - target: {fileID: 4339374791804991683, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 4339374791804991683, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-    - target: {fileID: 4799738143350959688, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 4799738143350959688, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
+      objectReference: {fileID: 3582009968132213763, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
     - target: {fileID: 5086816942476520915, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
       propertyPath: m_Name
       value: DeckUpgradePackage
       objectReference: {fileID: 0}
-    - target: {fileID: 5231544561490003296, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 5231544561490003296, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
     - target: {fileID: 6572457712359575993, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
       propertyPath: hoverScale
       value: 1.05
       objectReference: {fileID: 0}
-    - target: {fileID: 7325648923814015610, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 7325648923814015610, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
     - target: {fileID: 7333293378544178423, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.5
@@ -17797,33 +17812,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8047889124243708242, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 8047889124243708242, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-    - target: {fileID: 8480386449092343939, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 8480386449092343939, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-    - target: {fileID: 8510260507376497662, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 8510260507376497662, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-    - target: {fileID: 8943219434929559766, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 8943219434929559766, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-    - target: {fileID: 9202636268268278699, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      propertyPath: serializationData.Prefab
-      value: 
-      objectReference: {fileID: 9202636268268278699, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5086816942476520915, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1481632882}
     - targetCorrespondingSourceObject: {fileID: 3432105518362560907, guid: 7589aa06392a03b44a9a1d3c2eb3c2bc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
