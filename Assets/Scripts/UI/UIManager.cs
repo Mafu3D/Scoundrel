@@ -68,7 +68,6 @@ public class UIManager : MonoBehaviour
 
         currentRunCanvas.SetActive(true);
 
-        Debug.Log("showing");
         dungeonView.Show();
         playerActionsButtons.SetActive(true);
 
