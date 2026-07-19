@@ -20,6 +20,13 @@ public class AdvancedScoreKeeper : IScoreKeeper
         this.gameManager = gameManager;
     }
 
+    public void AddToScore(int amount)
+    {
+        score += amount;
+
+        OnScoreUpdated?.Invoke(score);
+    }
+
     public void AddToScore(RuntimeCardModel card)
     {
         if (card.Suit != Suit.CLUBS && card.Suit != Suit.SPADES)

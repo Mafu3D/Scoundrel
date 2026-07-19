@@ -22,7 +22,7 @@ public class Exploding : Buff
             else
             {
                 // neighbor.RegisterTemporaryValueModifier(Owner.Value);
-                neighbor.RegisterTemporaryValueModifier(amount);
+                neighbor.RegisterTemporaryValueModifier(-amount);
             }
         }
     }

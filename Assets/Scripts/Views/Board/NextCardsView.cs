@@ -21,7 +21,6 @@ public class NextCardsView : MonoBehaviour
 
     public void RegisterNextCards(List<RuntimeCardModel> nextCards)
     {
-        Debug.Log("registering");
         for (int i = 0; i < nextCardViews.Count; i++)
         {
             CardView cardView = nextCardViews[i];
@@ -38,7 +37,6 @@ public class NextCardsView : MonoBehaviour
 
     public void DeregisterNextCards()
     {
-        Debug.Log("deregistering");
         foreach(CardView cardView in nextCardViews)
         {
             cardView.DeregisterCard();

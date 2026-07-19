@@ -126,6 +126,26 @@ namespace Project.DebugCommands
     }
 
     [DebugCommand]
+    public class AddPoints : IDebugCommand<int>
+    {
+        public string ID => "addPoints";
+
+        public string Description => "Gain X points";
+
+        public string Format => "addPoints <int>";
+
+        public bool HasDefaultValue => true;
+
+        public string DefaultParameter => "10000";
+
+        public void Invoke(int amount)
+        {
+            ServiceLocator.Global.Get(out GameManager gameManager);
+            gameManager.ScoreKeeper.AddToScore(amount);
+        }
+    }
+
+    [DebugCommand]
     public class AddRunTokens : IDebugCommand<int>
     {
         public string ID => "addRunTokens";

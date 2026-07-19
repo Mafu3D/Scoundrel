@@ -248,7 +248,7 @@ public class GameManager : MonoBehaviour
             _ => false,
         };
 
-        if (success && card.CardType != CardType.MONSTER)
+        if (success && (card.CardType != CardType.MONSTER && card.CardType != CardType.DOOR))
         {
             stateMachine.SwitchState(new ResolveCardState(card, stateMachine, GameplayEffectQueue, Player, DungeonController, ScoreKeeper));
         }

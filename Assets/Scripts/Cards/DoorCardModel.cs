@@ -1,4 +1,5 @@
 using Project.Decks;
+using UnityEngine;
 
 public class DoorCardModel : RuntimeCardModel
 {
@@ -8,8 +9,10 @@ public class DoorCardModel : RuntimeCardModel
 
     public override bool TryUse(Player player, GameManager gameManager)
     {
+        Debug.Log("use door");
         if (gameManager.ScoreKeeper.GetScore() >= gameManager.GetScoreToGoToNextFloor())
         {
+            Debug.Log("user door success!");
             gameManager.GoToExitFloorState();
             return true;
         }

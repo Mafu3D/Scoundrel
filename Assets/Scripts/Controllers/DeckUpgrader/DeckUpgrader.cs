@@ -8,6 +8,7 @@ public class DeckUpgrader
     private readonly UpgradePackageCollection upgradePackages;
     private readonly DeckController deckController;
     private readonly Dictionary<Rarity, int> weights;
+    private System.Random random = new();
 
     public DeckUpgrader(DeckController deckController, UpgradePackageCollection upgradePackages, Dictionary<Rarity, int> weights)
     {
@@ -35,7 +36,7 @@ public class DeckUpgrader
 
     public void UpgradeMonsterDeckFromPackage(UpgradePackage upgradePackage)
     {
-        string outputString = $"Upgrading deck with package '{upgradePackage}':\n";
+        string outputString = $"Upgrading deck with package '{upgradePackage.Name}':\n";
 
         int amount = upgradePackage.Buffs.Count;
         List<RuntimeCardModel> monsterCards = deckController.GetRemainingOfType(CardType.MONSTER);
@@ -54,7 +55,12 @@ public class DeckUpgrader
     public List<UpgradePackage> GetRandomUniqueUpgradePackages(int amount)
     {
         Rarity rarity = default;
-        System.Random random = new();
-        return rarity.GetUniqueRandom(upgradePackages.UpgradePackages, amount, weights, random);
+        return rarity.GetUniqueRandom(upgradePackages.BasePackages, amount, weights, random);
+    }
+
+    public UpgradePackage GetRandomUniqueStartingUpgradePackage()
+    {
+        Rarity rarity = default;
+        return rarity.GetUniqueRandom(upgradePackages.StartingPackages, 1, weights, random)[0];
     }
 }

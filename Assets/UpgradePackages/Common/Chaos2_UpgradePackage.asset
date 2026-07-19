@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0277e0ab6fdd2404394cccb6479aa3d9, type: 3}
-  m_Name: UncommonStartingUpgradePackage_02
+  m_Name: Chaos2_UpgradePackage
   m_EditorClassIdentifier: 
-  Name: Uncommon Starting Package 01
-  rarity: 1
+  Name: Chaos II
+  rarity: 0
   Buffs:
+  - {fileID: 11400000, guid: cf0c4f47f1fe14542bb787bcba96cfd4, type: 2}
+  - {fileID: 11400000, guid: 6f32258e909b9104e8c042dc62317042, type: 2}
+  - {fileID: 11400000, guid: ca8da16d64138e34aba014511ee7a04e, type: 2}
+  - {fileID: 11400000, guid: 439249593927ae34180245fa0b6fda18, type: 2}
   - {fileID: 11400000, guid: 202e05391e53dd24bb813e93f40b5544, type: 2}
-  - {fileID: 11400000, guid: 202e05391e53dd24bb813e93f40b5544, type: 2}
-  - {fileID: 11400000, guid: 439249593927ae34180245fa0b6fda18, type: 2}
-  - {fileID: 11400000, guid: 439249593927ae34180245fa0b6fda18, type: 2}
-  - {fileID: 11400000, guid: 439249593927ae34180245fa0b6fda18, type: 2}
-  - {fileID: 11400000, guid: 439249593927ae34180245fa0b6fda18, type: 2}

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0277e0ab6fdd2404394cccb6479aa3d9, type: 3}
+  m_Name: RoyalProcession_StartingUpgradePackage
+  m_EditorClassIdentifier: 
+  Name: Honor Guard
+  rarity: 0
+  Buffs:
+  - {fileID: 11400000, guid: 202e05391e53dd24bb813e93f40b5544, type: 2}
+  - {fileID: 11400000, guid: 202e05391e53dd24bb813e93f40b5544, type: 2}
+  - {fileID: 11400000, guid: 202e05391e53dd24bb813e93f40b5544, type: 2}
+  - {fileID: 11400000, guid: 202e05391e53dd24bb813e93f40b5544, type: 2}
+  - {fileID: 11400000, guid: c652abec3d8c2624e914353d59cf6c77, type: 2}
+  - {fileID: 11400000, guid: c652abec3d8c2624e914353d59cf6c77, type: 2}
+  - {fileID: 11400000, guid: c652abec3d8c2624e914353d59cf6c77, type: 2}
+  - {fileID: 11400000, guid: 439249593927ae34180245fa0b6fda18, type: 2}
+  - {fileID: 11400000, guid: 439249593927ae34180245fa0b6fda18, type: 2}
