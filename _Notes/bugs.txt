@@ -1,0 +1,5 @@
+bugs:
+	weapons are losing buffs somehow?
+	 - probably after being used
+	pack tactics isn't removing its bonuses - maybe other bugs too?
+	sometimes it seems like not all buffs are applying on upgrade?
